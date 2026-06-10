@@ -729,43 +729,45 @@ loong64 (LSX) under qemu with the vector unit enabled.</p>
 registers (<code>(AX)</code>, <code>(R0)</code>), which asmdecl does not track — their correctness is
 established by the <strong>runtime test</strong>, which checks every lane.</p>
 <h2 id="simd-across-the-targets">SIMD across the targets<a class="headerlink" href="#simd-across-the-targets" title="Permanent link">&para;</a></h2>
-<p>Every target has a runtime-tested packed-add example:</p>
+<p>Every target has runtime-tested packed-add examples:</p>
 <table>
 <thead>
 <tr>
 <th>Target</th>
-<th>extension</th>
+<th>extension(s)</th>
 <th>key instructions</th>
-<th>notes</th>
+<th>width</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>amd64</td>
-<td>SSE2</td>
-<td><code>MOVOU</code>, <code>PADDL</code></td>
-<td>also AVX (<code>VADDPS</code>, Y/Z) available</td>
+<td>SSE2 + <strong>AVX2</strong></td>
+<td><code>MOVOU</code>/<code>PADDL</code>; <code>VMOVDQU</code>/<code>VPADDD</code></td>
+<td>128 + <strong>256-bit</strong></td>
 </tr>
 <tr>
 <td>arm64</td>
 <td>NEON</td>
 <td><code>VLD1</code>, <code>VADD.S4</code>, <code>VST1</code></td>
-<td>—</td>
+<td>128-bit</td>
 </tr>
 <tr>
 <td>riscv64</td>
 <td>RVV</td>
 <td><code>VSETVLI</code>, <code>VLE32.V</code>, <code>VADD.VV</code>, <code>VSE32.V</code></td>
-<td>assembler support added in <strong>Go 1.25</strong></td>
+<td>scalable (assembler: <strong>Go 1.25</strong>)</td>
 </tr>
 <tr>
 <td>loong64</td>
-<td>LSX</td>
-<td><code>VMOVQ</code>, <code>VADDW</code></td>
-<td>128-bit; LASX (<code>XV*</code>) is 256-bit. <strong>Go 1.25</strong></td>
+<td>LSX + <strong>LASX</strong></td>
+<td><code>VMOVQ</code>/<code>VADDW</code>; <code>XVMOVQ</code>/<code>XVADDW</code></td>
+<td>128 + <strong>256-bit</strong> (<strong>Go 1.25</strong>)</td>
 </tr>
 </tbody>
 </table>
+<p>The amd64 (<code>addI32x8</code>, AVX2) and loong64 (<code>addI32x8</code>, LASX) examples add eight
+int32 lanes at once; the others add four.</p>
 <div class="admonition note">
 <p class="admonition-title">RVV / LSX need Go 1.25</p>
 <p>The RISC-V Vector and LoongArch SIMD instructions were added to the Go

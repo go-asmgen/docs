@@ -591,6 +591,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#stack-frames-and-text-flags-done" class="md-nav__link">
+    <span class="md-ellipsis">
+      Stack frames and TEXT flags — done
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#adding-another-architecture" class="md-nav__link">
     <span class="md-ellipsis">
       Adding another architecture
@@ -725,6 +734,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#stack-frames-and-text-flags-done" class="md-nav__link">
+    <span class="md-ellipsis">
+      Stack frames and TEXT flags — done
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#adding-another-architecture" class="md-nav__link">
     <span class="md-ellipsis">
       Adding another architecture
@@ -802,12 +820,21 @@ covered; the library is released (latest: <strong>v0.2.0</strong>).</p>
 </ul>
 <h2 id="simd-done-via-raw">SIMD — done (via <code>Raw</code>)<a class="headerlink" href="#simd-done-via-raw" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Packed-add examples on <strong>all four</strong> targets, runtime-proven: SSE2 (amd64),
-  NEON (arm64), RVV (riscv64), LSX (loong64). Emitted through <code>Raw</code> over
-  <strong>pointer</strong> arguments — see <a href="../simd/">SIMD</a>. A <em>single</em> vector load of a whole
-  by-value array is not asmdecl-clean, so passing vectors by value is not pursued.</li>
+<li>Packed-add examples on <strong>all four</strong> targets, runtime-proven, including the
+  256-bit widths: SSE2 + <strong>AVX2</strong> (amd64), NEON (arm64), RVV (riscv64), LSX +
+  <strong>LASX</strong> (loong64). Emitted through <code>Raw</code> over <strong>pointer</strong> arguments — see
+  <a href="../simd/">SIMD</a>. A <em>single</em> vector load of a whole by-value array is not
+  asmdecl-clean, so passing vectors by value is not pursued.</li>
 <li>Possible future work: a typed vector-load helper that emits the
   pointer-based load/op/store sequence, removing the <code>Raw</code> boilerplate.</li>
+</ul>
+<h2 id="stack-frames-and-text-flags-done">Stack frames and TEXT flags — done<a class="headerlink" href="#stack-frames-and-text-flags-done" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>NewFuncFlags</code> emits any Plan 9 TEXT flags (<code>NOSPLIT</code>, <code>NOSPLIT|NOFRAME</code>, or
+  none); <code>frameSize &gt; 0</code> reserves stack locals addressed <code>name-N(SP)</code> via <code>Raw</code>.
+  See <a href="../design/#text-flags-and-stack-frames">TEXT flags and stack frames</a> and
+  <code>examples/frame</code> — a non-<code>NOSPLIT</code> function that spills to a 16-byte frame,
+  runtime-proven.</li>
 </ul>
 <h2 id="adding-another-architecture">Adding another architecture<a class="headerlink" href="#adding-another-architecture" title="Permanent link">&para;</a></h2>
 <ul>
