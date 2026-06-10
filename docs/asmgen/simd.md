@@ -40,9 +40,10 @@ MOVOU  X0, (CX)      // store
 RET
 ```
 
-Both are in [`examples/simd`](https://github.com/go-asmgen/asmgen/tree/main/examples/simd),
-runtime-tested: amd64 natively (the GitHub runner is amd64), arm64 natively on
-Apple Silicon / arm64 Linux.
+The same packed-add example exists for **all four targets** in
+[`examples/simd`](https://github.com/go-asmgen/asmgen/tree/main/examples/simd),
+each runtime-tested: amd64 (SSE2) and arm64 (NEON) natively, riscv64 (RVV) and
+loong64 (LSX) under qemu with the vector unit enabled.
 
 ## What asmdecl checks here
 
@@ -51,17 +52,22 @@ Only the **pointer loads** are FP-relative, so asmdecl validates those (three
 registers (`(AX)`, `(R0)`), which asmdecl does not track — their correctness is
 established by the **runtime test**, which checks every lane.
 
-## SIMD support across the targets
+## SIMD across the targets
 
-Every 64-bit Go target the project covers has vector support in the assembler,
-so the same `Raw`-based approach extends to all of them:
+Every target has a runtime-tested packed-add example:
 
-| Target | SIMD in `cmd/asm` |
-| --- | --- |
-| amd64 | SSE/SSE2 (`PADDL`, `ADDPS`, `MOVOU`…) and AVX (`VADDPS`, Y/Z registers) |
-| arm64 | NEON/ASIMD (`VADD`, `VLD1`, V registers with `.S4`/`.D2`… arrangements) |
-| riscv64 | RVV — the RISC-V Vector extension (`VSETVLI`, `VLE32.V`, V registers) |
-| loong64 | LSX (128-bit, `V*`) and LASX (256-bit, `XV*`) |
+| Target | extension | key instructions | notes |
+| --- | --- | --- | --- |
+| amd64 | SSE2 | `MOVOU`, `PADDL` | also AVX (`VADDPS`, Y/Z) available |
+| arm64 | NEON | `VLD1`, `VADD.S4`, `VST1` | — |
+| riscv64 | RVV | `VSETVLI`, `VLE32.V`, `VADD.VV`, `VSE32.V` | assembler support added in **Go 1.25** |
+| loong64 | LSX | `VMOVQ`, `VADDW` | 128-bit; LASX (`XV*`) is 256-bit. **Go 1.25** |
+
+!!! note "RVV / LSX need Go 1.25"
+    The RISC-V Vector and LoongArch SIMD instructions were added to the Go
+    assembler in Go 1.25. The riscv64/loong64 SIMD examples therefore build with
+    a Go 1.25+ toolchain; the library itself (and the scalar/SSE/NEON paths)
+    still build on Go 1.22+.
 
 ## Why pointers, not by-value vectors
 
