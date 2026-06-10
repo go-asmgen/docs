@@ -471,6 +471,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#why-pointers-not-by-value-vectors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why pointers, not by-value vectors
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#future-work" class="md-nav__link">
     <span class="md-ellipsis">
       Future work
@@ -644,6 +653,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#why-pointers-not-by-value-vectors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why pointers, not by-value vectors
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#future-work" class="md-nav__link">
     <span class="md-ellipsis">
       Future work
@@ -738,10 +756,17 @@ so the same <code>Raw</code>-based approach extends to all of them:</p>
 </tr>
 </tbody>
 </table>
+<h2 id="why-pointers-not-by-value-vectors">Why pointers, not by-value vectors<a class="headerlink" href="#why-pointers-not-by-value-vectors" title="Permanent link">&para;</a></h2>
+<p><code>go vet</code> asmdecl rejects a single vector load of a whole by-value array — e.g.
+<code>MOVOU a+0(FP), X0</code> for a <code>[4]int32</code> argument fails with <em>"invalid MOVOU …;
+[4]int32 is 16-byte value"</em>. So passing a vector <strong>by value</strong> and loading it in
+one instruction is not asmdecl-clean. The pointer-based shape above is the
+idiomatic Go approach and is what go-asmgen supports. (Fixed-size arrays passed
+by value are still usable <strong>element-wise</strong> — see <a href="../aggregates/#fixed-size-arrays">Aggregates</a>.)</p>
 <h2 id="future-work">Future work<a class="headerlink" href="#future-work" title="Permanent link">&para;</a></h2>
-<p>Passing vector/array values <strong>by value</strong> (e.g. <code>func(v [4]float32) float32</code>)
-needs array ABI0 layout, and a typed vector-load helper would remove the <code>Raw</code>
-boilerplate. Both are on the <a href="../roadmap/">Roadmap</a>; the <code>Raw</code> path works today.</p>
+<p>A typed vector-load helper could emit the pointer load/op/store sequence for you,
+removing the <code>Raw</code> boilerplate. See the <a href="../roadmap/">Roadmap</a>; the <code>Raw</code> path
+works today.</p>
 
 
 

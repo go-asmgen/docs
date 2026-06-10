@@ -468,6 +468,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#fixed-size-arrays" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fixed-size arrays
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#not-yet-covered" class="md-nav__link">
     <span class="md-ellipsis">
       Not yet covered
@@ -680,6 +689,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#fixed-size-arrays" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fixed-size arrays
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#not-yet-covered" class="md-nav__link">
     <span class="md-ellipsis">
       Not yet covered
@@ -775,8 +793,29 @@ internal structure of slices, strings, and structs — and rejects any
 <code>name_field+offset(FP)</code> whose offset or width does not match. That makes the
 padded-field and slice-header offsets self-checking: if go-asmgen computed them
 wrong, <code>go vet</code> would fail before any code ran.</p>
+<h2 id="fixed-size-arrays">Fixed-size arrays<a class="headerlink" href="#fixed-size-arrays" title="Permanent link">&para;</a></h2>
+<p>A <code>[n]T</code> array passed <strong>by value</strong> is laid out the same way — <code>abi.Array</code> flattens
+it into element slots <code>name_0 … name_(n-1)</code>, exactly the names asmdecl gives array
+elements:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nx">sig</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">abi</span><span class="p">.</span><span class="nx">LayoutArgs</span><span class="p">(</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="p">[]</span><span class="nx">abi</span><span class="p">.</span><span class="nx">Arg</span><span class="p">{</span><span class="nx">abi</span><span class="p">.</span><span class="nx">Array</span><span class="p">(</span><span class="s">&quot;v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">abi</span><span class="p">.</span><span class="nx">Int64</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)},</span><span class="w">   </span><span class="c1">// v_0@0, v_1@8, v_2@16</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="p">[]</span><span class="nx">abi</span><span class="p">.</span><span class="nx">Arg</span><span class="p">{</span><span class="nx">abi</span><span class="p">.</span><span class="nx">Scalar</span><span class="p">(</span><span class="s">&quot;ret&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">abi</span><span class="p">.</span><span class="nx">Int64</span><span class="p">)},</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="p">)</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="nx">b</span><span class="p">.</span><span class="nx">LoadArg</span><span class="p">(</span><span class="s">&quot;v_0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;R0&quot;</span><span class="p">).</span><span class="nx">LoadArg</span><span class="p">(</span><span class="s">&quot;v_1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;R1&quot;</span><span class="p">).</span><span class="nx">LoadArg</span><span class="p">(</span><span class="s">&quot;v_2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;R2&quot;</span><span class="p">).</span><span class="w"> </span><span class="cm">/* … */</span>
+</code></pre></div>
+<p>See <a href="https://github.com/go-asmgen/asmgen/tree/main/examples/array"><code>examples/array</code></a>.
+<code>abi.Signature.Slot(name)</code> looks up any slot's offset, handy when you need an
+aggregate's base offset for a <code>Raw</code> access.</p>
+<div class="admonition note">
+<p class="admonition-title">By-value arrays are accessed element-wise</p>
+<p><code>go vet</code> asmdecl does <strong>not</strong> accept a single wide/vector load of a whole
+by-value array — e.g. <code>MOVOU a+0(FP), X0</code> for a <code>[4]int32</code> is rejected
+("invalid MOVOU … is 16-byte value"). Idiomatic Go SIMD therefore passes
+vector data <strong>by pointer</strong>; see <a href="../simd/">SIMD</a>.</p>
+</div>
 <h2 id="not-yet-covered">Not yet covered<a class="headerlink" href="#not-yet-covered" title="Permanent link">&para;</a></h2>
-<p>Arrays and vector (<code>V</code>-register) values. See the <a href="../roadmap/">Roadmap</a>.</p>
+<p>First-class vector <em>types</em> in the typed surface (SIMD is via <code>Raw</code>). See the
+<a href="../roadmap/">Roadmap</a>.</p>
 
 
 

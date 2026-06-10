@@ -573,9 +573,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#arrays-and-vectors" class="md-nav__link">
+  <a href="#arrays-done" class="md-nav__link">
     <span class="md-ellipsis">
-      Arrays and vectors
+      Arrays — done
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vectors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Vectors
     </span>
   </a>
   
@@ -698,9 +707,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#arrays-and-vectors" class="md-nav__link">
+  <a href="#arrays-done" class="md-nav__link">
     <span class="md-ellipsis">
-      Arrays and vectors
+      Arrays — done
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vectors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Vectors
     </span>
   </a>
   
@@ -774,10 +792,19 @@ and <strong>more architectures</strong> reusing the same emit layer.</p>
   addressed as <code>name_field+offset(FP)</code>, asmdecl- and runtime-validated. See
   <a href="../aggregates/">Aggregates</a>.</li>
 </ul>
-<h2 id="arrays-and-vectors">Arrays and vectors<a class="headerlink" href="#arrays-and-vectors" title="Permanent link">&para;</a></h2>
+<h2 id="arrays-done">Arrays — done<a class="headerlink" href="#arrays-done" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Fixed-size array arguments/results.</li>
-<li>Vector (<code>V</code>-register) values.</li>
+<li>Fixed-size <code>[n]T</code> arrays passed by value, addressed element-wise
+  (<code>name_0 … name_(n-1)</code>) via <code>abi.Array</code>; <code>Signature.Slot</code> for offset lookup.
+  asmdecl-clean and runtime-proven. See <a href="../aggregates/#fixed-size-arrays">Aggregates</a>.</li>
+</ul>
+<h2 id="vectors">Vectors<a class="headerlink" href="#vectors" title="Permanent link">&para;</a></h2>
+<ul>
+<li>SIMD code generation works today through <code>Raw</code> over <strong>pointer</strong> arguments
+  (SSE/NEON) — see <a href="../simd/">SIMD</a>. A <em>single</em> vector load of a whole by-value
+  array is not asmdecl-clean, so passing vectors by value is not pursued.</li>
+<li>Possible future work: a typed vector-load helper that emits the
+  pointer-based load/op/store sequence, removing the <code>Raw</code> boilerplate.</li>
 </ul>
 <h2 id="more-architectures">More architectures<a class="headerlink" href="#more-architectures" title="Permanent link">&para;</a></h2>
 <ul>
