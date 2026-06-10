@@ -413,6 +413,27 @@
   
   
     <li class="md-nav__item">
+      <a href="asmgen/simd/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SIMD (SSE / NEON)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="asmgen/riscv64/" class="md-nav__link">
         
   
@@ -439,6 +460,27 @@
   
   <span class="md-ellipsis">
     Third architecture: loong64
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="asmgen/amd64/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fourth target: amd64
   </span>
   
 
@@ -530,14 +572,14 @@
 
 
 <h1 id="go-asmgen-documentation">go-asmgen documentation<a class="headerlink" href="#go-asmgen-documentation" title="Permanent link">&para;</a></h1>
-<p><strong>Ergonomic generation of Go-compatible Plan 9 assembly for non-amd64
-architectures</strong> — <strong>arm64</strong>, <strong>riscv64</strong>, and <strong>loong64</strong>.</p>
-<p>go-asmgen is the multi-architecture counterpart to what <a href="https://github.com/mmcloughlin/avo">avo</a> does for
-amd64. avo encodes instruction bytes itself, which is exactly what makes
-extending it to new ISAs expensive. go-asmgen instead <strong>emits Plan 9 assembly
-text and lets the Go toolchain assembler (<code>cmd/asm</code>) encode it</strong> — so each new
-architecture needs only a thin move/register surface over a <strong>shared</strong> ABI0
-layout model, not a byte-level encoder.</p>
+<p><strong>Ergonomic generation of Go-compatible Plan 9 assembly for every 64-bit Go
+target</strong> — <strong>amd64</strong>, <strong>arm64</strong>, <strong>riscv64</strong>, and <strong>loong64</strong>.</p>
+<p><a href="https://github.com/mmcloughlin/avo">avo</a> does this for amd64 by encoding instruction bytes itself, which is
+exactly what makes extending it to new ISAs expensive. go-asmgen instead <strong>emits
+Plan 9 assembly text and lets the Go toolchain assembler (<code>cmd/asm</code>) encode it</strong>
+— so each architecture is only a thin move/register surface over a <strong>shared</strong>
+ABI0 layout model, not a byte-level encoder. avo remains the richer choice for
+amd64-specific work; go-asmgen offers one uniform builder across every target.</p>
 <table>
 <thead>
 <tr>
@@ -546,6 +588,10 @@ layout model, not a byte-level encoder.</p>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><a href="asmgen/amd64/"><code>amd64</code></a></td>
+<td>builder emitting Plan 9 amd64 instructions (<code>MOVQ</code>, <code>MOVSS</code>/<code>MOVSD</code>)</td>
+</tr>
 <tr>
 <td><a href="asmgen/"><code>arm64</code></a></td>
 <td>builder emitting Plan 9 arm64 instructions (<code>MOVD</code>, <code>FMOVS</code>/<code>FMOVD</code>)</td>

@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://go-asmgen.github.io/docs/0.1/asmgen/design/">
+        <link rel="canonical" href="https://go-asmgen.github.io/docs/0.1/asmgen/amd64/">
       
       
-        <link rel="prev" href="../quickstart/">
+        <link rel="prev" href="../loong64/">
       
       
-        <link rel="next" href="../aggregates/">
+        <link rel="next" href="../roadmap/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -24,7 +24,7 @@
     
     
       
-        <title>ABI0 & design notes - go-asmgen docs</title>
+        <title>Fourth target: amd64 - go-asmgen docs</title>
       
     
     
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#asmgen-abi0-design-notes" class="md-skip">
+        <a href="#fourth-target-amd64" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              ABI0 & design notes
+              Fourth target: amd64
             
           </span>
         </div>
@@ -362,30 +362,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    ABI0 & design notes
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../design/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -394,95 +374,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#why-abi0-not-abiinternal" class="md-nav__link">
-    <span class="md-ellipsis">
-      Why ABI0, not ABIInternal
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#the-abi0-layout-model" class="md-nav__link">
-    <span class="md-ellipsis">
-      The ABI0 layout model
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="The ABI0 layout model">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#the-result-area-is-word-aligned" class="md-nav__link">
-    <span class="md-ellipsis">
-      The result area is word-aligned
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#move-selection" class="md-nav__link">
-    <span class="md-ellipsis">
-      Move selection
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#what-v0-is-and-is-not-correct-for" class="md-nav__link">
-    <span class="md-ellipsis">
-      What v0 is — and is not — correct for
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#nosplit-by-default" class="md-nav__link">
-    <span class="md-ellipsis">
-      NOSPLIT by default
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#validation-priorities" class="md-nav__link">
-    <span class="md-ellipsis">
-      Validation priorities
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -576,10 +467,30 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../amd64/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Fourth target: amd64
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -588,6 +499,35 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validation
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -668,69 +608,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#why-abi0-not-abiinternal" class="md-nav__link">
+  <a href="#validation" class="md-nav__link">
     <span class="md-ellipsis">
-      Why ABI0, not ABIInternal
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#the-abi0-layout-model" class="md-nav__link">
-    <span class="md-ellipsis">
-      The ABI0 layout model
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="The ABI0 layout model">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#the-result-area-is-word-aligned" class="md-nav__link">
-    <span class="md-ellipsis">
-      The result area is word-aligned
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#move-selection" class="md-nav__link">
-    <span class="md-ellipsis">
-      Move selection
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#what-v0-is-and-is-not-correct-for" class="md-nav__link">
-    <span class="md-ellipsis">
-      What v0 is — and is not — correct for
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#nosplit-by-default" class="md-nav__link">
-    <span class="md-ellipsis">
-      NOSPLIT by default
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#validation-priorities" class="md-nav__link">
-    <span class="md-ellipsis">
-      Validation priorities
+      Validation
     </span>
   </a>
   
@@ -751,154 +631,70 @@
                   
 
 
-<h1 id="asmgen-abi0-design-notes">asmgen — ABI0 &amp; design notes<a class="headerlink" href="#asmgen-abi0-design-notes" title="Permanent link">&para;</a></h1>
-<h2 id="why-abi0-not-abiinternal">Why ABI0, not ABIInternal<a class="headerlink" href="#why-abi0-not-abiinternal" title="Permanent link">&para;</a></h2>
-<p>Go has two calling conventions:</p>
+<h1 id="fourth-target-amd64">Fourth target: amd64<a class="headerlink" href="#fourth-target-amd64" title="Permanent link">&para;</a></h1>
+<p>amd64 is already well served by <a href="https://github.com/mmcloughlin/avo">avo</a>, which encodes instructions at the
+byte level and models the instruction set in depth. go-asmgen supports amd64 not
+to replace that, but so a <strong>single uniform builder</strong> spans every 64-bit Go
+target — the same code shape generates arm64, riscv64, loong64, and amd64.</p>
+<p>It reuses the shared ABI0 layout unchanged. amd64's move table is a little richer
+than the RISC targets', in two ways:</p>
 <ul>
-<li><strong>ABIInternal</strong> — the register-based convention the compiler uses internally.
-  It is an <em>unstable</em> contract that can change between Go releases.</li>
-<li><strong>ABI0</strong> — the stack-based, FP-relative convention. Arguments and results live
-  on the stack, addressed via the <code>FP</code> pseudo-register in declaration order.
-  This is the stable contract that hand-written <code>.s</code> files target.</li>
+<li><strong>Sub-word loads use explicit sign/zero-extending mnemonics.</strong> Where arm64 has
+  <code>MOVB</code>/<code>MOVBU</code>, amd64 has <code>MOVBQSX</code> (sign-extend byte→quad) / <code>MOVBQZX</code>
+  (zero-extend), and likewise <code>MOVWQSX</code>/<code>MOVWQZX</code> and <code>MOVLQSX</code>/<code>MOVLQZX</code>.</li>
+<li><strong>Floats use the SSE scalar moves</strong> <code>MOVSS</code> (single) / <code>MOVSD</code> (double) on the
+  X registers, rather than a dedicated float move like arm64's <code>FMOVS</code>/<code>FMOVD</code>.</li>
 </ul>
-<p>go-asmgen targets <strong>ABI0</strong>. That is what makes the emitted assembly safe to
-check in and rely on across Go versions, and it is what <code>go vet</code>'s asmdecl pass
-understands.</p>
-<h2 id="the-abi0-layout-model">The ABI0 layout model<a class="headerlink" href="#the-abi0-layout-model" title="Permanent link">&para;</a></h2>
-<p><code>arm64.Layout</code> lays out arguments, then results, contiguously. Each value is
-placed at an offset that respects its own alignment, and the total
-argument+result area is rounded up to the register word size (8 bytes on arm64):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kd">func</span><span class="w"> </span><span class="nx">align</span><span class="p">(</span><span class="nx">n</span><span class="p">,</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="nx">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;^</span><span class="w"> </span><span class="p">(</span><span class="nx">to</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
-</code></pre></div>
-<p>For <code>func add(a, b int64) int64</code> that yields:</p>
-<table>
-<thead>
-<tr>
-<th>Slot</th>
-<th>Size</th>
-<th>Offset</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>a</code></td>
-<td>8</td>
-<td>0</td>
-</tr>
-<tr>
-<td><code>b</code></td>
-<td>8</td>
-<td>8</td>
-</tr>
-<tr>
-<td><code>ret</code></td>
-<td>8</td>
-<td>16</td>
-</tr>
-</tbody>
-</table>
-<p>so the <code>TEXT</code> directive is <code>$0-24</code> (frame 0, args+results 24) and the loads/stores
-use <code>a+0(FP)</code>, <code>b+8(FP)</code>, <code>ret+16(FP)</code>.</p>
-<h3 id="the-result-area-is-word-aligned">The result area is word-aligned<a class="headerlink" href="#the-result-area-is-word-aligned" title="Permanent link">&para;</a></h3>
-<p>One subtlety asmdecl enforces: the <strong>result area starts at an offset rounded up
-to the register word size</strong> (8 on arm64), and the total frame size is the end of
-the last result — it is <em>not</em> rounded further. So <code>func add16(a, b int16) int16</code>
-lays out <code>a@0</code>, <code>b@2</code>, but <code>ret@8</code> (not <code>ret@4</code>), with <code>TEXT $0-10</code>:</p>
-<table>
-<thead>
-<tr>
-<th>Slot</th>
-<th>Size</th>
-<th>Offset</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>a</code></td>
-<td>2</td>
-<td>0</td>
-</tr>
-<tr>
-<td><code>b</code></td>
-<td>2</td>
-<td>2</td>
-</tr>
-<tr>
-<td><code>ret</code></td>
-<td>2</td>
-<td>8</td>
-</tr>
-</tbody>
-</table>
-<p>Getting this wrong is exactly the kind of mistake <code>go vet</code> asmdecl catches
-before runtime.</p>
-<h2 id="move-selection">Move selection<a class="headerlink" href="#move-selection" title="Permanent link">&para;</a></h2>
-<p><code>LoadArg</code>/<code>StoreRet</code> pick the Plan 9 move from the parameter's <code>Type</code>:</p>
 <table>
 <thead>
 <tr>
 <th>Type</th>
-<th>load</th>
-<th>store</th>
+<th>arm64</th>
+<th>amd64</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>int8</code> / <code>int16</code> / <code>int32</code></td>
-<td><code>MOVB</code> / <code>MOVH</code> / <code>MOVW</code> (sign-extend)</td>
-<td><code>MOVB</code> / <code>MOVH</code> / <code>MOVW</code></td>
-</tr>
-<tr>
-<td><code>uint8</code> / <code>uint16</code> / <code>uint32</code></td>
-<td><code>MOVBU</code> / <code>MOVHU</code> / <code>MOVWU</code> (zero-extend)</td>
-<td><code>MOVB</code> / <code>MOVH</code> / <code>MOVW</code></td>
-</tr>
-<tr>
 <td><code>int64</code> / <code>uint64</code> / pointer</td>
 <td><code>MOVD</code></td>
-<td><code>MOVD</code></td>
+<td><code>MOVQ</code></td>
+</tr>
+<tr>
+<td><code>int8</code> (load, sign)</td>
+<td><code>MOVB</code></td>
+<td><code>MOVBQSX</code></td>
+</tr>
+<tr>
+<td><code>uint8</code> (load, zero)</td>
+<td><code>MOVBU</code></td>
+<td><code>MOVBQZX</code></td>
+</tr>
+<tr>
+<td><code>int32</code> (load, sign)</td>
+<td><code>MOVW</code>…</td>
+<td><code>MOVLQSX</code></td>
+</tr>
+<tr>
+<td>store <code>int8</code>/<code>int16</code>/<code>int32</code></td>
+<td><code>MOVB</code>/<code>MOVH</code>/<code>MOVW</code></td>
+<td><code>MOVB</code>/<code>MOVW</code>/<code>MOVL</code></td>
 </tr>
 <tr>
 <td><code>float32</code> / <code>float64</code></td>
 <td><code>FMOVS</code> / <code>FMOVD</code></td>
-<td><code>FMOVS</code> / <code>FMOVD</code></td>
+<td><code>MOVSS</code> / <code>MOVSD</code></td>
 </tr>
 </tbody>
 </table>
-<p>Sub-word loads use the sign- or zero-extending form so the whole register holds
-the correct value; floats use the <code>F</code> register file. Arithmetic is still supplied
-via the <code>Raw</code> escape hatch (e.g. <code>ADDW</code>, <code>FADDD</code>).</p>
-<h2 id="what-v0-is-and-is-not-correct-for">What v0 is — and is not — correct for<a class="headerlink" href="#what-v0-is-and-is-not-correct-for" title="Permanent link">&para;</a></h2>
-<p>v0 is correct for sequences of arm64 <strong>scalars</strong> in any combination — signed and
-unsigned integers of 1/2/4/8 bytes, pointers, and 32/64-bit floats.</p>
-<p>Struct, slice, and string parameters are also supported — see
-<a href="../aggregates/">Aggregates</a> — and vector code is emitted through <code>Raw</code>, see
-<a href="../simd/">SIMD</a>. The same model drives <a href="../amd64/">amd64</a> as well as the RISC
-targets.</p>
-<div class="admonition warning">
-<p class="admonition-title">Not yet correct for</p>
-<ul>
-<li><strong>array / vector values passed by value</strong> (e.g. <code>[4]float32</code>), and</li>
-<li>first-class <strong>vector types</strong> (the typed surface stops at scalars; SIMD is
-  via <code>Raw</code>).</li>
-</ul>
-</div>
-<p>Each new case must be checked against <code>go vet</code> asmdecl, which cross-checks <code>.s</code>
-offsets and access widths against the Go declaration. See the
-<a href="../roadmap/">Roadmap</a>.</p>
-<h2 id="nosplit-by-default">NOSPLIT by default<a class="headerlink" href="#nosplit-by-default" title="Permanent link">&para;</a></h2>
-<p>v0 marks every function <code>NOSPLIT</code>, which omits the stack-growth preamble. That
-is fine for small leaf functions with no locals, and keeps the emitted assembly
-minimal. It must be revisited for functions with large frames or that call other
-functions.</p>
-<h2 id="validation-priorities">Validation priorities<a class="headerlink" href="#validation-priorities" title="Permanent link">&para;</a></h2>
-<p>The asmgen CI encodes the correctness order:</p>
-<ol>
-<li><strong><code>go vet</code> asmdecl</strong> — offsets in the <code>.s</code> match the Go declaration.</li>
-<li><strong>Generated assembly is committed</strong> — CI regenerates and fails on any diff.</li>
-<li><strong>Runtime test on native arm64</strong> — the function is actually called and its
-   result checked.</li>
-</ol>
+<p>amd64 arithmetic is two-operand (<code>ADDQ b, a</code> computes <code>a += b</code>), so the example
+generator accumulates into the first register. The ABI0 offsets are identical to
+the other targets.</p>
+<h2 id="validation">Validation<a class="headerlink" href="#validation" title="Permanent link">&para;</a></h2>
+<p>amd64 is the easiest target to runtime-test: the GitHub-hosted ubuntu runner is
+amd64, so the generated assembly runs natively — no emulation. Locally on Apple
+Silicon it runs under Rosetta (<code>GOARCH=amd64 go test</code>). The asmgen CI has a
+dedicated native <code>asm-amd64</code> job covering the scalar and SSE-SIMD examples.</p>
+<p>See also <a href="../simd/">SIMD</a> for the SSE packed-add example.</p>
 
 
 
