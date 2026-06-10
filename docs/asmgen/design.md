@@ -106,6 +106,24 @@ locals, addressed `name-N(SP)` via `Raw`. See
 [`examples/frame`](https://github.com/go-asmgen/asmgen/tree/main/examples/frame),
 which spills its arguments to a 16-byte frame, non-`NOSPLIT`, runtime-proven.
 
+## Builder helpers beyond moves
+
+Besides `LoadArg`/`StoreRet`, the builder offers a few helpers that stay uniform
+across all four targets (everything else is `Raw`):
+
+- **`LoadIndirect(ptrReg, t, reg)` / `StoreIndirect(reg, ptrReg, t)`** — load/store
+  through a pointer register (`MOVD (R0), R1`), move width chosen from the type.
+- **`Label(name)`** — a branch target at column 0, for loops written via `Raw`.
+- **`emit.File.Data(name, bytes)`** — a file-local read-only `DATA`/`GLOBL`
+  constant table, returning the symbol to address. This is what SIMD kernels load
+  for a weight vector or shuffle mask; see
+  [`examples/amd64/data`](https://github.com/go-asmgen/asmgen/tree/main/examples/amd64/data).
+
+These exist because they are genuinely architecture-uniform. A full
+instruction-level DSL is deliberately *not* a goal: it would re-implement, per
+architecture, what `cmd/asm` already validates — fighting the "emit text, let
+`cmd/asm` encode" thesis that keeps adding a target cheap.
+
 ## Validation priorities
 
 The asmgen CI encodes the correctness order:
