@@ -441,9 +441,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#widen-arm64-type-support" class="md-nav__link">
+  <a href="#widen-arm64-scalar-support-done" class="md-nav__link">
     <span class="md-ellipsis">
-      Widen arm64 type support
+      Widen arm64 scalar support — done
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aggregates-and-vectors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Aggregates and vectors
     </span>
   </a>
   
@@ -539,9 +548,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#widen-arm64-type-support" class="md-nav__link">
+  <a href="#widen-arm64-scalar-support-done" class="md-nav__link">
     <span class="md-ellipsis">
-      Widen arm64 type support
+      Widen arm64 scalar support — done
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aggregates-and-vectors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Aggregates and vectors
     </span>
   </a>
   
@@ -590,13 +608,20 @@ and <strong>more architectures</strong> reusing the same emit layer.</p>
 <li>End-to-end <code>go:generate</code> example, validated by asmdecl + a native arm64
   runtime test, with the library held to 100% coverage.</li>
 </ul>
-<h2 id="widen-arm64-type-support">Widen arm64 type support<a class="headerlink" href="#widen-arm64-type-support" title="Permanent link">&para;</a></h2>
+<h2 id="widen-arm64-scalar-support-done">Widen arm64 scalar support — done<a class="headerlink" href="#widen-arm64-scalar-support-done" title="Permanent link">&para;</a></h2>
 <ul>
-<li>1/2/4-byte integers, with correct move selection
-  (<code>MOVB</code>/<code>MOVH</code>/<code>MOVW</code>/<code>MOVD</code>).</li>
-<li>Floating-point registers (<code>F0..</code>) and <code>FMOV*</code> moves.</li>
-<li>Proper alignment and padding rules for mixed-size and struct arguments.</li>
-<li>Each case tested against <code>go vet</code> asmdecl.</li>
+<li>1/2/4/8-byte signed and unsigned integers and pointers, with correct move
+  selection (<code>MOVB</code>/<code>MOVBU</code>, <code>MOVH</code>/<code>MOVHU</code>, <code>MOVW</code>/<code>MOVWU</code>, <code>MOVD</code>) and sub-word
+  sign/zero extension.</li>
+<li>Floating-point registers (<code>F0..</code>) with <code>FMOVS</code>/<code>FMOVD</code>.</li>
+<li>Word-aligned result area and per-type argument alignment.</li>
+<li>Every case validated against <code>go vet</code> asmdecl and runtime tests on native
+  arm64 (see <code>examples/types</code>).</li>
+</ul>
+<h2 id="aggregates-and-vectors">Aggregates and vectors<a class="headerlink" href="#aggregates-and-vectors" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Struct and array arguments/results (field decomposition).</li>
+<li>Vector (<code>V</code>-register) values.</li>
 </ul>
 <h2 id="more-architectures">More architectures<a class="headerlink" href="#more-architectures" title="Permanent link">&para;</a></h2>
 <ul>
