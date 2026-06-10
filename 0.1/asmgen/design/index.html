@@ -471,6 +471,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#builder-helpers-beyond-moves" class="md-nav__link">
+    <span class="md-ellipsis">
+      Builder helpers beyond moves
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#validation-priorities" class="md-nav__link">
     <span class="md-ellipsis">
       Validation priorities
@@ -728,6 +737,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#builder-helpers-beyond-moves" class="md-nav__link">
+    <span class="md-ellipsis">
+      Builder helpers beyond moves
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#validation-priorities" class="md-nav__link">
     <span class="md-ellipsis">
       Validation priorities
@@ -901,6 +919,22 @@ takes explicit Plan 9 TEXT flags:</p>
 locals, addressed <code>name-N(SP)</code> via <code>Raw</code>. See
 <a href="https://github.com/go-asmgen/asmgen/tree/main/examples/frame"><code>examples/frame</code></a>,
 which spills its arguments to a 16-byte frame, non-<code>NOSPLIT</code>, runtime-proven.</p>
+<h2 id="builder-helpers-beyond-moves">Builder helpers beyond moves<a class="headerlink" href="#builder-helpers-beyond-moves" title="Permanent link">&para;</a></h2>
+<p>Besides <code>LoadArg</code>/<code>StoreRet</code>, the builder offers a few helpers that stay uniform
+across all four targets (everything else is <code>Raw</code>):</p>
+<ul>
+<li><strong><code>LoadIndirect(ptrReg, t, reg)</code> / <code>StoreIndirect(reg, ptrReg, t)</code></strong> — load/store
+  through a pointer register (<code>MOVD (R0), R1</code>), move width chosen from the type.</li>
+<li><strong><code>Label(name)</code></strong> — a branch target at column 0, for loops written via <code>Raw</code>.</li>
+<li><strong><code>emit.File.Data(name, bytes)</code></strong> — a file-local read-only <code>DATA</code>/<code>GLOBL</code>
+  constant table, returning the symbol to address. This is what SIMD kernels load
+  for a weight vector or shuffle mask; see
+  <a href="https://github.com/go-asmgen/asmgen/tree/main/examples/amd64/data"><code>examples/amd64/data</code></a>.</li>
+</ul>
+<p>These exist because they are genuinely architecture-uniform. A full
+instruction-level DSL is deliberately <em>not</em> a goal: it would re-implement, per
+architecture, what <code>cmd/asm</code> already validates — fighting the "emit text, let
+<code>cmd/asm</code> encode" thesis that keeps adding a target cheap.</p>
 <h2 id="validation-priorities">Validation priorities<a class="headerlink" href="#validation-priorities" title="Permanent link">&para;</a></h2>
 <p>The asmgen CI encodes the correctness order:</p>
 <ol>
