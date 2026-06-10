@@ -1,9 +1,10 @@
 # asmgen — Roadmap
 
-go-asmgen grows along two axes: **wider type support within an architecture**,
-and **more architectures** reusing the same emit layer.
+go-asmgen grew along two axes: **wider type support within an architecture**,
+and **more architectures** over a shared ABI0 layout model. Both are now broadly
+covered; the library is released (latest: **v0.2.0**).
 
-## v0 — proof of pipeline (here)
+## v0 — proof of pipeline — done
 
 - arm64, ABI0, sequences of 8-byte int/ptr arguments and results.
 - ISA-agnostic `emit` text writer.
@@ -20,14 +21,15 @@ and **more architectures** reusing the same emit layer.
 - Every case validated against `go vet` asmdecl and runtime tests on native
   arm64 (see `examples/types`).
 
-## Shared ABI0 model + riscv64 + loong64 — done
+## Shared ABI0 model + more architectures — done
 
 - Extracted the architecture-independent ABI0 layout into `abi`; arm64
   re-exports it with no behaviour change.
-- Added **riscv64** ([page](riscv64.md)) and **loong64** ([page](loong64.md)) as
-  thin architectures over the shared model — each only a move table (`MOV`/`MOVV`
-  for 8-byte ints, `MOVF`/`MOVD` for floats). 100% coverage, asmdecl + `cmd/asm`
-  validated, and runtime-proven under qemu-user.
+- Added **riscv64** ([page](riscv64.md)), **loong64** ([page](loong64.md)), and
+  **amd64** ([page](amd64.md)) as thin architectures over the shared model — each
+  only a move table. 100% coverage, asmdecl + `cmd/asm` validated, and
+  runtime-proven (natively on amd64/arm64, under qemu-user for riscv64/loong64).
+- Promoted `abi` and `emit` out of `internal/` so the library is importable.
 
 ## Aggregates — done
 
@@ -41,19 +43,19 @@ and **more architectures** reusing the same emit layer.
   (`name_0 … name_(n-1)`) via `abi.Array`; `Signature.Slot` for offset lookup.
   asmdecl-clean and runtime-proven. See [Aggregates](aggregates.md#fixed-size-arrays).
 
-## Vectors
+## SIMD — done (via `Raw`)
 
-- SIMD code generation works today through `Raw` over **pointer** arguments
-  (SSE/NEON) — see [SIMD](simd.md). A *single* vector load of a whole by-value
-  array is not asmdecl-clean, so passing vectors by value is not pursued.
+- Packed-add examples on **all four** targets, runtime-proven: SSE2 (amd64),
+  NEON (arm64), RVV (riscv64), LSX (loong64). Emitted through `Raw` over
+  **pointer** arguments — see [SIMD](simd.md). A *single* vector load of a whole
+  by-value array is not asmdecl-clean, so passing vectors by value is not pursued.
 - Possible future work: a typed vector-load helper that emits the
   pointer-based load/op/store sequence, removing the `Raw` boilerplate.
 
-## More architectures
+## Adding another architecture
 
-- Any further 64-bit target (e.g. a future port) follows the same recipe:
-  re-export the shared `abi` types and add one `loadMnemonic`/`storeMnemonic`
-  pair.
+- Any further 64-bit target follows the same recipe: re-export the shared `abi`
+  types and add one `loadMnemonic`/`storeMnemonic` pair.
 
 ## Possible future work
 

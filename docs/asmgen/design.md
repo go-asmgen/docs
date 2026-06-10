@@ -66,28 +66,32 @@ Sub-word loads use the sign- or zero-extending form so the whole register holds
 the correct value; floats use the `F` register file. Arithmetic is still supplied
 via the `Raw` escape hatch (e.g. `ADDW`, `FADDD`).
 
-## What v0 is — and is not — correct for
+## What's supported
 
-v0 is correct for sequences of arm64 **scalars** in any combination — signed and
-unsigned integers of 1/2/4/8 bytes, pointers, and 32/64-bit floats.
+All four targets handle sequences of **scalars** in any combination — signed and
+unsigned integers of 1/2/4/8 bytes, pointers, and 32/64-bit floats — plus:
 
-Struct, slice, and string parameters are also supported — see
-[Aggregates](aggregates.md) — and vector code is emitted through `Raw`, see
-[SIMD](simd.md). The same model drives [amd64](amd64.md) as well as the RISC
-targets.
+- **struct, slice, and string** parameters — see [Aggregates](aggregates.md);
+- **fixed-size arrays** passed by value, addressed element-wise — see
+  [Aggregates › Fixed-size arrays](aggregates.md#fixed-size-arrays);
+- **SIMD** (SSE/NEON/RVV/LSX) emitted through `Raw` over pointer arguments — see
+  [SIMD](simd.md).
 
-!!! warning "Not yet correct for"
-    - **array / vector values passed by value** (e.g. `[4]float32`), and
-    - first-class **vector types** (the typed surface stops at scalars; SIMD is
-      via `Raw`).
+The same model drives [amd64](amd64.md), [arm64](index.md), [riscv64](riscv64.md)
+and [loong64](loong64.md).
 
-Each new case must be checked against `go vet` asmdecl, which cross-checks `.s`
+!!! warning "Not yet"
+    First-class **vector types** in the typed surface — the builders' `LoadArg`/
+    `StoreRet` stop at scalars, so SIMD is written via `Raw`. A single vector
+    load of a whole by-value array is not asmdecl-clean (see [SIMD](simd.md)).
+
+Each new case is checked against `go vet` asmdecl, which cross-checks `.s`
 offsets and access widths against the Go declaration. See the
 [Roadmap](roadmap.md).
 
 ## NOSPLIT by default
 
-v0 marks every function `NOSPLIT`, which omits the stack-growth preamble. That
+go-asmgen marks every function `NOSPLIT`, which omits the stack-growth preamble. That
 is fine for small leaf functions with no locals, and keeps the emitted assembly
 minimal. It must be revisited for functions with large frames or that call other
 functions.
@@ -98,5 +102,5 @@ The asmgen CI encodes the correctness order:
 
 1. **`go vet` asmdecl** — offsets in the `.s` match the Go declaration.
 2. **Generated assembly is committed** — CI regenerates and fails on any diff.
-3. **Runtime test on native arm64** — the function is actually called and its
-   result checked.
+3. **Runtime test** — the function is actually called and its result checked:
+   natively on amd64 and arm64, and under qemu-user for riscv64 and loong64.

@@ -1,13 +1,17 @@
 # asmgen — Overview
 
-`go-asmgen` generates **Go-compatible Plan 9 assembly** for architectures the
-[avo][avo] ecosystem does not reach. It splits the problem into two layers:
+`go-asmgen` generates **Go-compatible Plan 9 assembly** for every 64-bit Go
+target — amd64, arm64, riscv64, and loong64. It splits the problem into three
+layers:
 
-- **`emit`** — knows how to write well-formed Plan 9 `.s` lines (a
-  `TEXT` block, instruction lines, the file header with `//go:build` and
+- **`abi`** — the architecture-independent ABI0 frame layout (offsets,
+  alignment, word size). All four targets share it.
+- **`amd64` / `arm64` / `riscv64` / `loong64`** — thin per-architecture builders:
+  a move/register table over the shared layout, plus a `Raw` escape hatch for
+  everything else.
+- **`emit`** — writes well-formed Plan 9 `.s` lines (the `TEXT` block,
+  instruction lines, the file header with `//go:build` and
   `#include "textflag.h"`). It knows nothing about any specific ISA.
-- **`arm64`** — computes the **ABI0 frame layout** for a function and drives the
-  emit layer with arm64 instruction text.
 
 ## The key idea: emit text, don't encode bytes
 
@@ -15,8 +19,8 @@ avo contains a full amd64 instruction encoder. That is powerful, but porting it
 to a new ISA means re-implementing encoding for that ISA. go-asmgen sidesteps
 this: it produces the same Plan 9 assembly text a human would hand-write, and
 **`cmd/asm` does the encoding** — the very same assembler the Go toolchain
-already uses. Adding an architecture therefore costs an ABI model and a small
-set of `MOV`/arithmetic emitters, not an encoder.
+already uses. Adding an architecture therefore costs only a move table over the
+shared ABI0 model, not an encoder.
 
 ## What you write
 
@@ -24,11 +28,11 @@ You describe a function's signature, then drive a small builder:
 
 ```go
 sig := arm64.Layout(
-    []string{"a", "b"}, []int{8, 8}, // args:  a, b int64
-    []string{"ret"}, []int{8},       // result: int64
+    []string{"a", "b"}, []arm64.Type{arm64.Int64, arm64.Int64}, // args
+    []string{"ret"}, []arm64.Type{arm64.Int64},                 // result
 )
 
-b := arm64.NewFunc("add", sig, 0)    // frameSize 0, NOSPLIT by default in v0
+b := arm64.NewFunc("add", sig, 0)    // frameSize 0, NOSPLIT by default
 b.LoadArg("a", "R0").
     LoadArg("b", "R1").
     Raw("ADD R1, R0, R2").
