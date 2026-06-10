@@ -10,26 +10,28 @@
       
       
       
-        <link rel="canonical" href="https://go-asmgen.github.io/docs/0.1/">
+        <link rel="canonical" href="https://go-asmgen.github.io/docs/0.1/asmgen/loong64/">
       
       
+        <link rel="prev" href="../riscv64/">
       
-        <link rel="next" href="asmgen/">
+      
+        <link rel="next" href="../roadmap/">
       
       
-      <link rel="icon" href="assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
     
     
       
-        <title>go-asmgen docs</title>
+        <title>Third architecture: loong64 - go-asmgen docs</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.6f8fc17f.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6f8fc17f.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -48,7 +50,7 @@
       
     
     
-    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -74,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#go-asmgen-documentation" class="md-skip">
+        <a href="#third-architecture-loong64" class="md-skip">
           Skip to content
         </a>
       
@@ -94,7 +96,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="go-asmgen docs" class="md-header__button md-logo" aria-label="go-asmgen docs" data-md-component="logo">
+    <a href="../.." title="go-asmgen docs" class="md-header__button md-logo" aria-label="go-asmgen docs" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -114,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Home
+              Third architecture: loong64
             
           </span>
         </div>
@@ -229,7 +231,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="go-asmgen docs" class="md-nav__button md-logo" aria-label="go-asmgen docs" data-md-component="logo">
+    <a href="../.." title="go-asmgen docs" class="md-nav__button md-logo" aria-label="go-asmgen docs" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -256,19 +258,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="." class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -277,7 +270,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -286,8 +278,10 @@
       
   
   
+    
   
   
+  
     
     
     
@@ -297,11 +291,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
           <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
@@ -315,7 +309,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             asmgen
@@ -329,7 +323,7 @@
   
   
     <li class="md-nav__item">
-      <a href="asmgen/" class="md-nav__link">
+      <a href="../" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -350,7 +344,7 @@
   
   
     <li class="md-nav__item">
-      <a href="asmgen/quickstart/" class="md-nav__link">
+      <a href="../quickstart/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -371,7 +365,7 @@
   
   
     <li class="md-nav__item">
-      <a href="asmgen/design/" class="md-nav__link">
+      <a href="../design/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -392,7 +386,7 @@
   
   
     <li class="md-nav__item">
-      <a href="asmgen/riscv64/" class="md-nav__link">
+      <a href="../riscv64/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -410,10 +404,30 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="asmgen/loong64/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Third architecture: loong64
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -422,6 +436,62 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-move-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      The move table
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-note-on-arithmetic-and-cmdasm" class="md-nav__link">
+    <span class="md-ellipsis">
+      A note on arithmetic and cmd/asm
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validation
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -434,7 +504,7 @@
   
   
     <li class="md-nav__item">
-      <a href="asmgen/roadmap/" class="md-nav__link">
+      <a href="../roadmap/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -462,7 +532,7 @@
   
   
     <li class="md-nav__item">
-      <a href="contributing/" class="md-nav__link">
+      <a href="../../contributing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -495,6 +565,50 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-move-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      The move table
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-note-on-arithmetic-and-cmdasm" class="md-nav__link">
+    <span class="md-ellipsis">
+      A note on arithmetic and cmd/asm
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validation
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -508,50 +622,92 @@
                   
 
 
-<h1 id="go-asmgen-documentation">go-asmgen documentation<a class="headerlink" href="#go-asmgen-documentation" title="Permanent link">&para;</a></h1>
-<p><strong>Ergonomic generation of Go-compatible Plan 9 assembly for non-amd64
-architectures</strong> — <strong>arm64</strong>, <strong>riscv64</strong>, and <strong>loong64</strong>.</p>
-<p>go-asmgen is the multi-architecture counterpart to what <a href="https://github.com/mmcloughlin/avo">avo</a> does for
-amd64. avo encodes instruction bytes itself, which is exactly what makes
-extending it to new ISAs expensive. go-asmgen instead <strong>emits Plan 9 assembly
-text and lets the Go toolchain assembler (<code>cmd/asm</code>) encode it</strong> — so each new
-architecture needs only a thin move/register surface over a <strong>shared</strong> ABI0
-layout model, not a byte-level encoder.</p>
+<h1 id="third-architecture-loong64">Third architecture: loong64<a class="headerlink" href="#third-architecture-loong64" title="Permanent link">&para;</a></h1>
+<p>loong64 (LoongArch 64-bit) was the cheapest architecture yet — it confirms that
+the <a href="../riscv64/">riscv64</a> drop-in was not a coincidence between two similar
+ISAs. It reuses the shared ABI0 model (<code>internal/abi</code>) unchanged and adds only a
+move table.</p>
+<h2 id="the-move-table">The move table<a class="headerlink" href="#the-move-table" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Package</th>
-<th>What it is</th>
+<th>Type</th>
+<th>arm64</th>
+<th>riscv64</th>
+<th>loong64</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><a href="asmgen/"><code>arm64</code></a></td>
-<td>builder emitting Plan 9 arm64 instructions (<code>MOVD</code>, <code>FMOVS</code>/<code>FMOVD</code>)</td>
+<td><code>int64</code> / <code>uint64</code> / pointer</td>
+<td><code>MOVD</code></td>
+<td><code>MOV</code></td>
+<td><strong><code>MOVV</code></strong></td>
 </tr>
 <tr>
-<td><a href="asmgen/riscv64/"><code>riscv64</code></a></td>
-<td>builder emitting Plan 9 riscv64 instructions (<code>MOV</code>, <code>MOVF</code>/<code>MOVD</code>)</td>
+<td><code>int8</code>/<code>int16</code>/<code>int32</code> (signed)</td>
+<td><code>MOVB</code>/<code>MOVH</code>/<code>MOVW</code></td>
+<td>same</td>
+<td>same</td>
 </tr>
 <tr>
-<td><a href="asmgen/loong64/"><code>loong64</code></a></td>
-<td>builder emitting Plan 9 loong64 instructions (<code>MOVV</code>, <code>MOVF</code>/<code>MOVD</code>)</td>
+<td><code>uint8</code>/<code>uint16</code>/<code>uint32</code></td>
+<td><code>MOVBU</code>/<code>MOVHU</code>/<code>MOVWU</code></td>
+<td>same</td>
+<td>same</td>
 </tr>
 <tr>
-<td><code>internal/abi</code></td>
-<td>the architecture-independent ABI0 layout model all builders share</td>
+<td><code>float32</code></td>
+<td><code>FMOVS</code></td>
+<td><code>MOVF</code></td>
+<td><code>MOVF</code></td>
 </tr>
 <tr>
-<td><code>internal/emit</code></td>
-<td>a deliberately dumb, ISA-agnostic writer of well-formed Plan 9 <code>.s</code> text</td>
+<td><code>float64</code></td>
+<td><code>FMOVD</code></td>
+<td><code>MOVD</code></td>
+<td><code>MOVD</code></td>
 </tr>
 </tbody>
 </table>
-<p>Start with the <a href="asmgen/quickstart/">Quick start</a>, read the
-<a href="asmgen/design/">ABI0 &amp; design notes</a> for why it is built this way, then see
-<a href="asmgen/riscv64/">riscv64</a> and <a href="asmgen/loong64/">loong64</a> for how cheaply a
-new ISA drops in.</p>
-<p>Source lives at <a href="https://github.com/go-asmgen/asmgen">github.com/go-asmgen/asmgen</a>.</p>
+<p>loong64's 8-byte integer move is <code>MOVV</code> (the "V" = 8-byte/doubleword, inherited
+from the MIPS lineage of Go's assembler). Floats match riscv64 (<code>MOVF</code>/<code>MOVD</code>).
+The ABI0 offsets are, again, byte-for-byte identical to the other targets.</p>
+<h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nx">sig</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">loong64</span><span class="p">.</span><span class="nx">Layout</span><span class="p">(</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;a&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;b&quot;</span><span class="p">},</span><span class="w"> </span><span class="p">[]</span><span class="nx">loong64</span><span class="p">.</span><span class="nx">Type</span><span class="p">{</span><span class="nx">loong64</span><span class="p">.</span><span class="nx">Int64</span><span class="p">,</span><span class="w"> </span><span class="nx">loong64</span><span class="p">.</span><span class="nx">Int64</span><span class="p">},</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;ret&quot;</span><span class="p">},</span><span class="w"> </span><span class="p">[]</span><span class="nx">loong64</span><span class="p">.</span><span class="nx">Type</span><span class="p">{</span><span class="nx">loong64</span><span class="p">.</span><span class="nx">Int64</span><span class="p">},</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="p">)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nx">b</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">loong64</span><span class="p">.</span><span class="nx">NewFunc</span><span class="p">(</span><span class="s">&quot;add&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">sig</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nx">b</span><span class="p">.</span><span class="nx">LoadArg</span><span class="p">(</span><span class="s">&quot;a&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;R4&quot;</span><span class="p">).</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="nx">LoadArg</span><span class="p">(</span><span class="s">&quot;b&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;R5&quot;</span><span class="p">).</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="nx">Raw</span><span class="p">(</span><span class="s">&quot;ADDV R5, R4, R6&quot;</span><span class="p">).</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="nx">StoreRet</span><span class="p">(</span><span class="s">&quot;R6&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ret&quot;</span><span class="p">).</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="nx">Ret</span><span class="p">()</span>
+</code></pre></div>
+<p>emits:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nf">TEXT</span><span class="w"> </span><span class="err">·</span><span class="no">add</span><span class="p">(</span><span class="no">SB</span><span class="p">),</span><span class="w"> </span><span class="no">NOSPLIT</span><span class="p">,</span><span class="w"> </span><span class="no">$0-24</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="nf">MOVV</span><span class="w"> </span><span class="no">a</span><span class="err">+</span><span class="mi">0</span><span class="p">(</span><span class="no">FP</span><span class="p">),</span><span class="w"> </span><span class="no">R4</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nf">MOVV</span><span class="w"> </span><span class="no">b</span><span class="err">+</span><span class="mi">8</span><span class="p">(</span><span class="no">FP</span><span class="p">),</span><span class="w"> </span><span class="no">R5</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nf">ADDV</span><span class="w"> </span><span class="no">R5</span><span class="p">,</span><span class="w"> </span><span class="no">R4</span><span class="p">,</span><span class="w"> </span><span class="no">R6</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="nf">MOVV</span><span class="w"> </span><span class="no">R6</span><span class="p">,</span><span class="w"> </span><span class="no">ret</span><span class="err">+</span><span class="mi">16</span><span class="p">(</span><span class="no">FP</span><span class="p">)</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="nf">RET</span>
+</code></pre></div>
+<h2 id="a-note-on-arithmetic-and-cmdasm">A note on arithmetic and <code>cmd/asm</code><a class="headerlink" href="#a-note-on-arithmetic-and-cmdasm" title="Permanent link">&para;</a></h2>
+<p>Arithmetic is supplied through the <code>Raw</code> escape hatch, and <code>cmd/asm</code> is the
+backstop that keeps it honest. loong64's assembler has no three-register <code>ADDW</code>
+form, so the int32 example uses a 64-bit <code>ADDV</code> with a <code>MOVW</code> store (the low 32
+bits of the sum are the correct <code>int32</code> result). The build step caught the wrong
+mnemonic immediately — the move-selection surface that go-asmgen <em>does</em> model
+(<code>MOVW</code> load/store) is unaffected.</p>
+<h2 id="validation">Validation<a class="headerlink" href="#validation" title="Permanent link">&para;</a></h2>
+<p>Identical to riscv64 — asmdecl (cross-arch), <code>cmd/asm</code> cross-build, and runtime
+under qemu-user, in a dedicated <code>asm-loong64</code> CI job:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>go<span class="w"> </span>generate<span class="w"> </span>./examples/loong64/...
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nv">GOOS</span><span class="o">=</span>linux<span class="w"> </span><span class="nv">GOARCH</span><span class="o">=</span>loong64<span class="w"> </span>go<span class="w"> </span>vet<span class="w"> </span>./examples/loong64/...
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nv">GOOS</span><span class="o">=</span>linux<span class="w"> </span><span class="nv">GOARCH</span><span class="o">=</span>loong64<span class="w"> </span>go<span class="w"> </span>build<span class="w"> </span>./examples/loong64/...
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nv">GOARCH</span><span class="o">=</span>loong64<span class="w"> </span>go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-exec<span class="o">=</span>qemu-loongarch64-static<span class="w"> </span>./examples/loong64/...
+</code></pre></div>
 
 
 
@@ -604,10 +760,10 @@ new ISA drops in.</p>
     </div>
     
     
-    <script id="__config" type="application/json">{"base": ".", "features": ["navigation.sections", "navigation.top", "navigation.instant", "content.code.copy", "search.suggest"], "search": "assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.sections", "navigation.top", "navigation.instant", "content.code.copy", "search.suggest"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
-      <script src="assets/javascripts/bundle.88dd0f4e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
       
     
   </body>

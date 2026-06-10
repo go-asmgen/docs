@@ -16,7 +16,7 @@
         <link rel="prev" href="../design/">
       
       
-        <link rel="next" href="../roadmap/">
+        <link rel="next" href="../loong64/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -483,6 +483,27 @@
   
   
     <li class="md-nav__item">
+      <a href="../loong64/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Third architecture: loong64
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../roadmap/" class="md-nav__link">
         
   
@@ -690,9 +711,10 @@ layers:</p>
 </ol>
 <p>The asmgen CI runs all three in a dedicated <code>asm-riscv64</code> job.</p>
 <h2 id="adding-the-next-architecture">Adding the next architecture<a class="headerlink" href="#adding-the-next-architecture" title="Permanent link">&para;</a></h2>
-<p>loong64 (and any other 64-bit target) follows the same recipe: re-export the
-shared <code>abi</code> types, write a <code>loadMnemonic</code>/<code>storeMnemonic</code> pair, and reuse the
-<code>Builder</code> shape. The layout model does not change.</p>
+<p>Any other 64-bit target follows the same recipe: re-export the shared <code>abi</code>
+types, write a <code>loadMnemonic</code>/<code>storeMnemonic</code> pair, and reuse the <code>Builder</code>
+shape. The layout model does not change — <a href="../loong64/">loong64</a> was exactly
+this.</p>
 
 
 
