@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://go-asmgen.github.io/docs/0.1/asmgen/quickstart/">
+        <link rel="canonical" href="https://go-asmgen.github.io/docs/0.1/asmgen/riscv64/">
       
       
-        <link rel="prev" href="../">
+        <link rel="prev" href="../design/">
       
       
-        <link rel="next" href="../design/">
+        <link rel="next" href="../roadmap/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -24,7 +24,7 @@
     
     
       
-        <title>Quick start - go-asmgen docs</title>
+        <title>Second architecture: riscv64 - go-asmgen docs</title>
       
     
     
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#asmgen-quick-start" class="md-skip">
+        <a href="#second-architecture-riscv64" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Quick start
+              Second architecture: riscv64
             
           </span>
         </div>
@@ -341,30 +341,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Quick start
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -373,71 +353,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#install" class="md-nav__link">
-    <span class="md-ellipsis">
-      Install
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#1-declare-the-function-with-no-body" class="md-nav__link">
-    <span class="md-ellipsis">
-      1. Declare the function with no body
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#2-write-the-generator" class="md-nav__link">
-    <span class="md-ellipsis">
-      2. Write the generator
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#3-generate-vet-build-test" class="md-nav__link">
-    <span class="md-ellipsis">
-      3. Generate, vet, build, test
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#how-correctness-is-checked" class="md-nav__link">
-    <span class="md-ellipsis">
-      How correctness is checked
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -468,10 +383,30 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../riscv64/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Second architecture: riscv64
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -480,6 +415,62 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-the-riscv64-package-adds" class="md-nav__link">
+    <span class="md-ellipsis">
+      What the riscv64 package adds
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validating-riscv64" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validating riscv64
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adding-the-next-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adding the next architecture
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -560,45 +551,36 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#install" class="md-nav__link">
+  <a href="#what-the-riscv64-package-adds" class="md-nav__link">
     <span class="md-ellipsis">
-      Install
+      What the riscv64 package adds
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-declare-the-function-with-no-body" class="md-nav__link">
+  <a href="#example" class="md-nav__link">
     <span class="md-ellipsis">
-      1. Declare the function with no body
+      Example
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-write-the-generator" class="md-nav__link">
+  <a href="#validating-riscv64" class="md-nav__link">
     <span class="md-ellipsis">
-      2. Write the generator
+      Validating riscv64
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-generate-vet-build-test" class="md-nav__link">
+  <a href="#adding-the-next-architecture" class="md-nav__link">
     <span class="md-ellipsis">
-      3. Generate, vet, build, test
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#how-correctness-is-checked" class="md-nav__link">
-    <span class="md-ellipsis">
-      How correctness is checked
+      Adding the next architecture
     </span>
   </a>
   
@@ -619,99 +601,98 @@
                   
 
 
-<h1 id="asmgen-quick-start">asmgen — Quick start<a class="headerlink" href="#asmgen-quick-start" title="Permanent link">&para;</a></h1>
-<p>This walks through the <code>examples/add</code> program shipped in the
-<a href="https://github.com/go-asmgen/asmgen/tree/main/examples/add">asmgen repo</a>: a
-<code>func add(a, b int64) int64</code> whose body is generated arm64 assembly.</p>
-<div class="admonition note">
-<p class="admonition-title">arm64 required to run</p>
-<p>The generated assembly is built under <code>//go:build arm64</code> and exercised by a
-runtime test. Generation runs anywhere, but <strong>building and testing the
-example requires an arm64 host</strong> (Apple Silicon, an arm64 Linux box, or a
-GitHub <code>ubuntu-24.04-arm</code> runner). The library packages themselves are
-architecture-independent.</p>
-</div>
-<h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>go<span class="w"> </span>get<span class="w"> </span>github.com/go-asmgen/asmgen@latest
+<h1 id="second-architecture-riscv64">Second architecture: riscv64<a class="headerlink" href="#second-architecture-riscv64" title="Permanent link">&para;</a></h1>
+<p>riscv64 is where go-asmgen's design pays off. Adding it required <strong>no new layout
+code</strong> — it reuses the shared ABI0 model (<code>internal/abi</code>) unchanged, because
+ABI0's stack layout is identical on every 64-bit target. All that differs is the
+register file and the move table.</p>
+<h2 id="what-the-riscv64-package-adds">What the <code>riscv64</code> package adds<a class="headerlink" href="#what-the-riscv64-package-adds" title="Permanent link">&para;</a></h2>
+<p>Compared to <code>arm64</code>, the entire architecture-specific surface is the move
+selection:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>arm64</th>
+<th>riscv64</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>int64</code> / <code>uint64</code> / pointer</td>
+<td><code>MOVD</code></td>
+<td><strong><code>MOV</code></strong></td>
+</tr>
+<tr>
+<td><code>int8</code>/<code>int16</code>/<code>int32</code> (signed)</td>
+<td><code>MOVB</code>/<code>MOVH</code>/<code>MOVW</code></td>
+<td><code>MOVB</code>/<code>MOVH</code>/<code>MOVW</code></td>
+</tr>
+<tr>
+<td><code>uint8</code>/<code>uint16</code>/<code>uint32</code></td>
+<td><code>MOVBU</code>/<code>MOVHU</code>/<code>MOVWU</code></td>
+<td><code>MOVBU</code>/<code>MOVHU</code>/<code>MOVWU</code></td>
+</tr>
+<tr>
+<td><code>float32</code></td>
+<td><code>FMOVS</code></td>
+<td><strong><code>MOVF</code></strong></td>
+</tr>
+<tr>
+<td><code>float64</code></td>
+<td><code>FMOVD</code></td>
+<td><strong><code>MOVD</code></strong> (the float double move)</td>
+</tr>
+</tbody>
+</table>
+<p>Note the deliberate trap: on riscv64 <code>MOVD</code> is the <strong>float</strong> double move, while
+the 8-byte <strong>integer</strong> move is plain <code>MOV</code>. The opposite of arm64, where <code>MOVD</code>
+is the integer move. Encoding each correctly is exactly what the per-arch move
+table exists for — and <code>cmd/asm</code> rejects a wrong choice at build time.</p>
+<p>The ABI0 offsets are byte-for-byte the same as arm64. For <code>func add(a, b int64)
+int64</code> both emit <code>TEXT ·add(SB), NOSPLIT, $0-24</code> with <code>a+0(FP)</code>, <code>b+8(FP)</code>,
+<code>ret+16(FP)</code> — only the mnemonic changes (<code>MOVD</code> → <code>MOV</code>).</p>
+<h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nx">sig</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">riscv64</span><span class="p">.</span><span class="nx">Layout</span><span class="p">(</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;a&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;b&quot;</span><span class="p">},</span><span class="w"> </span><span class="p">[]</span><span class="nx">riscv64</span><span class="p">.</span><span class="nx">Type</span><span class="p">{</span><span class="nx">riscv64</span><span class="p">.</span><span class="nx">Int64</span><span class="p">,</span><span class="w"> </span><span class="nx">riscv64</span><span class="p">.</span><span class="nx">Int64</span><span class="p">},</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;ret&quot;</span><span class="p">},</span><span class="w"> </span><span class="p">[]</span><span class="nx">riscv64</span><span class="p">.</span><span class="nx">Type</span><span class="p">{</span><span class="nx">riscv64</span><span class="p">.</span><span class="nx">Int64</span><span class="p">},</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="p">)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nx">b</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">riscv64</span><span class="p">.</span><span class="nx">NewFunc</span><span class="p">(</span><span class="s">&quot;add&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">sig</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nx">b</span><span class="p">.</span><span class="nx">LoadArg</span><span class="p">(</span><span class="s">&quot;a&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;X5&quot;</span><span class="p">).</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="nx">LoadArg</span><span class="p">(</span><span class="s">&quot;b&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;X6&quot;</span><span class="p">).</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="nx">Raw</span><span class="p">(</span><span class="s">&quot;ADD X6, X5, X7&quot;</span><span class="p">).</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="nx">StoreRet</span><span class="p">(</span><span class="s">&quot;X7&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ret&quot;</span><span class="p">).</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="nx">Ret</span><span class="p">()</span>
 </code></pre></div>
-<h2 id="1-declare-the-function-with-no-body">1. Declare the function with no body<a class="headerlink" href="#1-declare-the-function-with-no-body" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">// add.go</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">package</span><span class="w"> </span><span class="nx">add</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1">//go:generate go run gen.go</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="c1">// add returns a + b. Implemented in add_arm64.s, generated by go-asmgen.</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="kd">func</span><span class="w"> </span><span class="nx">add</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="kt">int64</span><span class="p">)</span><span class="w"> </span><span class="kt">int64</span>
+<p>emits:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nf">TEXT</span><span class="w"> </span><span class="err">·</span><span class="no">add</span><span class="p">(</span><span class="no">SB</span><span class="p">),</span><span class="w"> </span><span class="no">NOSPLIT</span><span class="p">,</span><span class="w"> </span><span class="no">$0-24</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="nf">MOV</span><span class="w"> </span><span class="no">a</span><span class="err">+</span><span class="mi">0</span><span class="p">(</span><span class="no">FP</span><span class="p">),</span><span class="w"> </span><span class="no">X5</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nf">MOV</span><span class="w"> </span><span class="no">b</span><span class="err">+</span><span class="mi">8</span><span class="p">(</span><span class="no">FP</span><span class="p">),</span><span class="w"> </span><span class="no">X6</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nf">ADD</span><span class="w"> </span><span class="no">X6</span><span class="p">,</span><span class="w"> </span><span class="no">X5</span><span class="p">,</span><span class="w"> </span><span class="no">X7</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="nf">MOV</span><span class="w"> </span><span class="no">X7</span><span class="p">,</span><span class="w"> </span><span class="no">ret</span><span class="err">+</span><span class="mi">16</span><span class="p">(</span><span class="no">FP</span><span class="p">)</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="nf">RET</span>
 </code></pre></div>
-<h2 id="2-write-the-generator">2. Write the generator<a class="headerlink" href="#2-write-the-generator" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1">//go:build ignore</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1">// gen.go — run with: go run gen.go</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="kn">import</span><span class="w"> </span><span class="p">(</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="s">&quot;fmt&quot;</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="s">&quot;os&quot;</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span><span class="s">&quot;github.com/go-asmgen/asmgen/arm64&quot;</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">    </span><span class="s">&quot;github.com/go-asmgen/asmgen/internal/emit&quot;</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="p">)</span>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">    </span><span class="c1">// func add(a, b int64) int64</span>
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">    </span><span class="nx">sig</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">arm64</span><span class="p">.</span><span class="nx">Layout</span><span class="p">(</span>
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">        </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;a&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;b&quot;</span><span class="p">},</span><span class="w"> </span><span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">},</span>
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">        </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;ret&quot;</span><span class="p">},</span><span class="w"> </span><span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">8</span><span class="p">},</span>
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">    </span><span class="p">)</span>
-<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>
-<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">    </span><span class="nx">b</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">arm64</span><span class="p">.</span><span class="nx">NewFunc</span><span class="p">(</span><span class="s">&quot;add&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">sig</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
-<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="w">    </span><span class="nx">b</span><span class="p">.</span><span class="nx">LoadArg</span><span class="p">(</span><span class="s">&quot;a&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;R0&quot;</span><span class="p">).</span>
-<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="w">        </span><span class="nx">LoadArg</span><span class="p">(</span><span class="s">&quot;b&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;R1&quot;</span><span class="p">).</span>
-<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="w">        </span><span class="nx">Raw</span><span class="p">(</span><span class="s">&quot;ADD R1, R0, R2&quot;</span><span class="p">).</span>
-<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="w">        </span><span class="nx">StoreRet</span><span class="p">(</span><span class="s">&quot;R2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ret&quot;</span><span class="p">).</span>
-<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a><span class="w">        </span><span class="nx">Ret</span><span class="p">()</span>
-<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>
-<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a><span class="w">    </span><span class="nx">f</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">emit</span><span class="p">.</span><span class="nx">NewFile</span><span class="p">(</span><span class="s">&quot;arm64&quot;</span><span class="p">)</span>
-<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a><span class="w">    </span><span class="nx">f</span><span class="p">.</span><span class="nx">Add</span><span class="p">(</span><span class="nx">b</span><span class="p">.</span><span class="nx">Func</span><span class="p">())</span>
-<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>
-<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">WriteFile</span><span class="p">(</span><span class="s">&quot;add_arm64.s&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">f</span><span class="p">.</span><span class="nx">String</span><span class="p">()),</span><span class="w"> </span><span class="mi">0</span><span class="nx">o644</span><span class="p">);</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a><span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Fprintln</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stderr</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
-<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a><span class="w">        </span><span class="nx">os</span><span class="p">.</span><span class="nx">Exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;wrote add_arm64.s&quot;</span><span class="p">)</span>
-<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a><span class="p">}</span>
-</code></pre></div>
-<h2 id="3-generate-vet-build-test">3. Generate, vet, build, test<a class="headerlink" href="#3-generate-vet-build-test" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>go<span class="w"> </span>generate<span class="w"> </span>./...<span class="w">          </span><span class="c1"># runs gen.go -&gt; writes add_arm64.s</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nv">GOARCH</span><span class="o">=</span>arm64<span class="w"> </span>go<span class="w"> </span>vet<span class="w"> </span>./...<span class="w">  </span><span class="c1"># asmdecl cross-checks .s offsets vs add.go decl</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nv">GOARCH</span><span class="o">=</span>arm64<span class="w"> </span>go<span class="w"> </span>build<span class="w"> </span>./...
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>./...<span class="w">              </span><span class="c1"># on an arm64 host (or under qemu/Rosetta)</span>
-</code></pre></div>
-<p>The generated <code>add_arm64.s</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1">// Code generated by go-asmgen. DO NOT EDIT.</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1">//go:build arm64</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="c1">#include &quot;textflag.h&quot;</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="nf">TEXT</span><span class="w"> </span><span class="err">·</span><span class="no">add</span><span class="p">(</span><span class="no">SB</span><span class="p">),</span><span class="w"> </span><span class="no">NOSPLIT</span><span class="p">,</span><span class="w"> </span><span class="no">$0-24</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span><span class="nf">MOVD</span><span class="w"> </span><span class="no">a</span><span class="err">+</span><span class="mi">0</span><span class="p">(</span><span class="no">FP</span><span class="p">),</span><span class="w"> </span><span class="no">R0</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="nf">MOVD</span><span class="w"> </span><span class="no">b</span><span class="err">+</span><span class="mi">8</span><span class="p">(</span><span class="no">FP</span><span class="p">),</span><span class="w"> </span><span class="no">R1</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">    </span><span class="nf">ADD</span><span class="w"> </span><span class="no">R1</span><span class="p">,</span><span class="w"> </span><span class="no">R0</span><span class="p">,</span><span class="w"> </span><span class="no">R2</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">    </span><span class="nf">MOVD</span><span class="w"> </span><span class="no">R2</span><span class="p">,</span><span class="w"> </span><span class="no">ret</span><span class="err">+</span><span class="mi">16</span><span class="p">(</span><span class="no">FP</span><span class="p">)</span>
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">    </span><span class="nf">RET</span>
-</code></pre></div>
-<h2 id="how-correctness-is-checked">How correctness is checked<a class="headerlink" href="#how-correctness-is-checked" title="Permanent link">&para;</a></h2>
-<p>In priority order — the same checks the asmgen CI runs:</p>
+<h2 id="validating-riscv64">Validating riscv64<a class="headerlink" href="#validating-riscv64" title="Permanent link">&para;</a></h2>
+<p>There is no common riscv64 developer host, so correctness is established in
+layers:</p>
 <ol>
-<li><strong><code>go vet</code> asmdecl passes.</strong> The cheapest, strongest check: it verifies every
-   <code>name+offset(FP)</code> in the <code>.s</code> matches the Go declaration. Wrong offsets are
-   caught before runtime.</li>
-<li><strong>Generated assembly is committed and up to date.</strong> CI regenerates and fails
-   on any diff, so the checked-in <code>.s</code> always matches the generator.</li>
-<li><strong>Runtime test on real arm64</strong> — the function is called and its result
-   checked, on a native arm64 runner.</li>
+<li><strong><code>go vet</code> asmdecl</strong> (cross-arch) — verifies offsets and access widths
+   against the Go declaration. Runs anywhere:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nv">GOOS</span><span class="o">=</span>linux<span class="w"> </span><span class="nv">GOARCH</span><span class="o">=</span>riscv64<span class="w"> </span>go<span class="w"> </span>vet<span class="w"> </span>./examples/riscv64/...
+</code></pre></div></li>
+<li><strong><code>cmd/asm</code> cross-build</strong> — rejects any invalid mnemonic or operand form:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nv">GOOS</span><span class="o">=</span>linux<span class="w"> </span><span class="nv">GOARCH</span><span class="o">=</span>riscv64<span class="w"> </span>go<span class="w"> </span>build<span class="w"> </span>./examples/riscv64/...
+</code></pre></div></li>
+<li><strong>Runtime under emulation</strong> — the generated instructions are actually
+   executed, in CI under qemu-user, or locally with Docker's riscv64 support:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nv">GOARCH</span><span class="o">=</span>riscv64<span class="w"> </span>go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-exec<span class="o">=</span>qemu-riscv64-static<span class="w"> </span>./examples/riscv64/...
+</code></pre></div></li>
 </ol>
+<p>The asmgen CI runs all three in a dedicated <code>asm-riscv64</code> job.</p>
+<h2 id="adding-the-next-architecture">Adding the next architecture<a class="headerlink" href="#adding-the-next-architecture" title="Permanent link">&para;</a></h2>
+<p>loong64 (and any other 64-bit target) follows the same recipe: re-export the
+shared <code>abi</code> types, write a <code>loadMnemonic</code>/<code>storeMnemonic</code> pair, and reuse the
+<code>Builder</code> shape. The layout model does not change.</p>
 
 
 

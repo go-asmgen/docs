@@ -392,6 +392,27 @@
   
   
     <li class="md-nav__item">
+      <a href="asmgen/riscv64/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Second architecture: riscv64
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="asmgen/roadmap/" class="md-nav__link">
         
   
@@ -468,13 +489,13 @@
 
 <h1 id="go-asmgen-documentation">go-asmgen documentation<a class="headerlink" href="#go-asmgen-documentation" title="Permanent link">&para;</a></h1>
 <p><strong>Ergonomic generation of Go-compatible Plan 9 assembly for non-amd64
-architectures</strong>, starting with <strong>arm64</strong>.</p>
+architectures</strong> — <strong>arm64</strong> and <strong>riscv64</strong>.</p>
 <p>go-asmgen is the multi-architecture counterpart to what <a href="https://github.com/mmcloughlin/avo">avo</a> does for
 amd64. avo encodes instruction bytes itself, which is exactly what makes
 extending it to new ISAs expensive. go-asmgen instead <strong>emits Plan 9 assembly
 text and lets the Go toolchain assembler (<code>cmd/asm</code>) encode it</strong> — so each new
-architecture needs only an ABI layout model plus a thin instruction-emit
-surface, not a byte-level encoder.</p>
+architecture needs only a thin move/register surface over a <strong>shared</strong> ABI0
+layout model, not a byte-level encoder.</p>
 <table>
 <thead>
 <tr>
@@ -485,7 +506,15 @@ surface, not a byte-level encoder.</p>
 <tbody>
 <tr>
 <td><a href="asmgen/"><code>arm64</code></a></td>
-<td>ABI0 frame-layout model + an ergonomic builder that emits Plan 9 arm64 instructions</td>
+<td>builder emitting Plan 9 arm64 instructions (<code>MOVD</code>, <code>FMOVS</code>/<code>FMOVD</code>)</td>
+</tr>
+<tr>
+<td><a href="asmgen/riscv64/"><code>riscv64</code></a></td>
+<td>builder emitting Plan 9 riscv64 instructions (<code>MOV</code>, <code>MOVF</code>/<code>MOVD</code>)</td>
+</tr>
+<tr>
+<td><code>internal/abi</code></td>
+<td>the architecture-independent ABI0 layout model both builders share</td>
 </tr>
 <tr>
 <td><code>internal/emit</code></td>
@@ -493,9 +522,10 @@ surface, not a byte-level encoder.</p>
 </tr>
 </tbody>
 </table>
-<p>Start with the <a href="asmgen/quickstart/">Quick start</a>, then read the
-<a href="asmgen/design/">ABI0 &amp; design notes</a> for why it is built this way and what
-is and is not correct in v0.</p>
+<p>Start with the <a href="asmgen/quickstart/">Quick start</a>, read the
+<a href="asmgen/design/">ABI0 &amp; design notes</a> for why it is built this way, then see
+<a href="asmgen/riscv64/">Second architecture: riscv64</a> for how cheaply a new ISA
+drops in.</p>
 <p>Source lives at <a href="https://github.com/go-asmgen/asmgen">github.com/go-asmgen/asmgen</a>.</p>
 
 

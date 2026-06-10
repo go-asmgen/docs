@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://go-asmgen.github.io/docs/0.1/asmgen/roadmap/">
       
       
-        <link rel="prev" href="../design/">
+        <link rel="prev" href="../riscv64/">
       
       
         <link rel="next" href="../../contributing/">
@@ -383,6 +383,27 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../riscv64/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Second architecture: riscv64
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -444,6 +465,15 @@
   <a href="#widen-arm64-scalar-support-done" class="md-nav__link">
     <span class="md-ellipsis">
       Widen arm64 scalar support — done
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#shared-abi0-model-riscv64-done" class="md-nav__link">
+    <span class="md-ellipsis">
+      Shared ABI0 model + riscv64 — done
     </span>
   </a>
   
@@ -557,6 +587,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#shared-abi0-model-riscv64-done" class="md-nav__link">
+    <span class="md-ellipsis">
+      Shared ABI0 model + riscv64 — done
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#aggregates-and-vectors" class="md-nav__link">
     <span class="md-ellipsis">
       Aggregates and vectors
@@ -618,6 +657,15 @@ and <strong>more architectures</strong> reusing the same emit layer.</p>
 <li>Every case validated against <code>go vet</code> asmdecl and runtime tests on native
   arm64 (see <code>examples/types</code>).</li>
 </ul>
+<h2 id="shared-abi0-model-riscv64-done">Shared ABI0 model + riscv64 — done<a class="headerlink" href="#shared-abi0-model-riscv64-done" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Extracted the architecture-independent ABI0 layout into <code>internal/abi</code>; arm64
+  re-exports it with no behaviour change.</li>
+<li>Added <strong>riscv64</strong> as a thin second architecture over the shared model — only a
+  move table differs (<code>MOV</code> for 8-byte ints, <code>MOVF</code>/<code>MOVD</code> for floats). 100%
+  coverage, asmdecl + <code>cmd/asm</code> validated, and runtime-proven under qemu-user.
+  See <a href="../riscv64/">Second architecture: riscv64</a>.</li>
+</ul>
 <h2 id="aggregates-and-vectors">Aggregates and vectors<a class="headerlink" href="#aggregates-and-vectors" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Struct and array arguments/results (field decomposition).</li>
@@ -625,8 +673,7 @@ and <strong>more architectures</strong> reusing the same emit layer.</p>
 </ul>
 <h2 id="more-architectures">More architectures<a class="headerlink" href="#more-architectures" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>riscv64</strong> (starting from RV64GC), reusing the emit layer.</li>
-<li><strong>loong64</strong>.</li>
+<li><strong>loong64</strong>, reusing the shared layout model (same recipe as riscv64).</li>
 </ul>
 <h2 id="possible-future-work">Possible future work<a class="headerlink" href="#possible-future-work" title="Permanent link">&para;</a></h2>
 <ul>
