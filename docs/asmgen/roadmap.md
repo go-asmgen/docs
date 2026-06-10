@@ -20,6 +20,15 @@ and **more architectures** reusing the same emit layer.
 - Every case validated against `go vet` asmdecl and runtime tests on native
   arm64 (see `examples/types`).
 
+## Shared ABI0 model + riscv64 — done
+
+- Extracted the architecture-independent ABI0 layout into `internal/abi`; arm64
+  re-exports it with no behaviour change.
+- Added **riscv64** as a thin second architecture over the shared model — only a
+  move table differs (`MOV` for 8-byte ints, `MOVF`/`MOVD` for floats). 100%
+  coverage, asmdecl + `cmd/asm` validated, and runtime-proven under qemu-user.
+  See [Second architecture: riscv64](riscv64.md).
+
 ## Aggregates and vectors
 
 - Struct and array arguments/results (field decomposition).
@@ -27,8 +36,7 @@ and **more architectures** reusing the same emit layer.
 
 ## More architectures
 
-- **riscv64** (starting from RV64GC), reusing the emit layer.
-- **loong64**.
+- **loong64**, reusing the shared layout model (same recipe as riscv64).
 
 ## Possible future work
 

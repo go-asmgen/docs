@@ -38,6 +38,7 @@ nav:
       - Overview: asmgen/index.md
       - Quick start: asmgen/quickstart.md
       - ABI0 & design notes: asmgen/design.md
+      - "Second architecture: riscv64": asmgen/riscv64.md
       - Roadmap: asmgen/roadmap.md
   - Contributing: contributing.md
 
