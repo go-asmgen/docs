@@ -1,0 +1,55 @@
+site_name: go-asmgen docs
+site_description: Ergonomic generation of Go-compatible Plan 9 assembly for non-amd64 architectures, delegating encoding to cmd/asm.
+site_url: https://go-asmgen.github.io/docs/
+repo_url: https://github.com/go-asmgen
+repo_name: go-asmgen
+edit_uri: ""
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.top
+    - navigation.instant
+    - content.code.copy
+    - search.suggest
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+extra:
+  version:
+    provider: mike
+    default: latest
+
+nav:
+  - Home: index.md
+  - asmgen:
+      - Overview: asmgen/index.md
+      - Quick start: asmgen/quickstart.md
+      - ABI0 & design notes: asmgen/design.md
+      - Roadmap: asmgen/roadmap.md
+  - Contributing: contributing.md
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
