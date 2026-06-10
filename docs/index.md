@@ -1,17 +1,18 @@
 # go-asmgen documentation
 
-**Ergonomic generation of Go-compatible Plan 9 assembly for non-amd64
-architectures** — **arm64**, **riscv64**, and **loong64**.
+**Ergonomic generation of Go-compatible Plan 9 assembly for every 64-bit Go
+target** — **amd64**, **arm64**, **riscv64**, and **loong64**.
 
-go-asmgen is the multi-architecture counterpart to what [avo][avo] does for
-amd64. avo encodes instruction bytes itself, which is exactly what makes
-extending it to new ISAs expensive. go-asmgen instead **emits Plan 9 assembly
-text and lets the Go toolchain assembler (`cmd/asm`) encode it** — so each new
-architecture needs only a thin move/register surface over a **shared** ABI0
-layout model, not a byte-level encoder.
+[avo][avo] does this for amd64 by encoding instruction bytes itself, which is
+exactly what makes extending it to new ISAs expensive. go-asmgen instead **emits
+Plan 9 assembly text and lets the Go toolchain assembler (`cmd/asm`) encode it**
+— so each architecture is only a thin move/register surface over a **shared**
+ABI0 layout model, not a byte-level encoder. avo remains the richer choice for
+amd64-specific work; go-asmgen offers one uniform builder across every target.
 
 | Package | What it is |
 | --- | --- |
+| [`amd64`](asmgen/amd64.md) | builder emitting Plan 9 amd64 instructions (`MOVQ`, `MOVSS`/`MOVSD`) |
 | [`arm64`](asmgen/index.md) | builder emitting Plan 9 arm64 instructions (`MOVD`, `FMOVS`/`FMOVD`) |
 | [`riscv64`](asmgen/riscv64.md) | builder emitting Plan 9 riscv64 instructions (`MOV`, `MOVF`/`MOVD`) |
 | [`loong64`](asmgen/loong64.md) | builder emitting Plan 9 loong64 instructions (`MOVV`, `MOVF`/`MOVD`) |

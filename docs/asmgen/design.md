@@ -72,11 +72,14 @@ v0 is correct for sequences of arm64 **scalars** in any combination — signed a
 unsigned integers of 1/2/4/8 bytes, pointers, and 32/64-bit floats.
 
 Struct, slice, and string parameters are also supported — see
-[Aggregates](aggregates.md).
+[Aggregates](aggregates.md) — and vector code is emitted through `Raw`, see
+[SIMD](simd.md). The same model drives [amd64](amd64.md) as well as the RISC
+targets.
 
 !!! warning "Not yet correct for"
-    - **array** arguments/results, and
-    - **vector** values (the `V` register file).
+    - **array / vector values passed by value** (e.g. `[4]float32`), and
+    - first-class **vector types** (the typed surface stops at scalars; SIMD is
+      via `Raw`).
 
 Each new case must be checked against `go vet` asmdecl, which cross-checks `.s`
 offsets and access widths against the Go declaration. See the
