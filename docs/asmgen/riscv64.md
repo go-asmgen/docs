@@ -77,6 +77,7 @@ The asmgen CI runs all three in a dedicated `asm-riscv64` job.
 
 ## Adding the next architecture
 
-loong64 (and any other 64-bit target) follows the same recipe: re-export the
-shared `abi` types, write a `loadMnemonic`/`storeMnemonic` pair, and reuse the
-`Builder` shape. The layout model does not change.
+Any other 64-bit target follows the same recipe: re-export the shared `abi`
+types, write a `loadMnemonic`/`storeMnemonic` pair, and reuse the `Builder`
+shape. The layout model does not change — [loong64](loong64.md) was exactly
+this.

@@ -20,23 +20,26 @@ and **more architectures** reusing the same emit layer.
 - Every case validated against `go vet` asmdecl and runtime tests on native
   arm64 (see `examples/types`).
 
-## Shared ABI0 model + riscv64 — done
+## Shared ABI0 model + riscv64 + loong64 — done
 
 - Extracted the architecture-independent ABI0 layout into `internal/abi`; arm64
   re-exports it with no behaviour change.
-- Added **riscv64** as a thin second architecture over the shared model — only a
-  move table differs (`MOV` for 8-byte ints, `MOVF`/`MOVD` for floats). 100%
-  coverage, asmdecl + `cmd/asm` validated, and runtime-proven under qemu-user.
-  See [Second architecture: riscv64](riscv64.md).
+- Added **riscv64** ([page](riscv64.md)) and **loong64** ([page](loong64.md)) as
+  thin architectures over the shared model — each only a move table (`MOV`/`MOVV`
+  for 8-byte ints, `MOVF`/`MOVD` for floats). 100% coverage, asmdecl + `cmd/asm`
+  validated, and runtime-proven under qemu-user.
 
 ## Aggregates and vectors
 
-- Struct and array arguments/results (field decomposition).
+- Struct and array arguments/results (field decomposition), which unlocks slices
+  and strings (their underlying `{ptr, len[, cap]}` structs).
 - Vector (`V`-register) values.
 
 ## More architectures
 
-- **loong64**, reusing the shared layout model (same recipe as riscv64).
+- Any further 64-bit target (e.g. a future port) follows the same recipe:
+  re-export the shared `abi` types and add one `loadMnemonic`/`storeMnemonic`
+  pair.
 
 ## Possible future work
 

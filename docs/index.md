@@ -1,7 +1,7 @@
 # go-asmgen documentation
 
 **Ergonomic generation of Go-compatible Plan 9 assembly for non-amd64
-architectures** — **arm64** and **riscv64**.
+architectures** — **arm64**, **riscv64**, and **loong64**.
 
 go-asmgen is the multi-architecture counterpart to what [avo][avo] does for
 amd64. avo encodes instruction bytes itself, which is exactly what makes
@@ -14,13 +14,14 @@ layout model, not a byte-level encoder.
 | --- | --- |
 | [`arm64`](asmgen/index.md) | builder emitting Plan 9 arm64 instructions (`MOVD`, `FMOVS`/`FMOVD`) |
 | [`riscv64`](asmgen/riscv64.md) | builder emitting Plan 9 riscv64 instructions (`MOV`, `MOVF`/`MOVD`) |
-| `internal/abi` | the architecture-independent ABI0 layout model both builders share |
+| [`loong64`](asmgen/loong64.md) | builder emitting Plan 9 loong64 instructions (`MOVV`, `MOVF`/`MOVD`) |
+| `internal/abi` | the architecture-independent ABI0 layout model all builders share |
 | `internal/emit` | a deliberately dumb, ISA-agnostic writer of well-formed Plan 9 `.s` text |
 
 Start with the [Quick start](asmgen/quickstart.md), read the
 [ABI0 & design notes](asmgen/design.md) for why it is built this way, then see
-[Second architecture: riscv64](asmgen/riscv64.md) for how cheaply a new ISA
-drops in.
+[riscv64](asmgen/riscv64.md) and [loong64](asmgen/loong64.md) for how cheaply a
+new ISA drops in.
 
 Source lives at [github.com/go-asmgen/asmgen](https://github.com/go-asmgen/asmgen).
 
