@@ -73,6 +73,31 @@ internal structure of slices, strings, and structs — and rejects any
 padded-field and slice-header offsets self-checking: if go-asmgen computed them
 wrong, `go vet` would fail before any code ran.
 
+## Fixed-size arrays
+
+A `[n]T` array passed **by value** is laid out the same way — `abi.Array` flattens
+it into element slots `name_0 … name_(n-1)`, exactly the names asmdecl gives array
+elements:
+
+```go
+sig := abi.LayoutArgs(
+    []abi.Arg{abi.Array("v", abi.Int64, 3)},   // v_0@0, v_1@8, v_2@16
+    []abi.Arg{abi.Scalar("ret", abi.Int64)},
+)
+b.LoadArg("v_0", "R0").LoadArg("v_1", "R1").LoadArg("v_2", "R2"). /* … */
+```
+
+See [`examples/array`](https://github.com/go-asmgen/asmgen/tree/main/examples/array).
+`abi.Signature.Slot(name)` looks up any slot's offset, handy when you need an
+aggregate's base offset for a `Raw` access.
+
+!!! note "By-value arrays are accessed element-wise"
+    `go vet` asmdecl does **not** accept a single wide/vector load of a whole
+    by-value array — e.g. `MOVOU a+0(FP), X0` for a `[4]int32` is rejected
+    ("invalid MOVOU … is 16-byte value"). Idiomatic Go SIMD therefore passes
+    vector data **by pointer**; see [SIMD](simd.md).
+
 ## Not yet covered
 
-Arrays and vector (`V`-register) values. See the [Roadmap](roadmap.md).
+First-class vector *types* in the typed surface (SIMD is via `Raw`). See the
+[Roadmap](roadmap.md).

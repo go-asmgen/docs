@@ -63,8 +63,17 @@ so the same `Raw`-based approach extends to all of them:
 | riscv64 | RVV — the RISC-V Vector extension (`VSETVLI`, `VLE32.V`, V registers) |
 | loong64 | LSX (128-bit, `V*`) and LASX (256-bit, `XV*`) |
 
+## Why pointers, not by-value vectors
+
+`go vet` asmdecl rejects a single vector load of a whole by-value array — e.g.
+`MOVOU a+0(FP), X0` for a `[4]int32` argument fails with *"invalid MOVOU …;
+[4]int32 is 16-byte value"*. So passing a vector **by value** and loading it in
+one instruction is not asmdecl-clean. The pointer-based shape above is the
+idiomatic Go approach and is what go-asmgen supports. (Fixed-size arrays passed
+by value are still usable **element-wise** — see [Aggregates](aggregates.md#fixed-size-arrays).)
+
 ## Future work
 
-Passing vector/array values **by value** (e.g. `func(v [4]float32) float32`)
-needs array ABI0 layout, and a typed vector-load helper would remove the `Raw`
-boilerplate. Both are on the [Roadmap](roadmap.md); the `Raw` path works today.
+A typed vector-load helper could emit the pointer load/op/store sequence for you,
+removing the `Raw` boilerplate. See the [Roadmap](roadmap.md); the `Raw` path
+works today.

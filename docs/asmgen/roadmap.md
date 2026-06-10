@@ -35,10 +35,19 @@ and **more architectures** reusing the same emit layer.
   addressed as `name_field+offset(FP)`, asmdecl- and runtime-validated. See
   [Aggregates](aggregates.md).
 
-## Arrays and vectors
+## Arrays — done
 
-- Fixed-size array arguments/results.
-- Vector (`V`-register) values.
+- Fixed-size `[n]T` arrays passed by value, addressed element-wise
+  (`name_0 … name_(n-1)`) via `abi.Array`; `Signature.Slot` for offset lookup.
+  asmdecl-clean and runtime-proven. See [Aggregates](aggregates.md#fixed-size-arrays).
+
+## Vectors
+
+- SIMD code generation works today through `Raw` over **pointer** arguments
+  (SSE/NEON) — see [SIMD](simd.md). A *single* vector load of a whole by-value
+  array is not asmdecl-clean, so passing vectors by value is not pursued.
+- Possible future work: a typed vector-load helper that emits the
+  pointer-based load/op/store sequence, removing the `Raw` boilerplate.
 
 ## More architectures
 
