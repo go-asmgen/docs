@@ -29,10 +29,15 @@ and **more architectures** reusing the same emit layer.
   for 8-byte ints, `MOVF`/`MOVD` for floats). 100% coverage, asmdecl + `cmd/asm`
   validated, and runtime-proven under qemu-user.
 
-## Aggregates and vectors
+## Aggregates — done
 
-- Struct and array arguments/results (field decomposition), which unlocks slices
-  and strings (their underlying `{ptr, len[, cap]}` structs).
+- Struct, slice, and string parameters laid out by Go's struct rules, each field
+  addressed as `name_field+offset(FP)`, asmdecl- and runtime-validated. See
+  [Aggregates](aggregates.md).
+
+## Arrays and vectors
+
+- Fixed-size array arguments/results.
 - Vector (`V`-register) values.
 
 ## More architectures

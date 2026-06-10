@@ -38,6 +38,7 @@ nav:
       - Overview: asmgen/index.md
       - Quick start: asmgen/quickstart.md
       - ABI0 & design notes: asmgen/design.md
+      - Aggregates (structs, slices, strings): asmgen/aggregates.md
       - "Second architecture: riscv64": asmgen/riscv64.md
       - "Third architecture: loong64": asmgen/loong64.md
       - Roadmap: asmgen/roadmap.md

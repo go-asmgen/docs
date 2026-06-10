@@ -19,7 +19,8 @@ layout model, not a byte-level encoder.
 | `internal/emit` | a deliberately dumb, ISA-agnostic writer of well-formed Plan 9 `.s` text |
 
 Start with the [Quick start](asmgen/quickstart.md), read the
-[ABI0 & design notes](asmgen/design.md) for why it is built this way, then see
+[ABI0 & design notes](asmgen/design.md) for why it is built this way, see
+[Aggregates](asmgen/aggregates.md) for struct/slice/string parameters, then
 [riscv64](asmgen/riscv64.md) and [loong64](asmgen/loong64.md) for how cheaply a
 new ISA drops in.
 

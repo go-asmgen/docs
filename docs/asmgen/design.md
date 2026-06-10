@@ -71,8 +71,11 @@ via the `Raw` escape hatch (e.g. `ADDW`, `FADDD`).
 v0 is correct for sequences of arm64 **scalars** in any combination — signed and
 unsigned integers of 1/2/4/8 bytes, pointers, and 32/64-bit floats.
 
+Struct, slice, and string parameters are also supported — see
+[Aggregates](aggregates.md).
+
 !!! warning "Not yet correct for"
-    - **struct or array** arguments/results (need field decomposition), and
+    - **array** arguments/results, and
     - **vector** values (the `V` register file).
 
 Each new case must be checked against `go vet` asmdecl, which cross-checks `.s`
