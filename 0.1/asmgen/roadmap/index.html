@@ -386,6 +386,27 @@
   
   
     <li class="md-nav__item">
+      <a href="../aggregates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Aggregates (structs, slices, strings)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../riscv64/" class="md-nav__link">
         
   
@@ -501,9 +522,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#aggregates-and-vectors" class="md-nav__link">
+  <a href="#aggregates-done" class="md-nav__link">
     <span class="md-ellipsis">
-      Aggregates and vectors
+      Aggregates — done
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#arrays-and-vectors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Arrays and vectors
     </span>
   </a>
   
@@ -617,9 +647,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#aggregates-and-vectors" class="md-nav__link">
+  <a href="#aggregates-done" class="md-nav__link">
     <span class="md-ellipsis">
-      Aggregates and vectors
+      Aggregates — done
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#arrays-and-vectors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Arrays and vectors
     </span>
   </a>
   
@@ -687,10 +726,15 @@ and <strong>more architectures</strong> reusing the same emit layer.</p>
   for 8-byte ints, <code>MOVF</code>/<code>MOVD</code> for floats). 100% coverage, asmdecl + <code>cmd/asm</code>
   validated, and runtime-proven under qemu-user.</li>
 </ul>
-<h2 id="aggregates-and-vectors">Aggregates and vectors<a class="headerlink" href="#aggregates-and-vectors" title="Permanent link">&para;</a></h2>
+<h2 id="aggregates-done">Aggregates — done<a class="headerlink" href="#aggregates-done" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Struct and array arguments/results (field decomposition), which unlocks slices
-  and strings (their underlying <code>{ptr, len[, cap]}</code> structs).</li>
+<li>Struct, slice, and string parameters laid out by Go's struct rules, each field
+  addressed as <code>name_field+offset(FP)</code>, asmdecl- and runtime-validated. See
+  <a href="../aggregates/">Aggregates</a>.</li>
+</ul>
+<h2 id="arrays-and-vectors">Arrays and vectors<a class="headerlink" href="#arrays-and-vectors" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Fixed-size array arguments/results.</li>
 <li>Vector (<code>V</code>-register) values.</li>
 </ul>
 <h2 id="more-architectures">More architectures<a class="headerlink" href="#more-architectures" title="Permanent link">&para;</a></h2>
