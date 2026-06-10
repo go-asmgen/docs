@@ -35,24 +35,49 @@ For `func add(a, b int64) int64` that yields:
 so the `TEXT` directive is `$0-24` (frame 0, args+results 24) and the loads/stores
 use `a+0(FP)`, `b+8(FP)`, `ret+16(FP)`.
 
+### The result area is word-aligned
+
+One subtlety asmdecl enforces: the **result area starts at an offset rounded up
+to the register word size** (8 on arm64), and the total frame size is the end of
+the last result — it is *not* rounded further. So `func add16(a, b int16) int16`
+lays out `a@0`, `b@2`, but `ret@8` (not `ret@4`), with `TEXT $0-10`:
+
+| Slot | Size | Offset |
+| --- | --- | --- |
+| `a` | 2 | 0 |
+| `b` | 2 | 2 |
+| `ret` | 2 | 8 |
+
+Getting this wrong is exactly the kind of mistake `go vet` asmdecl catches
+before runtime.
+
+## Move selection
+
+`LoadArg`/`StoreRet` pick the Plan 9 move from the parameter's `Type`:
+
+| Type | load | store |
+| --- | --- | --- |
+| `int8` / `int16` / `int32` | `MOVB` / `MOVH` / `MOVW` (sign-extend) | `MOVB` / `MOVH` / `MOVW` |
+| `uint8` / `uint16` / `uint32` | `MOVBU` / `MOVHU` / `MOVWU` (zero-extend) | `MOVB` / `MOVH` / `MOVW` |
+| `int64` / `uint64` / pointer | `MOVD` | `MOVD` |
+| `float32` / `float64` | `FMOVS` / `FMOVD` | `FMOVS` / `FMOVD` |
+
+Sub-word loads use the sign- or zero-extending form so the whole register holds
+the correct value; floats use the `F` register file. Arithmetic is still supplied
+via the `Raw` escape hatch (e.g. `ADDW`, `FADDD`).
+
 ## What v0 is — and is not — correct for
 
-!!! warning "Scope of v0"
-    v0 is a **proof of pipeline**. It is correct only for sequences of 8-byte
-    (`int64` / `uint64` / pointer) arguments and results under ABI0.
+v0 is correct for sequences of arm64 **scalars** in any combination — signed and
+unsigned integers of 1/2/4/8 bytes, pointers, and 32/64-bit floats.
 
-Not yet correct for:
+!!! warning "Not yet correct for"
+    - **struct or array** arguments/results (need field decomposition), and
+    - **vector** values (the `V` register file).
 
-- mixed-size arguments (1/2/4-byte ints) and the padding rules they need,
-- struct or array arguments,
-- floating-point or vector values (which use the `F`/`V` register files and
-  `FMOV*` moves),
-
-The layout function already aligns per declared size, but `LoadArg`/`StoreRet`
-currently hardcode `MOVD` (the 8-byte move), so sub-word and float values need
-move-instruction selection before they are correct. Each new case must be
-checked against `go vet` asmdecl, which cross-checks `.s` offsets against the Go
-declaration. See the [Roadmap](roadmap.md).
+Each new case must be checked against `go vet` asmdecl, which cross-checks `.s`
+offsets and access widths against the Go declaration. See the
+[Roadmap](roadmap.md).
 
 ## NOSPLIT by default
 

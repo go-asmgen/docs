@@ -10,13 +10,20 @@ and **more architectures** reusing the same emit layer.
 - End-to-end `go:generate` example, validated by asmdecl + a native arm64
   runtime test, with the library held to 100% coverage.
 
-## Widen arm64 type support
+## Widen arm64 scalar support — done
 
-- 1/2/4-byte integers, with correct move selection
-  (`MOVB`/`MOVH`/`MOVW`/`MOVD`).
-- Floating-point registers (`F0..`) and `FMOV*` moves.
-- Proper alignment and padding rules for mixed-size and struct arguments.
-- Each case tested against `go vet` asmdecl.
+- 1/2/4/8-byte signed and unsigned integers and pointers, with correct move
+  selection (`MOVB`/`MOVBU`, `MOVH`/`MOVHU`, `MOVW`/`MOVWU`, `MOVD`) and sub-word
+  sign/zero extension.
+- Floating-point registers (`F0..`) with `FMOVS`/`FMOVD`.
+- Word-aligned result area and per-type argument alignment.
+- Every case validated against `go vet` asmdecl and runtime tests on native
+  arm64 (see `examples/types`).
+
+## Aggregates and vectors
+
+- Struct and array arguments/results (field decomposition).
+- Vector (`V`-register) values.
 
 ## More architectures
 
