@@ -2,7 +2,7 @@
 
 loong64 (LoongArch 64-bit) was the cheapest architecture yet — it confirms that
 the [riscv64](riscv64.md) drop-in was not a coincidence between two similar
-ISAs. It reuses the shared ABI0 model (`internal/abi`) unchanged and adds only a
+ISAs. It reuses the shared ABI0 model (`abi`) unchanged and adds only a
 move table.
 
 ## The move table

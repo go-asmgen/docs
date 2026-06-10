@@ -3,7 +3,7 @@
 `go-asmgen` generates **Go-compatible Plan 9 assembly** for architectures the
 [avo][avo] ecosystem does not reach. It splits the problem into two layers:
 
-- **`internal/emit`** — knows how to write well-formed Plan 9 `.s` lines (a
+- **`emit`** — knows how to write well-formed Plan 9 `.s` lines (a
   `TEXT` block, instruction lines, the file header with `//go:build` and
   `#include "textflag.h"`). It knows nothing about any specific ISA.
 - **`arm64`** — computes the **ABI0 frame layout** for a function and drives the

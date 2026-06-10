@@ -7,7 +7,7 @@ organizations.
 
 - **Pure Go, `CGO_ENABLED=0`** for the library — it is ordinary,
   architecture-independent Go that builds everywhere.
-- **100% test coverage** of the library packages (`arm64`, `internal/emit`),
+- **100% test coverage** of the library packages (`arm64`, `emit`),
   enforced as a CI gate. Every branch must be reachable from a test, or the dead
   code is removed — the bar is never lowered.
 - **Correctness is proven, not asserted.** A new instruction or type case is not
@@ -29,13 +29,13 @@ organizations.
    ```
 4. Confirm the library still measures 100% coverage:
    ```bash
-   go test -coverprofile=cover.out ./arm64/... ./internal/...
+   go test -coverprofile=cover.out ./abi/... ./emit/... ./arm64/...
    go tool cover -func=cover.out
    ```
 
 ## Adding an architecture
 
-A new ISA package reuses `internal/emit` unchanged and provides:
+A new ISA package reuses `emit` unchanged and provides:
 
 - an **ABI0 layout model** (offsets, alignment, word size), and
 - a **thin instruction-emit surface** (the moves and arithmetic you need).

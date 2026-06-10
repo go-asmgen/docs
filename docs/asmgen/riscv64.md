@@ -1,7 +1,7 @@
 # Second architecture: riscv64
 
 riscv64 is where go-asmgen's design pays off. Adding it required **no new layout
-code** — it reuses the shared ABI0 model (`internal/abi`) unchanged, because
+code** — it reuses the shared ABI0 model (`abi`) unchanged, because
 ABI0's stack layout is identical on every 64-bit target. All that differs is the
 register file and the move table.
 

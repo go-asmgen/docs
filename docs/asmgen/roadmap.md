@@ -6,7 +6,7 @@ and **more architectures** reusing the same emit layer.
 ## v0 — proof of pipeline (here)
 
 - arm64, ABI0, sequences of 8-byte int/ptr arguments and results.
-- ISA-agnostic `internal/emit` text writer.
+- ISA-agnostic `emit` text writer.
 - End-to-end `go:generate` example, validated by asmdecl + a native arm64
   runtime test, with the library held to 100% coverage.
 
@@ -22,7 +22,7 @@ and **more architectures** reusing the same emit layer.
 
 ## Shared ABI0 model + riscv64 + loong64 — done
 
-- Extracted the architecture-independent ABI0 layout into `internal/abi`; arm64
+- Extracted the architecture-independent ABI0 layout into `abi`; arm64
   re-exports it with no behaviour change.
 - Added **riscv64** ([page](riscv64.md)) and **loong64** ([page](loong64.md)) as
   thin architectures over the shared model — each only a move table (`MOV`/`MOVV`
