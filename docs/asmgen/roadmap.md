@@ -45,12 +45,21 @@ covered; the library is released (latest: **v0.2.0**).
 
 ## SIMD — done (via `Raw`)
 
-- Packed-add examples on **all four** targets, runtime-proven: SSE2 (amd64),
-  NEON (arm64), RVV (riscv64), LSX (loong64). Emitted through `Raw` over
-  **pointer** arguments — see [SIMD](simd.md). A *single* vector load of a whole
-  by-value array is not asmdecl-clean, so passing vectors by value is not pursued.
+- Packed-add examples on **all four** targets, runtime-proven, including the
+  256-bit widths: SSE2 + **AVX2** (amd64), NEON (arm64), RVV (riscv64), LSX +
+  **LASX** (loong64). Emitted through `Raw` over **pointer** arguments — see
+  [SIMD](simd.md). A *single* vector load of a whole by-value array is not
+  asmdecl-clean, so passing vectors by value is not pursued.
 - Possible future work: a typed vector-load helper that emits the
   pointer-based load/op/store sequence, removing the `Raw` boilerplate.
+
+## Stack frames and TEXT flags — done
+
+- `NewFuncFlags` emits any Plan 9 TEXT flags (`NOSPLIT`, `NOSPLIT|NOFRAME`, or
+  none); `frameSize > 0` reserves stack locals addressed `name-N(SP)` via `Raw`.
+  See [TEXT flags and stack frames](design.md#text-flags-and-stack-frames) and
+  `examples/frame` — a non-`NOSPLIT` function that spills to a 16-byte frame,
+  runtime-proven.
 
 ## Adding another architecture
 

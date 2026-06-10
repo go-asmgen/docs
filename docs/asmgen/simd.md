@@ -54,14 +54,17 @@ established by the **runtime test**, which checks every lane.
 
 ## SIMD across the targets
 
-Every target has a runtime-tested packed-add example:
+Every target has runtime-tested packed-add examples:
 
-| Target | extension | key instructions | notes |
+| Target | extension(s) | key instructions | width |
 | --- | --- | --- | --- |
-| amd64 | SSE2 | `MOVOU`, `PADDL` | also AVX (`VADDPS`, Y/Z) available |
-| arm64 | NEON | `VLD1`, `VADD.S4`, `VST1` | — |
-| riscv64 | RVV | `VSETVLI`, `VLE32.V`, `VADD.VV`, `VSE32.V` | assembler support added in **Go 1.25** |
-| loong64 | LSX | `VMOVQ`, `VADDW` | 128-bit; LASX (`XV*`) is 256-bit. **Go 1.25** |
+| amd64 | SSE2 + **AVX2** | `MOVOU`/`PADDL`; `VMOVDQU`/`VPADDD` | 128 + **256-bit** |
+| arm64 | NEON | `VLD1`, `VADD.S4`, `VST1` | 128-bit |
+| riscv64 | RVV | `VSETVLI`, `VLE32.V`, `VADD.VV`, `VSE32.V` | scalable (assembler: **Go 1.25**) |
+| loong64 | LSX + **LASX** | `VMOVQ`/`VADDW`; `XVMOVQ`/`XVADDW` | 128 + **256-bit** (**Go 1.25**) |
+
+The amd64 (`addI32x8`, AVX2) and loong64 (`addI32x8`, LASX) examples add eight
+int32 lanes at once; the others add four.
 
 !!! note "RVV / LSX need Go 1.25"
     The RISC-V Vector and LoongArch SIMD instructions were added to the Go

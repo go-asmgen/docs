@@ -89,12 +89,22 @@ Each new case is checked against `go vet` asmdecl, which cross-checks `.s`
 offsets and access widths against the Go declaration. See the
 [Roadmap](roadmap.md).
 
-## NOSPLIT by default
+## TEXT flags and stack frames
 
-go-asmgen marks every function `NOSPLIT`, which omits the stack-growth preamble. That
-is fine for small leaf functions with no locals, and keeps the emitted assembly
-minimal. It must be revisited for functions with large frames or that call other
-functions.
+`NewFunc` marks every function `NOSPLIT`, which omits the stack-growth preamble —
+fine for small leaf functions and the common case. For anything else, **`NewFuncFlags`**
+takes explicit Plan 9 TEXT flags:
+
+```go
+b := arm64.NewFuncFlags("f", sig, 16, "")            // 16-byte frame, no NOSPLIT
+b := arm64.NewFuncFlags("g", sig, 0, "NOSPLIT|NOFRAME")
+```
+
+Passing `""` omits the flags so the assembler inserts the stack-growth preamble
+(needed for large frames or non-leaf functions). `frameSize > 0` reserves stack
+locals, addressed `name-N(SP)` via `Raw`. See
+[`examples/frame`](https://github.com/go-asmgen/asmgen/tree/main/examples/frame),
+which spills its arguments to a 16-byte frame, non-`NOSPLIT`, runtime-proven.
 
 ## Validation priorities
 
