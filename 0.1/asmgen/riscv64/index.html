@@ -645,7 +645,7 @@
 
 <h1 id="second-architecture-riscv64">Second architecture: riscv64<a class="headerlink" href="#second-architecture-riscv64" title="Permanent link">&para;</a></h1>
 <p>riscv64 is where go-asmgen's design pays off. Adding it required <strong>no new layout
-code</strong> — it reuses the shared ABI0 model (<code>internal/abi</code>) unchanged, because
+code</strong> — it reuses the shared ABI0 model (<code>abi</code>) unchanged, because
 ABI0's stack layout is identical on every 64-bit target. All that differs is the
 register file and the move table.</p>
 <h2 id="what-the-riscv64-package-adds">What the <code>riscv64</code> package adds<a class="headerlink" href="#what-the-riscv64-package-adds" title="Permanent link">&para;</a></h2>

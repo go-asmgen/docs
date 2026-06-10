@@ -629,7 +629,7 @@
 <p><code>go-asmgen</code> generates <strong>Go-compatible Plan 9 assembly</strong> for architectures the
 <a href="https://github.com/mmcloughlin/avo">avo</a> ecosystem does not reach. It splits the problem into two layers:</p>
 <ul>
-<li><strong><code>internal/emit</code></strong> — knows how to write well-formed Plan 9 <code>.s</code> lines (a
+<li><strong><code>emit</code></strong> — knows how to write well-formed Plan 9 <code>.s</code> lines (a
   <code>TEXT</code> block, instruction lines, the file header with <code>//go:build</code> and
   <code>#include "textflag.h"</code>). It knows nothing about any specific ISA.</li>
 <li><strong><code>arm64</code></strong> — computes the <strong>ABI0 frame layout</strong> for a function and drives the

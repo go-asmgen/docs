@@ -646,7 +646,7 @@ organizations.</p>
 <ul>
 <li><strong>Pure Go, <code>CGO_ENABLED=0</code></strong> for the library — it is ordinary,
   architecture-independent Go that builds everywhere.</li>
-<li><strong>100% test coverage</strong> of the library packages (<code>arm64</code>, <code>internal/emit</code>),
+<li><strong>100% test coverage</strong> of the library packages (<code>arm64</code>, <code>emit</code>),
   enforced as a CI gate. Every branch must be reachable from a test, or the dead
   code is removed — the bar is never lowered.</li>
 <li><strong>Correctness is proven, not asserted.</strong> A new instruction or type case is not
@@ -666,12 +666,12 @@ organizations.</p>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>./...<span class="w">               </span><span class="c1"># native arm64</span>
 </code></pre></div></li>
 <li>Confirm the library still measures 100% coverage:
-   <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-coverprofile<span class="o">=</span>cover.out<span class="w"> </span>./arm64/...<span class="w"> </span>./internal/...
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-coverprofile<span class="o">=</span>cover.out<span class="w"> </span>./abi/...<span class="w"> </span>./emit/...<span class="w"> </span>./arm64/...
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>go<span class="w"> </span>tool<span class="w"> </span>cover<span class="w"> </span>-func<span class="o">=</span>cover.out
 </code></pre></div></li>
 </ol>
 <h2 id="adding-an-architecture">Adding an architecture<a class="headerlink" href="#adding-an-architecture" title="Permanent link">&para;</a></h2>
-<p>A new ISA package reuses <code>internal/emit</code> unchanged and provides:</p>
+<p>A new ISA package reuses <code>emit</code> unchanged and provides:</p>
 <ul>
 <li>an <strong>ABI0 layout model</strong> (offsets, alignment, word size), and</li>
 <li>a <strong>thin instruction-emit surface</strong> (the moves and arithmetic you need).</li>

@@ -703,7 +703,7 @@ and <strong>more architectures</strong> reusing the same emit layer.</p>
 <h2 id="v0-proof-of-pipeline-here">v0 — proof of pipeline (here)<a class="headerlink" href="#v0-proof-of-pipeline-here" title="Permanent link">&para;</a></h2>
 <ul>
 <li>arm64, ABI0, sequences of 8-byte int/ptr arguments and results.</li>
-<li>ISA-agnostic <code>internal/emit</code> text writer.</li>
+<li>ISA-agnostic <code>emit</code> text writer.</li>
 <li>End-to-end <code>go:generate</code> example, validated by asmdecl + a native arm64
   runtime test, with the library held to 100% coverage.</li>
 </ul>
@@ -719,7 +719,7 @@ and <strong>more architectures</strong> reusing the same emit layer.</p>
 </ul>
 <h2 id="shared-abi0-model-riscv64-loong64-done">Shared ABI0 model + riscv64 + loong64 — done<a class="headerlink" href="#shared-abi0-model-riscv64-loong64-done" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Extracted the architecture-independent ABI0 layout into <code>internal/abi</code>; arm64
+<li>Extracted the architecture-independent ABI0 layout into <code>abi</code>; arm64
   re-exports it with no behaviour change.</li>
 <li>Added <strong>riscv64</strong> (<a href="../riscv64/">page</a>) and <strong>loong64</strong> (<a href="../loong64/">page</a>) as
   thin architectures over the shared model — each only a move table (<code>MOV</code>/<code>MOVV</code>
