@@ -453,9 +453,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-v0-is-and-is-not-correct-for" class="md-nav__link">
+  <a href="#whats-supported" class="md-nav__link">
     <span class="md-ellipsis">
-      What v0 is — and is not — correct for
+      What's supported
     </span>
   </a>
   
@@ -710,9 +710,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-v0-is-and-is-not-correct-for" class="md-nav__link">
+  <a href="#whats-supported" class="md-nav__link">
     <span class="md-ellipsis">
-      What v0 is — and is not — correct for
+      What's supported
     </span>
   </a>
   
@@ -868,26 +868,29 @@ before runtime.</p>
 <p>Sub-word loads use the sign- or zero-extending form so the whole register holds
 the correct value; floats use the <code>F</code> register file. Arithmetic is still supplied
 via the <code>Raw</code> escape hatch (e.g. <code>ADDW</code>, <code>FADDD</code>).</p>
-<h2 id="what-v0-is-and-is-not-correct-for">What v0 is — and is not — correct for<a class="headerlink" href="#what-v0-is-and-is-not-correct-for" title="Permanent link">&para;</a></h2>
-<p>v0 is correct for sequences of arm64 <strong>scalars</strong> in any combination — signed and
-unsigned integers of 1/2/4/8 bytes, pointers, and 32/64-bit floats.</p>
-<p>Struct, slice, and string parameters are also supported — see
-<a href="../aggregates/">Aggregates</a> — and vector code is emitted through <code>Raw</code>, see
-<a href="../simd/">SIMD</a>. The same model drives <a href="../amd64/">amd64</a> as well as the RISC
-targets.</p>
-<div class="admonition warning">
-<p class="admonition-title">Not yet correct for</p>
+<h2 id="whats-supported">What's supported<a class="headerlink" href="#whats-supported" title="Permanent link">&para;</a></h2>
+<p>All four targets handle sequences of <strong>scalars</strong> in any combination — signed and
+unsigned integers of 1/2/4/8 bytes, pointers, and 32/64-bit floats — plus:</p>
 <ul>
-<li><strong>array / vector values passed by value</strong> (e.g. <code>[4]float32</code>), and</li>
-<li>first-class <strong>vector types</strong> (the typed surface stops at scalars; SIMD is
-  via <code>Raw</code>).</li>
+<li><strong>struct, slice, and string</strong> parameters — see <a href="../aggregates/">Aggregates</a>;</li>
+<li><strong>fixed-size arrays</strong> passed by value, addressed element-wise — see
+  <a href="../aggregates/#fixed-size-arrays">Aggregates › Fixed-size arrays</a>;</li>
+<li><strong>SIMD</strong> (SSE/NEON/RVV/LSX) emitted through <code>Raw</code> over pointer arguments — see
+  <a href="../simd/">SIMD</a>.</li>
 </ul>
+<p>The same model drives <a href="../amd64/">amd64</a>, <a href="../">arm64</a>, <a href="../riscv64/">riscv64</a>
+and <a href="../loong64/">loong64</a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Not yet</p>
+<p>First-class <strong>vector types</strong> in the typed surface — the builders' <code>LoadArg</code>/
+<code>StoreRet</code> stop at scalars, so SIMD is written via <code>Raw</code>. A single vector
+load of a whole by-value array is not asmdecl-clean (see <a href="../simd/">SIMD</a>).</p>
 </div>
-<p>Each new case must be checked against <code>go vet</code> asmdecl, which cross-checks <code>.s</code>
+<p>Each new case is checked against <code>go vet</code> asmdecl, which cross-checks <code>.s</code>
 offsets and access widths against the Go declaration. See the
 <a href="../roadmap/">Roadmap</a>.</p>
 <h2 id="nosplit-by-default">NOSPLIT by default<a class="headerlink" href="#nosplit-by-default" title="Permanent link">&para;</a></h2>
-<p>v0 marks every function <code>NOSPLIT</code>, which omits the stack-growth preamble. That
+<p>go-asmgen marks every function <code>NOSPLIT</code>, which omits the stack-growth preamble. That
 is fine for small leaf functions with no locals, and keeps the emitted assembly
 minimal. It must be revisited for functions with large frames or that call other
 functions.</p>
@@ -896,8 +899,8 @@ functions.</p>
 <ol>
 <li><strong><code>go vet</code> asmdecl</strong> — offsets in the <code>.s</code> match the Go declaration.</li>
 <li><strong>Generated assembly is committed</strong> — CI regenerates and fails on any diff.</li>
-<li><strong>Runtime test on native arm64</strong> — the function is actually called and its
-   result checked.</li>
+<li><strong>Runtime test</strong> — the function is actually called and its result checked:
+   natively on amd64 and arm64, and under qemu-user for riscv64 and loong64.</li>
 </ol>
 
 

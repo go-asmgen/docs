@@ -537,9 +537,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#v0-proof-of-pipeline-here" class="md-nav__link">
+  <a href="#v0-proof-of-pipeline-done" class="md-nav__link">
     <span class="md-ellipsis">
-      v0 — proof of pipeline (here)
+      v0 — proof of pipeline — done
     </span>
   </a>
   
@@ -555,9 +555,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#shared-abi0-model-riscv64-loong64-done" class="md-nav__link">
+  <a href="#shared-abi0-model-more-architectures-done" class="md-nav__link">
     <span class="md-ellipsis">
-      Shared ABI0 model + riscv64 + loong64 — done
+      Shared ABI0 model + more architectures — done
     </span>
   </a>
   
@@ -582,18 +582,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#vectors" class="md-nav__link">
+  <a href="#simd-done-via-raw" class="md-nav__link">
     <span class="md-ellipsis">
-      Vectors
+      SIMD — done (via Raw)
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#more-architectures" class="md-nav__link">
+  <a href="#adding-another-architecture" class="md-nav__link">
     <span class="md-ellipsis">
-      More architectures
+      Adding another architecture
     </span>
   </a>
   
@@ -671,9 +671,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#v0-proof-of-pipeline-here" class="md-nav__link">
+  <a href="#v0-proof-of-pipeline-done" class="md-nav__link">
     <span class="md-ellipsis">
-      v0 — proof of pipeline (here)
+      v0 — proof of pipeline — done
     </span>
   </a>
   
@@ -689,9 +689,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#shared-abi0-model-riscv64-loong64-done" class="md-nav__link">
+  <a href="#shared-abi0-model-more-architectures-done" class="md-nav__link">
     <span class="md-ellipsis">
-      Shared ABI0 model + riscv64 + loong64 — done
+      Shared ABI0 model + more architectures — done
     </span>
   </a>
   
@@ -716,18 +716,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#vectors" class="md-nav__link">
+  <a href="#simd-done-via-raw" class="md-nav__link">
     <span class="md-ellipsis">
-      Vectors
+      SIMD — done (via Raw)
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#more-architectures" class="md-nav__link">
+  <a href="#adding-another-architecture" class="md-nav__link">
     <span class="md-ellipsis">
-      More architectures
+      Adding another architecture
     </span>
   </a>
   
@@ -758,9 +758,10 @@
 
 
 <h1 id="asmgen-roadmap">asmgen — Roadmap<a class="headerlink" href="#asmgen-roadmap" title="Permanent link">&para;</a></h1>
-<p>go-asmgen grows along two axes: <strong>wider type support within an architecture</strong>,
-and <strong>more architectures</strong> reusing the same emit layer.</p>
-<h2 id="v0-proof-of-pipeline-here">v0 — proof of pipeline (here)<a class="headerlink" href="#v0-proof-of-pipeline-here" title="Permanent link">&para;</a></h2>
+<p>go-asmgen grew along two axes: <strong>wider type support within an architecture</strong>,
+and <strong>more architectures</strong> over a shared ABI0 layout model. Both are now broadly
+covered; the library is released (latest: <strong>v0.2.0</strong>).</p>
+<h2 id="v0-proof-of-pipeline-done">v0 — proof of pipeline — done<a class="headerlink" href="#v0-proof-of-pipeline-done" title="Permanent link">&para;</a></h2>
 <ul>
 <li>arm64, ABI0, sequences of 8-byte int/ptr arguments and results.</li>
 <li>ISA-agnostic <code>emit</code> text writer.</li>
@@ -777,14 +778,15 @@ and <strong>more architectures</strong> reusing the same emit layer.</p>
 <li>Every case validated against <code>go vet</code> asmdecl and runtime tests on native
   arm64 (see <code>examples/types</code>).</li>
 </ul>
-<h2 id="shared-abi0-model-riscv64-loong64-done">Shared ABI0 model + riscv64 + loong64 — done<a class="headerlink" href="#shared-abi0-model-riscv64-loong64-done" title="Permanent link">&para;</a></h2>
+<h2 id="shared-abi0-model-more-architectures-done">Shared ABI0 model + more architectures — done<a class="headerlink" href="#shared-abi0-model-more-architectures-done" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Extracted the architecture-independent ABI0 layout into <code>abi</code>; arm64
   re-exports it with no behaviour change.</li>
-<li>Added <strong>riscv64</strong> (<a href="../riscv64/">page</a>) and <strong>loong64</strong> (<a href="../loong64/">page</a>) as
-  thin architectures over the shared model — each only a move table (<code>MOV</code>/<code>MOVV</code>
-  for 8-byte ints, <code>MOVF</code>/<code>MOVD</code> for floats). 100% coverage, asmdecl + <code>cmd/asm</code>
-  validated, and runtime-proven under qemu-user.</li>
+<li>Added <strong>riscv64</strong> (<a href="../riscv64/">page</a>), <strong>loong64</strong> (<a href="../loong64/">page</a>), and
+  <strong>amd64</strong> (<a href="../amd64/">page</a>) as thin architectures over the shared model — each
+  only a move table. 100% coverage, asmdecl + <code>cmd/asm</code> validated, and
+  runtime-proven (natively on amd64/arm64, under qemu-user for riscv64/loong64).</li>
+<li>Promoted <code>abi</code> and <code>emit</code> out of <code>internal/</code> so the library is importable.</li>
 </ul>
 <h2 id="aggregates-done">Aggregates — done<a class="headerlink" href="#aggregates-done" title="Permanent link">&para;</a></h2>
 <ul>
@@ -798,19 +800,19 @@ and <strong>more architectures</strong> reusing the same emit layer.</p>
   (<code>name_0 … name_(n-1)</code>) via <code>abi.Array</code>; <code>Signature.Slot</code> for offset lookup.
   asmdecl-clean and runtime-proven. See <a href="../aggregates/#fixed-size-arrays">Aggregates</a>.</li>
 </ul>
-<h2 id="vectors">Vectors<a class="headerlink" href="#vectors" title="Permanent link">&para;</a></h2>
+<h2 id="simd-done-via-raw">SIMD — done (via <code>Raw</code>)<a class="headerlink" href="#simd-done-via-raw" title="Permanent link">&para;</a></h2>
 <ul>
-<li>SIMD code generation works today through <code>Raw</code> over <strong>pointer</strong> arguments
-  (SSE/NEON) — see <a href="../simd/">SIMD</a>. A <em>single</em> vector load of a whole by-value
-  array is not asmdecl-clean, so passing vectors by value is not pursued.</li>
+<li>Packed-add examples on <strong>all four</strong> targets, runtime-proven: SSE2 (amd64),
+  NEON (arm64), RVV (riscv64), LSX (loong64). Emitted through <code>Raw</code> over
+  <strong>pointer</strong> arguments — see <a href="../simd/">SIMD</a>. A <em>single</em> vector load of a whole
+  by-value array is not asmdecl-clean, so passing vectors by value is not pursued.</li>
 <li>Possible future work: a typed vector-load helper that emits the
   pointer-based load/op/store sequence, removing the <code>Raw</code> boilerplate.</li>
 </ul>
-<h2 id="more-architectures">More architectures<a class="headerlink" href="#more-architectures" title="Permanent link">&para;</a></h2>
+<h2 id="adding-another-architecture">Adding another architecture<a class="headerlink" href="#adding-another-architecture" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Any further 64-bit target (e.g. a future port) follows the same recipe:
-  re-export the shared <code>abi</code> types and add one <code>loadMnemonic</code>/<code>storeMnemonic</code>
-  pair.</li>
+<li>Any further 64-bit target follows the same recipe: re-export the shared <code>abi</code>
+  types and add one <code>loadMnemonic</code>/<code>storeMnemonic</code> pair.</li>
 </ul>
 <h2 id="possible-future-work">Possible future work<a class="headerlink" href="#possible-future-work" title="Permanent link">&para;</a></h2>
 <ul>

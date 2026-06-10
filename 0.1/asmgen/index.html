@@ -668,30 +668,34 @@
 
 
 <h1 id="asmgen-overview">asmgen — Overview<a class="headerlink" href="#asmgen-overview" title="Permanent link">&para;</a></h1>
-<p><code>go-asmgen</code> generates <strong>Go-compatible Plan 9 assembly</strong> for architectures the
-<a href="https://github.com/mmcloughlin/avo">avo</a> ecosystem does not reach. It splits the problem into two layers:</p>
+<p><code>go-asmgen</code> generates <strong>Go-compatible Plan 9 assembly</strong> for every 64-bit Go
+target — amd64, arm64, riscv64, and loong64. It splits the problem into three
+layers:</p>
 <ul>
-<li><strong><code>emit</code></strong> — knows how to write well-formed Plan 9 <code>.s</code> lines (a
-  <code>TEXT</code> block, instruction lines, the file header with <code>//go:build</code> and
+<li><strong><code>abi</code></strong> — the architecture-independent ABI0 frame layout (offsets,
+  alignment, word size). All four targets share it.</li>
+<li><strong><code>amd64</code> / <code>arm64</code> / <code>riscv64</code> / <code>loong64</code></strong> — thin per-architecture builders:
+  a move/register table over the shared layout, plus a <code>Raw</code> escape hatch for
+  everything else.</li>
+<li><strong><code>emit</code></strong> — writes well-formed Plan 9 <code>.s</code> lines (the <code>TEXT</code> block,
+  instruction lines, the file header with <code>//go:build</code> and
   <code>#include "textflag.h"</code>). It knows nothing about any specific ISA.</li>
-<li><strong><code>arm64</code></strong> — computes the <strong>ABI0 frame layout</strong> for a function and drives the
-  emit layer with arm64 instruction text.</li>
 </ul>
 <h2 id="the-key-idea-emit-text-dont-encode-bytes">The key idea: emit text, don't encode bytes<a class="headerlink" href="#the-key-idea-emit-text-dont-encode-bytes" title="Permanent link">&para;</a></h2>
 <p>avo contains a full amd64 instruction encoder. That is powerful, but porting it
 to a new ISA means re-implementing encoding for that ISA. go-asmgen sidesteps
 this: it produces the same Plan 9 assembly text a human would hand-write, and
 <strong><code>cmd/asm</code> does the encoding</strong> — the very same assembler the Go toolchain
-already uses. Adding an architecture therefore costs an ABI model and a small
-set of <code>MOV</code>/arithmetic emitters, not an encoder.</p>
+already uses. Adding an architecture therefore costs only a move table over the
+shared ABI0 model, not an encoder.</p>
 <h2 id="what-you-write">What you write<a class="headerlink" href="#what-you-write" title="Permanent link">&para;</a></h2>
 <p>You describe a function's signature, then drive a small builder:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nx">sig</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">arm64</span><span class="p">.</span><span class="nx">Layout</span><span class="p">(</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;a&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;b&quot;</span><span class="p">},</span><span class="w"> </span><span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">},</span><span class="w"> </span><span class="c1">// args:  a, b int64</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;ret&quot;</span><span class="p">},</span><span class="w"> </span><span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">8</span><span class="p">},</span><span class="w">       </span><span class="c1">// result: int64</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;a&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;b&quot;</span><span class="p">},</span><span class="w"> </span><span class="p">[]</span><span class="nx">arm64</span><span class="p">.</span><span class="nx">Type</span><span class="p">{</span><span class="nx">arm64</span><span class="p">.</span><span class="nx">Int64</span><span class="p">,</span><span class="w"> </span><span class="nx">arm64</span><span class="p">.</span><span class="nx">Int64</span><span class="p">},</span><span class="w"> </span><span class="c1">// args</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;ret&quot;</span><span class="p">},</span><span class="w"> </span><span class="p">[]</span><span class="nx">arm64</span><span class="p">.</span><span class="nx">Type</span><span class="p">{</span><span class="nx">arm64</span><span class="p">.</span><span class="nx">Int64</span><span class="p">},</span><span class="w">                 </span><span class="c1">// result</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="p">)</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nx">b</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">arm64</span><span class="p">.</span><span class="nx">NewFunc</span><span class="p">(</span><span class="s">&quot;add&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">sig</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w">    </span><span class="c1">// frameSize 0, NOSPLIT by default in v0</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nx">b</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">arm64</span><span class="p">.</span><span class="nx">NewFunc</span><span class="p">(</span><span class="s">&quot;add&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">sig</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w">    </span><span class="c1">// frameSize 0, NOSPLIT by default</span>
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="nx">b</span><span class="p">.</span><span class="nx">LoadArg</span><span class="p">(</span><span class="s">&quot;a&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;R0&quot;</span><span class="p">).</span>
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="nx">LoadArg</span><span class="p">(</span><span class="s">&quot;b&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;R1&quot;</span><span class="p">).</span>
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="nx">Raw</span><span class="p">(</span><span class="s">&quot;ADD R1, R0, R2&quot;</span><span class="p">).</span>
