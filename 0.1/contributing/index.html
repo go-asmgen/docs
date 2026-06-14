@@ -407,7 +407,7 @@
         
   
   <span class="md-ellipsis">
-    SIMD (SSE / NEON)
+    SIMD (SSE / NEON / VSX / …)
   </span>
   
 
@@ -471,6 +471,48 @@
   
   <span class="md-ellipsis">
     Fourth target: amd64
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../asmgen/ppc64le/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fifth target: ppc64le
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../asmgen/s390x/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Sixth target: s390x
   </span>
   
 
@@ -688,14 +730,15 @@ organizations.</p>
 <ul>
 <li><strong>Pure Go, <code>CGO_ENABLED=0</code></strong> for the library — it is ordinary,
   architecture-independent Go that builds everywhere.</li>
-<li><strong>100% test coverage</strong> of the library packages (<code>abi</code>, <code>emit</code>, and the four
-  builders <code>amd64</code>/<code>arm64</code>/<code>riscv64</code>/<code>loong64</code>), enforced as a CI gate. Every
+<li><strong>100% test coverage</strong> of the library packages (<code>abi</code>, <code>emit</code>, and the six
+  builders <code>amd64</code>/<code>arm64</code>/<code>riscv64</code>/<code>loong64</code>/<code>ppc64le</code>/<code>s390x</code>), enforced as a
+  CI gate. Every
   branch must be reachable from a test, or the dead code is removed — the bar is
   never lowered.</li>
 <li><strong>Correctness is proven, not asserted.</strong> A new instruction or type case is not
   "done" until <code>go vet</code> asmdecl passes on the generated <code>.s</code> <em>and</em> a runtime
-  test exercises it — natively on amd64 and arm64, under qemu-user for riscv64
-  and loong64.</li>
+  test exercises it — natively on amd64 and arm64, under qemu-user for riscv64,
+  loong64, ppc64le and s390x.</li>
 <li><strong>English only</strong> for all repository content (issues, PRs, commits, code
   comments).</li>
 </ul>
@@ -710,7 +753,7 @@ organizations.</p>
 </code></pre></div>
    For riscv64/loong64, cross-vet + <code>cmd/asm</code> build, then run under qemu-user.</li>
 <li>Confirm the library still measures 100% coverage:
-   <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-coverprofile<span class="o">=</span>cover.out<span class="w"> </span>./abi/...<span class="w"> </span>./emit/...<span class="w"> </span>./amd64/...<span class="w"> </span>./arm64/...<span class="w"> </span>./riscv64/...<span class="w"> </span>./loong64/...
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-coverprofile<span class="o">=</span>cover.out<span class="w"> </span>./abi/...<span class="w"> </span>./emit/...<span class="w"> </span>./amd64/...<span class="w"> </span>./arm64/...<span class="w"> </span>./riscv64/...<span class="w"> </span>./loong64/...<span class="w"> </span>./ppc64le/...<span class="w"> </span>./s390x/...
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>go<span class="w"> </span>tool<span class="w"> </span>cover<span class="w"> </span>-func<span class="o">=</span>cover.out
 </code></pre></div></li>
 </ol>

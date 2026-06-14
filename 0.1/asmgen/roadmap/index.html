@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://go-asmgen.github.io/docs/0.1/asmgen/roadmap/">
       
       
-        <link rel="prev" href="../amd64/">
+        <link rel="prev" href="../s390x/">
       
       
         <link rel="next" href="../../contributing/">
@@ -411,7 +411,7 @@
         
   
   <span class="md-ellipsis">
-    SIMD (SSE / NEON)
+    SIMD (SSE / NEON / VSX / …)
   </span>
   
 
@@ -475,6 +475,48 @@
   
   <span class="md-ellipsis">
     Fourth target: amd64
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ppc64le/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fifth target: ppc64le
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s390x/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Sixth target: s390x
   </span>
   
 
@@ -576,6 +618,15 @@
   <a href="#arrays-done" class="md-nav__link">
     <span class="md-ellipsis">
       Arrays — done
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ppc64le-s390x-done-v050" class="md-nav__link">
+    <span class="md-ellipsis">
+      ppc64le + s390x — done — v0.5.0
     </span>
   </a>
   
@@ -725,6 +776,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ppc64le-s390x-done-v050" class="md-nav__link">
+    <span class="md-ellipsis">
+      ppc64le + s390x — done — v0.5.0
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#simd-done-via-raw" class="md-nav__link">
     <span class="md-ellipsis">
       SIMD — done (via Raw)
@@ -778,7 +838,7 @@
 <h1 id="asmgen-roadmap">asmgen — Roadmap<a class="headerlink" href="#asmgen-roadmap" title="Permanent link">&para;</a></h1>
 <p>go-asmgen grew along two axes: <strong>wider type support within an architecture</strong>,
 and <strong>more architectures</strong> over a shared ABI0 layout model. Both are now broadly
-covered; the library is released (latest: <strong>v0.2.0</strong>).</p>
+covered; the library is released (latest: <strong>v0.5.0</strong>).</p>
 <h2 id="v0-proof-of-pipeline-done">v0 — proof of pipeline — done<a class="headerlink" href="#v0-proof-of-pipeline-done" title="Permanent link">&para;</a></h2>
 <ul>
 <li>arm64, ABI0, sequences of 8-byte int/ptr arguments and results.</li>
@@ -800,10 +860,12 @@ covered; the library is released (latest: <strong>v0.2.0</strong>).</p>
 <ul>
 <li>Extracted the architecture-independent ABI0 layout into <code>abi</code>; arm64
   re-exports it with no behaviour change.</li>
-<li>Added <strong>riscv64</strong> (<a href="../riscv64/">page</a>), <strong>loong64</strong> (<a href="../loong64/">page</a>), and
-  <strong>amd64</strong> (<a href="../amd64/">page</a>) as thin architectures over the shared model — each
-  only a move table. 100% coverage, asmdecl + <code>cmd/asm</code> validated, and
-  runtime-proven (natively on amd64/arm64, under qemu-user for riscv64/loong64).</li>
+<li>Added <strong>riscv64</strong> (<a href="../riscv64/">page</a>), <strong>loong64</strong> (<a href="../loong64/">page</a>),
+  <strong>amd64</strong> (<a href="../amd64/">page</a>), <strong>ppc64le</strong> (<a href="../ppc64le/">page</a>) and <strong>s390x</strong>
+  (<a href="../s390x/">page</a>) as thin architectures over the shared model — each only a
+  move table. 100% coverage, asmdecl + <code>cmd/asm</code> validated, and runtime-proven
+  (natively on amd64/arm64, under qemu-user for riscv64/loong64/ppc64le/s390x,
+  the s390x run exercising the big-endian path).</li>
 <li>Promoted <code>abi</code> and <code>emit</code> out of <code>internal/</code> so the library is importable.</li>
 </ul>
 <h2 id="aggregates-done">Aggregates — done<a class="headerlink" href="#aggregates-done" title="Permanent link">&para;</a></h2>
@@ -818,11 +880,21 @@ covered; the library is released (latest: <strong>v0.2.0</strong>).</p>
   (<code>name_0 … name_(n-1)</code>) via <code>abi.Array</code>; <code>Signature.Slot</code> for offset lookup.
   asmdecl-clean and runtime-proven. See <a href="../aggregates/#fixed-size-arrays">Aggregates</a>.</li>
 </ul>
+<h2 id="ppc64le-s390x-done-v050">ppc64le + s390x — done — v0.5.0<a class="headerlink" href="#ppc64le-s390x-done-v050" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Added <strong>ppc64le</strong> (<a href="../ppc64le/">page</a>) and <strong>s390x</strong> (<a href="../s390x/">page</a>) as the
+  fifth and sixth targets, completing all six 64-bit Go SIMD architectures. Both
+  use the move table <code>MOVD</code> / <code>FMOVS</code> / <code>FMOVD</code>; s390x is <strong>big-endian</strong>, and its
+  runtime job deliberately exercises that path. Validated under qemu-user on
+  <code>debian:trixie</code> (<code>QEMU_CPU=power9</code> for ppc64le; <code>QEMU_CPU=qemu</code> for s390x),
+  asmdecl + <code>cmd/asm</code> clean, 100% coverage. Released as <strong>v0.5.0</strong>.</li>
+</ul>
 <h2 id="simd-done-via-raw">SIMD — done (via <code>Raw</code>)<a class="headerlink" href="#simd-done-via-raw" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Packed-add examples on <strong>all four</strong> targets, runtime-proven, including the
+<li>Packed-add examples on <strong>all six</strong> targets, runtime-proven, including the
   256-bit widths: SSE2 + <strong>AVX2</strong> (amd64), NEON (arm64), RVV (riscv64), LSX +
-  <strong>LASX</strong> (loong64). Emitted through <code>Raw</code> over <strong>pointer</strong> arguments — see
+  <strong>LASX</strong> (loong64), <strong>VSX</strong> (ppc64le), <strong>vector facility</strong> (s390x). Emitted
+  through <code>Raw</code> over <strong>pointer</strong> arguments — see
   <a href="../simd/">SIMD</a>. A <em>single</em> vector load of a whole by-value array is not
   asmdecl-clean, so passing vectors by value is not pursued.</li>
 <li>Possible future work: a typed vector-load helper that emits the

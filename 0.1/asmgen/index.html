@@ -478,7 +478,7 @@
         
   
   <span class="md-ellipsis">
-    SIMD (SSE / NEON)
+    SIMD (SSE / NEON / VSX / …)
   </span>
   
 
@@ -542,6 +542,48 @@
   
   <span class="md-ellipsis">
     Fourth target: amd64
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ppc64le/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fifth target: ppc64le
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="s390x/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Sixth target: s390x
   </span>
   
 
@@ -669,14 +711,14 @@
 
 <h1 id="asmgen-overview">asmgen — Overview<a class="headerlink" href="#asmgen-overview" title="Permanent link">&para;</a></h1>
 <p><code>go-asmgen</code> generates <strong>Go-compatible Plan 9 assembly</strong> for every 64-bit Go
-target — amd64, arm64, riscv64, and loong64. It splits the problem into three
-layers:</p>
+target — amd64, arm64, riscv64, loong64, ppc64le, and s390x. It splits the
+problem into three layers:</p>
 <ul>
 <li><strong><code>abi</code></strong> — the architecture-independent ABI0 frame layout (offsets,
-  alignment, word size). All four targets share it.</li>
-<li><strong><code>amd64</code> / <code>arm64</code> / <code>riscv64</code> / <code>loong64</code></strong> — thin per-architecture builders:
-  a move/register table over the shared layout, plus a <code>Raw</code> escape hatch for
-  everything else.</li>
+  alignment, word size). All six targets share it.</li>
+<li><strong><code>amd64</code> / <code>arm64</code> / <code>riscv64</code> / <code>loong64</code> / <code>ppc64le</code> / <code>s390x</code></strong> — thin
+  per-architecture builders: a move/register table over the shared layout, plus a
+  <code>Raw</code> escape hatch for everything else.</li>
 <li><strong><code>emit</code></strong> — writes well-formed Plan 9 <code>.s</code> lines (the <code>TEXT</code> block,
   instruction lines, the file header with <code>//go:build</code> and
   <code>#include "textflag.h"</code>). It knows nothing about any specific ISA.</li>

@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://go-asmgen.github.io/docs/0.1/asmgen/riscv64/">
+        <link rel="canonical" href="https://go-asmgen.github.io/docs/0.1/asmgen/ppc64le/">
       
       
-        <link rel="prev" href="../simd/">
+        <link rel="prev" href="../amd64/">
       
       
-        <link rel="next" href="../loong64/">
+        <link rel="next" href="../s390x/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -24,7 +24,7 @@
     
     
       
-        <title>Second architecture: riscv64 - go-asmgen docs</title>
+        <title>Fifth target: ppc64le - go-asmgen docs</title>
       
     
     
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#second-architecture-riscv64" class="md-skip">
+        <a href="#fifth-target-ppc64le" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Second architecture: riscv64
+              Fifth target: ppc64le
             
           </span>
         </div>
@@ -425,30 +425,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Second architecture: riscv64
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../riscv64/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -457,62 +437,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#what-the-riscv64-package-adds" class="md-nav__link">
-    <span class="md-ellipsis">
-      What the riscv64 package adds
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#example" class="md-nav__link">
-    <span class="md-ellipsis">
-      Example
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#validating-riscv64" class="md-nav__link">
-    <span class="md-ellipsis">
-      Validating riscv64
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#adding-the-next-architecture" class="md-nav__link">
-    <span class="md-ellipsis">
-      Adding the next architecture
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -564,10 +488,30 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../ppc64le/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Fifth target: ppc64le
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -576,6 +520,62 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-move-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      The move table
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#simd" class="md-nav__link">
+    <span class="md-ellipsis">
+      SIMD
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validation
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -677,9 +677,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#what-the-riscv64-package-adds" class="md-nav__link">
+  <a href="#the-move-table" class="md-nav__link">
     <span class="md-ellipsis">
-      What the riscv64 package adds
+      The move table
     </span>
   </a>
   
@@ -695,18 +695,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#validating-riscv64" class="md-nav__link">
+  <a href="#simd" class="md-nav__link">
     <span class="md-ellipsis">
-      Validating riscv64
+      SIMD
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#adding-the-next-architecture" class="md-nav__link">
+  <a href="#validation" class="md-nav__link">
     <span class="md-ellipsis">
-      Adding the next architecture
+      Validation
     </span>
   </a>
   
@@ -727,27 +727,23 @@
                   
 
 
-<h1 id="second-architecture-riscv64">Second architecture: riscv64<a class="headerlink" href="#second-architecture-riscv64" title="Permanent link">&para;</a></h1>
-<p>riscv64 is where go-asmgen's design pays off. Adding it required <strong>no new layout
-code</strong> — it reuses the shared ABI0 model (<code>abi</code>) unchanged, because
-ABI0's stack layout is identical on every 64-bit target. All that differs is the
-register file and the move table.</p>
-<h2 id="what-the-riscv64-package-adds">What the <code>riscv64</code> package adds<a class="headerlink" href="#what-the-riscv64-package-adds" title="Permanent link">&para;</a></h2>
-<p>Compared to <code>arm64</code>, the entire architecture-specific surface is the move
-selection:</p>
+<h1 id="fifth-target-ppc64le">Fifth target: ppc64le<a class="headerlink" href="#fifth-target-ppc64le" title="Permanent link">&para;</a></h1>
+<p>ppc64le (POWER, little-endian) is the fifth architecture. Like the others, it
+reuses the shared ABI0 model (<code>abi</code>) unchanged and adds only a move table.</p>
+<h2 id="the-move-table">The move table<a class="headerlink" href="#the-move-table" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
 <th>Type</th>
 <th>arm64</th>
-<th>riscv64</th>
+<th>ppc64le</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>int64</code> / <code>uint64</code> / pointer</td>
 <td><code>MOVD</code></td>
-<td><strong><code>MOV</code></strong></td>
+<td><code>MOVD</code></td>
 </tr>
 <tr>
 <td><code>int8</code>/<code>int16</code>/<code>int32</code> (signed)</td>
@@ -757,69 +753,56 @@ selection:</p>
 <tr>
 <td><code>uint8</code>/<code>uint16</code>/<code>uint32</code></td>
 <td><code>MOVBU</code>/<code>MOVHU</code>/<code>MOVWU</code></td>
-<td><code>MOVBU</code>/<code>MOVHU</code>/<code>MOVWU</code></td>
+<td><code>MOVBZ</code>/<code>MOVHZ</code>/<code>MOVWZ</code></td>
 </tr>
 <tr>
 <td><code>float32</code></td>
 <td><code>FMOVS</code></td>
-<td><strong><code>MOVF</code></strong></td>
+<td><code>FMOVS</code></td>
 </tr>
 <tr>
 <td><code>float64</code></td>
 <td><code>FMOVD</code></td>
-<td><strong><code>MOVD</code></strong> (the float double move)</td>
+<td><code>FMOVD</code></td>
 </tr>
 </tbody>
 </table>
-<p>Note the deliberate trap: on riscv64 <code>MOVD</code> is the <strong>float</strong> double move, while
-the 8-byte <strong>integer</strong> move is plain <code>MOV</code>. The opposite of arm64, where <code>MOVD</code>
-is the integer move. Encoding each correctly is exactly what the per-arch move
-table exists for — and <code>cmd/asm</code> rejects a wrong choice at build time.</p>
-<p>The ABI0 offsets are byte-for-byte the same as arm64. For <code>func add(a, b int64)
-int64</code> both emit <code>TEXT ·add(SB), NOSPLIT, $0-24</code> with <code>a+0(FP)</code>, <code>b+8(FP)</code>,
-<code>ret+16(FP)</code> — only the mnemonic changes (<code>MOVD</code> → <code>MOV</code>).</p>
+<p>ppc64le's 8-byte integer move is <code>MOVD</code>, and its floats use <code>FMOVS</code>/<code>FMOVD</code> — the
+same shape as arm64. The unsigned sub-word loads use the <code>Z</code> (zero-extend)
+suffix (<code>MOVBZ</code>/<code>MOVHZ</code>/<code>MOVWZ</code>). The ABI0 offsets are byte-for-byte identical to
+the other targets.</p>
 <h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nx">sig</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">riscv64</span><span class="p">.</span><span class="nx">Layout</span><span class="p">(</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;a&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;b&quot;</span><span class="p">},</span><span class="w"> </span><span class="p">[]</span><span class="nx">riscv64</span><span class="p">.</span><span class="nx">Type</span><span class="p">{</span><span class="nx">riscv64</span><span class="p">.</span><span class="nx">Int64</span><span class="p">,</span><span class="w"> </span><span class="nx">riscv64</span><span class="p">.</span><span class="nx">Int64</span><span class="p">},</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;ret&quot;</span><span class="p">},</span><span class="w"> </span><span class="p">[]</span><span class="nx">riscv64</span><span class="p">.</span><span class="nx">Type</span><span class="p">{</span><span class="nx">riscv64</span><span class="p">.</span><span class="nx">Int64</span><span class="p">},</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nx">sig</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">ppc64le</span><span class="p">.</span><span class="nx">Layout</span><span class="p">(</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;a&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;b&quot;</span><span class="p">},</span><span class="w"> </span><span class="p">[]</span><span class="nx">ppc64le</span><span class="p">.</span><span class="nx">Type</span><span class="p">{</span><span class="nx">ppc64le</span><span class="p">.</span><span class="nx">Int64</span><span class="p">,</span><span class="w"> </span><span class="nx">ppc64le</span><span class="p">.</span><span class="nx">Int64</span><span class="p">},</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;ret&quot;</span><span class="p">},</span><span class="w"> </span><span class="p">[]</span><span class="nx">ppc64le</span><span class="p">.</span><span class="nx">Type</span><span class="p">{</span><span class="nx">ppc64le</span><span class="p">.</span><span class="nx">Int64</span><span class="p">},</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="p">)</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nx">b</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">riscv64</span><span class="p">.</span><span class="nx">NewFunc</span><span class="p">(</span><span class="s">&quot;add&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">sig</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nx">b</span><span class="p">.</span><span class="nx">LoadArg</span><span class="p">(</span><span class="s">&quot;a&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;X5&quot;</span><span class="p">).</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="nx">LoadArg</span><span class="p">(</span><span class="s">&quot;b&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;X6&quot;</span><span class="p">).</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="nx">Raw</span><span class="p">(</span><span class="s">&quot;ADD X6, X5, X7&quot;</span><span class="p">).</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="nx">StoreRet</span><span class="p">(</span><span class="s">&quot;X7&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ret&quot;</span><span class="p">).</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nx">b</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">ppc64le</span><span class="p">.</span><span class="nx">NewFunc</span><span class="p">(</span><span class="s">&quot;add&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">sig</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nx">b</span><span class="p">.</span><span class="nx">LoadArg</span><span class="p">(</span><span class="s">&quot;a&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;R3&quot;</span><span class="p">).</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="nx">LoadArg</span><span class="p">(</span><span class="s">&quot;b&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;R4&quot;</span><span class="p">).</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="nx">Raw</span><span class="p">(</span><span class="s">&quot;ADD R4, R3, R5&quot;</span><span class="p">).</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="nx">StoreRet</span><span class="p">(</span><span class="s">&quot;R5&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ret&quot;</span><span class="p">).</span>
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="nx">Ret</span><span class="p">()</span>
 </code></pre></div>
 <p>emits:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nf">TEXT</span><span class="w"> </span><span class="err">·</span><span class="no">add</span><span class="p">(</span><span class="no">SB</span><span class="p">),</span><span class="w"> </span><span class="no">NOSPLIT</span><span class="p">,</span><span class="w"> </span><span class="no">$0-24</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="nf">MOV</span><span class="w"> </span><span class="no">a</span><span class="err">+</span><span class="mi">0</span><span class="p">(</span><span class="no">FP</span><span class="p">),</span><span class="w"> </span><span class="no">X5</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nf">MOV</span><span class="w"> </span><span class="no">b</span><span class="err">+</span><span class="mi">8</span><span class="p">(</span><span class="no">FP</span><span class="p">),</span><span class="w"> </span><span class="no">X6</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nf">ADD</span><span class="w"> </span><span class="no">X6</span><span class="p">,</span><span class="w"> </span><span class="no">X5</span><span class="p">,</span><span class="w"> </span><span class="no">X7</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="nf">MOV</span><span class="w"> </span><span class="no">X7</span><span class="p">,</span><span class="w"> </span><span class="no">ret</span><span class="err">+</span><span class="mi">16</span><span class="p">(</span><span class="no">FP</span><span class="p">)</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="nf">MOVD</span><span class="w"> </span><span class="no">a</span><span class="err">+</span><span class="mi">0</span><span class="p">(</span><span class="no">FP</span><span class="p">),</span><span class="w"> </span><span class="no">R3</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nf">MOVD</span><span class="w"> </span><span class="no">b</span><span class="err">+</span><span class="mi">8</span><span class="p">(</span><span class="no">FP</span><span class="p">),</span><span class="w"> </span><span class="no">R4</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nf">ADD</span><span class="w"> </span><span class="no">R4</span><span class="p">,</span><span class="w"> </span><span class="no">R3</span><span class="p">,</span><span class="w"> </span><span class="no">R5</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="nf">MOVD</span><span class="w"> </span><span class="no">R5</span><span class="p">,</span><span class="w"> </span><span class="no">ret</span><span class="err">+</span><span class="mi">16</span><span class="p">(</span><span class="no">FP</span><span class="p">)</span>
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="nf">RET</span>
 </code></pre></div>
-<h2 id="validating-riscv64">Validating riscv64<a class="headerlink" href="#validating-riscv64" title="Permanent link">&para;</a></h2>
-<p>There is no common riscv64 developer host, so correctness is established in
-layers:</p>
-<ol>
-<li><strong><code>go vet</code> asmdecl</strong> (cross-arch) — verifies offsets and access widths
-   against the Go declaration. Runs anywhere:
-   <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nv">GOOS</span><span class="o">=</span>linux<span class="w"> </span><span class="nv">GOARCH</span><span class="o">=</span>riscv64<span class="w"> </span>go<span class="w"> </span>vet<span class="w"> </span>./examples/riscv64/...
-</code></pre></div></li>
-<li><strong><code>cmd/asm</code> cross-build</strong> — rejects any invalid mnemonic or operand form:
-   <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nv">GOOS</span><span class="o">=</span>linux<span class="w"> </span><span class="nv">GOARCH</span><span class="o">=</span>riscv64<span class="w"> </span>go<span class="w"> </span>build<span class="w"> </span>./examples/riscv64/...
-</code></pre></div></li>
-<li><strong>Runtime under emulation</strong> — the generated instructions are actually
-   executed, in CI under qemu-user, or locally with Docker's riscv64 support:
-   <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nv">GOARCH</span><span class="o">=</span>riscv64<span class="w"> </span>go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-exec<span class="o">=</span>qemu-riscv64-static<span class="w"> </span>./examples/riscv64/...
-</code></pre></div></li>
-</ol>
-<p>The asmgen CI runs all three in a dedicated <code>asm-riscv64</code> job.</p>
-<h2 id="adding-the-next-architecture">Adding the next architecture<a class="headerlink" href="#adding-the-next-architecture" title="Permanent link">&para;</a></h2>
-<p>Any other 64-bit target follows the same recipe: re-export the shared <code>abi</code>
-types, write a <code>loadMnemonic</code>/<code>storeMnemonic</code> pair, and reuse the <code>Builder</code>
-shape. The layout model does not change — <a href="../loong64/">loong64</a> was exactly
-this.</p>
+<h2 id="simd">SIMD<a class="headerlink" href="#simd" title="Permanent link">&para;</a></h2>
+<p>The packed-add example uses VSX (<code>LXVD2X</code> / <code>VADDUWM</code> / <code>STXVD2X</code>) through <code>Raw</code>
+over pointer arguments — see <a href="../simd/">SIMD</a>.</p>
+<h2 id="validation">Validation<a class="headerlink" href="#validation" title="Permanent link">&para;</a></h2>
+<p>There is no common ppc64le developer host, so correctness is established in
+layers — asmdecl (cross-arch), <code>cmd/asm</code> cross-build, and runtime under
+qemu-user, in a dedicated <code>asm-ppc64le</code> CI job on <code>debian:trixie</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>go<span class="w"> </span>generate<span class="w"> </span>./examples/ppc64le/...
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nv">GOOS</span><span class="o">=</span>linux<span class="w"> </span><span class="nv">GOARCH</span><span class="o">=</span>ppc64le<span class="w"> </span>go<span class="w"> </span>vet<span class="w"> </span>./examples/ppc64le/...
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nv">GOOS</span><span class="o">=</span>linux<span class="w"> </span><span class="nv">GOARCH</span><span class="o">=</span>ppc64le<span class="w"> </span>go<span class="w"> </span>build<span class="w"> </span>./examples/ppc64le/...
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nv">QEMU_CPU</span><span class="o">=</span>power9<span class="w"> </span><span class="nv">GOARCH</span><span class="o">=</span>ppc64le<span class="w"> </span>go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-exec<span class="o">=</span>qemu-ppc64le-static<span class="w"> </span>./examples/ppc64le/...
+</code></pre></div>
 
 
 

@@ -24,7 +24,7 @@
     
     
       
-        <title>SIMD (SSE / NEON) - go-asmgen docs</title>
+        <title>SIMD (SSE / NEON / VSX / …) - go-asmgen docs</title>
       
     
     
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              SIMD (SSE / NEON)
+              SIMD (SSE / NEON / VSX / …)
             
           </span>
         </div>
@@ -420,7 +420,7 @@
           
   
   <span class="md-ellipsis">
-    SIMD (SSE / NEON)
+    SIMD (SSE / NEON / VSX / …)
   </span>
   
 
@@ -431,7 +431,7 @@
         
   
   <span class="md-ellipsis">
-    SIMD (SSE / NEON)
+    SIMD (SSE / NEON / VSX / …)
   </span>
   
 
@@ -551,6 +551,48 @@
   
   <span class="md-ellipsis">
     Fourth target: amd64
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ppc64le/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fifth target: ppc64le
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s390x/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Sixth target: s390x
   </span>
   
 
@@ -719,10 +761,11 @@ registers:</p>
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="nf">MOVOU</span><span class="w">  </span><span class="no">X0</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="no">CX</span><span class="p">)</span><span class="w">      </span><span class="c1">// store</span>
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="nf">RET</span>
 </code></pre></div>
-<p>The same packed-add example exists for <strong>all four targets</strong> in
+<p>The same packed-add example exists for <strong>all six targets</strong> in
 <a href="https://github.com/go-asmgen/asmgen/tree/main/examples/simd"><code>examples/simd</code></a>,
-each runtime-tested: amd64 (SSE2) and arm64 (NEON) natively, riscv64 (RVV) and
-loong64 (LSX) under qemu with the vector unit enabled.</p>
+each runtime-tested: amd64 (SSE2) and arm64 (NEON) natively, and riscv64 (RVV),
+loong64 (LSX), ppc64le (VSX) and s390x (vector facility) under qemu with the
+vector unit enabled (s390x exercising the big-endian path).</p>
 <h2 id="what-asmdecl-checks-here">What asmdecl checks here<a class="headerlink" href="#what-asmdecl-checks-here" title="Permanent link">&para;</a></h2>
 <p>Only the <strong>pointer loads</strong> are FP-relative, so asmdecl validates those (three
 8-byte pointer reads at offsets 0/8/16). The vector loads/stores go through
@@ -763,6 +806,18 @@ established by the <strong>runtime test</strong>, which checks every lane.</p>
 <td>LSX + <strong>LASX</strong></td>
 <td><code>VMOVQ</code>/<code>VADDW</code>; <code>XVMOVQ</code>/<code>XVADDW</code></td>
 <td>128 + <strong>256-bit</strong> (<strong>Go 1.25</strong>)</td>
+</tr>
+<tr>
+<td>ppc64le</td>
+<td>VSX</td>
+<td><code>LXVD2X</code>, <code>VADDUWM</code>, <code>STXVD2X</code></td>
+<td>128-bit</td>
+</tr>
+<tr>
+<td>s390x</td>
+<td>vector facility</td>
+<td><code>VL</code>, <code>VAF</code>, <code>VST</code> (big-endian)</td>
+<td>128-bit</td>
 </tr>
 </tbody>
 </table>

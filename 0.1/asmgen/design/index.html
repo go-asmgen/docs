@@ -529,7 +529,7 @@
         
   
   <span class="md-ellipsis">
-    SIMD (SSE / NEON)
+    SIMD (SSE / NEON / VSX / …)
   </span>
   
 
@@ -593,6 +593,48 @@
   
   <span class="md-ellipsis">
     Fourth target: amd64
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ppc64le/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fifth target: ppc64le
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s390x/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Sixth target: s390x
   </span>
   
 
@@ -887,17 +929,17 @@ before runtime.</p>
 the correct value; floats use the <code>F</code> register file. Arithmetic is still supplied
 via the <code>Raw</code> escape hatch (e.g. <code>ADDW</code>, <code>FADDD</code>).</p>
 <h2 id="whats-supported">What's supported<a class="headerlink" href="#whats-supported" title="Permanent link">&para;</a></h2>
-<p>All four targets handle sequences of <strong>scalars</strong> in any combination — signed and
+<p>All six targets handle sequences of <strong>scalars</strong> in any combination — signed and
 unsigned integers of 1/2/4/8 bytes, pointers, and 32/64-bit floats — plus:</p>
 <ul>
 <li><strong>struct, slice, and string</strong> parameters — see <a href="../aggregates/">Aggregates</a>;</li>
 <li><strong>fixed-size arrays</strong> passed by value, addressed element-wise — see
   <a href="../aggregates/#fixed-size-arrays">Aggregates › Fixed-size arrays</a>;</li>
-<li><strong>SIMD</strong> (SSE/NEON/RVV/LSX) emitted through <code>Raw</code> over pointer arguments — see
-  <a href="../simd/">SIMD</a>.</li>
+<li><strong>SIMD</strong> (SSE/NEON/RVV/LSX/VSX/s390x vector) emitted through <code>Raw</code> over pointer
+  arguments — see <a href="../simd/">SIMD</a>.</li>
 </ul>
-<p>The same model drives <a href="../amd64/">amd64</a>, <a href="../">arm64</a>, <a href="../riscv64/">riscv64</a>
-and <a href="../loong64/">loong64</a>.</p>
+<p>The same model drives <a href="../amd64/">amd64</a>, <a href="../">arm64</a>, <a href="../riscv64/">riscv64</a>,
+<a href="../loong64/">loong64</a>, <a href="../ppc64le/">ppc64le</a> and <a href="../s390x/">s390x</a>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Not yet</p>
 <p>First-class <strong>vector types</strong> in the typed surface — the builders' <code>LoadArg</code>/
@@ -921,7 +963,7 @@ locals, addressed <code>name-N(SP)</code> via <code>Raw</code>. See
 which spills its arguments to a 16-byte frame, non-<code>NOSPLIT</code>, runtime-proven.</p>
 <h2 id="builder-helpers-beyond-moves">Builder helpers beyond moves<a class="headerlink" href="#builder-helpers-beyond-moves" title="Permanent link">&para;</a></h2>
 <p>Besides <code>LoadArg</code>/<code>StoreRet</code>, the builder offers a few helpers that stay uniform
-across all four targets (everything else is <code>Raw</code>):</p>
+across all six targets (everything else is <code>Raw</code>):</p>
 <ul>
 <li><strong><code>LoadIndirect(ptrReg, t, reg)</code> / <code>StoreIndirect(reg, ptrReg, t)</code></strong> — load/store
   through a pointer register (<code>MOVD (R0), R1</code>), move width chosen from the type.</li>
@@ -941,7 +983,8 @@ architecture, what <code>cmd/asm</code> already validates — fighting the "emit
 <li><strong><code>go vet</code> asmdecl</strong> — offsets in the <code>.s</code> match the Go declaration.</li>
 <li><strong>Generated assembly is committed</strong> — CI regenerates and fails on any diff.</li>
 <li><strong>Runtime test</strong> — the function is actually called and its result checked:
-   natively on amd64 and arm64, and under qemu-user for riscv64 and loong64.</li>
+   natively on amd64 and arm64, and under qemu-user for riscv64, loong64,
+   ppc64le and s390x (the s390x run exercising the big-endian path).</li>
 </ol>
 
 
