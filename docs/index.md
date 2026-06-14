@@ -1,7 +1,8 @@
 # go-asmgen documentation
 
 **Ergonomic generation of Go-compatible Plan 9 assembly for every 64-bit Go
-target** — **amd64**, **arm64**, **riscv64**, and **loong64**.
+target** — **amd64**, **arm64**, **riscv64**, **loong64**, **ppc64le** (VSX),
+and **s390x** (vector facility, big-endian).
 
 [avo][avo] does this for amd64 by encoding instruction bytes itself, which is
 exactly what makes extending it to new ISAs expensive. go-asmgen instead **emits
@@ -16,13 +17,16 @@ amd64-specific work; go-asmgen offers one uniform builder across every target.
 | [`arm64`](asmgen/index.md) | builder emitting Plan 9 arm64 instructions (`MOVD`, `FMOVS`/`FMOVD`) |
 | [`riscv64`](asmgen/riscv64.md) | builder emitting Plan 9 riscv64 instructions (`MOV`, `MOVF`/`MOVD`) |
 | [`loong64`](asmgen/loong64.md) | builder emitting Plan 9 loong64 instructions (`MOVV`, `MOVF`/`MOVD`) |
+| [`ppc64le`](asmgen/ppc64le.md) | builder emitting Plan 9 ppc64le instructions (`MOVD`, `FMOVS`/`FMOVD`) |
+| [`s390x`](asmgen/s390x.md) | builder emitting Plan 9 s390x instructions (`MOVD`, `FMOVS`/`FMOVD`; big-endian) |
 | `abi` | the architecture-independent ABI0 layout model all builders share |
 | `emit` | a deliberately dumb, ISA-agnostic writer of well-formed Plan 9 `.s` text |
 
 Start with the [Quick start](asmgen/quickstart.md), read the
 [ABI0 & design notes](asmgen/design.md) for why it is built this way, see
 [Aggregates](asmgen/aggregates.md) for struct/slice/string parameters, then
-[riscv64](asmgen/riscv64.md) and [loong64](asmgen/loong64.md) for how cheaply a
+[riscv64](asmgen/riscv64.md), [loong64](asmgen/loong64.md),
+[ppc64le](asmgen/ppc64le.md) and [s390x](asmgen/s390x.md) for how cheaply a
 new ISA drops in.
 
 Source lives at [github.com/go-asmgen/asmgen](https://github.com/go-asmgen/asmgen).

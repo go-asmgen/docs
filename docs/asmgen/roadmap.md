@@ -2,7 +2,7 @@
 
 go-asmgen grew along two axes: **wider type support within an architecture**,
 and **more architectures** over a shared ABI0 layout model. Both are now broadly
-covered; the library is released (latest: **v0.2.0**).
+covered; the library is released (latest: **v0.5.0**).
 
 ## v0 — proof of pipeline — done
 
@@ -25,10 +25,12 @@ covered; the library is released (latest: **v0.2.0**).
 
 - Extracted the architecture-independent ABI0 layout into `abi`; arm64
   re-exports it with no behaviour change.
-- Added **riscv64** ([page](riscv64.md)), **loong64** ([page](loong64.md)), and
-  **amd64** ([page](amd64.md)) as thin architectures over the shared model — each
-  only a move table. 100% coverage, asmdecl + `cmd/asm` validated, and
-  runtime-proven (natively on amd64/arm64, under qemu-user for riscv64/loong64).
+- Added **riscv64** ([page](riscv64.md)), **loong64** ([page](loong64.md)),
+  **amd64** ([page](amd64.md)), **ppc64le** ([page](ppc64le.md)) and **s390x**
+  ([page](s390x.md)) as thin architectures over the shared model — each only a
+  move table. 100% coverage, asmdecl + `cmd/asm` validated, and runtime-proven
+  (natively on amd64/arm64, under qemu-user for riscv64/loong64/ppc64le/s390x,
+  the s390x run exercising the big-endian path).
 - Promoted `abi` and `emit` out of `internal/` so the library is importable.
 
 ## Aggregates — done
@@ -43,11 +45,21 @@ covered; the library is released (latest: **v0.2.0**).
   (`name_0 … name_(n-1)`) via `abi.Array`; `Signature.Slot` for offset lookup.
   asmdecl-clean and runtime-proven. See [Aggregates](aggregates.md#fixed-size-arrays).
 
+## ppc64le + s390x — done — v0.5.0
+
+- Added **ppc64le** ([page](ppc64le.md)) and **s390x** ([page](s390x.md)) as the
+  fifth and sixth targets, completing all six 64-bit Go SIMD architectures. Both
+  use the move table `MOVD` / `FMOVS` / `FMOVD`; s390x is **big-endian**, and its
+  runtime job deliberately exercises that path. Validated under qemu-user on
+  `debian:trixie` (`QEMU_CPU=power9` for ppc64le; `QEMU_CPU=qemu` for s390x),
+  asmdecl + `cmd/asm` clean, 100% coverage. Released as **v0.5.0**.
+
 ## SIMD — done (via `Raw`)
 
-- Packed-add examples on **all four** targets, runtime-proven, including the
+- Packed-add examples on **all six** targets, runtime-proven, including the
   256-bit widths: SSE2 + **AVX2** (amd64), NEON (arm64), RVV (riscv64), LSX +
-  **LASX** (loong64). Emitted through `Raw` over **pointer** arguments — see
+  **LASX** (loong64), **VSX** (ppc64le), **vector facility** (s390x). Emitted
+  through `Raw` over **pointer** arguments — see
   [SIMD](simd.md). A *single* vector load of a whole by-value array is not
   asmdecl-clean, so passing vectors by value is not pursued.
 - Possible future work: a typed vector-load helper that emits the

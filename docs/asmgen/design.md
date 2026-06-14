@@ -68,17 +68,17 @@ via the `Raw` escape hatch (e.g. `ADDW`, `FADDD`).
 
 ## What's supported
 
-All four targets handle sequences of **scalars** in any combination — signed and
+All six targets handle sequences of **scalars** in any combination — signed and
 unsigned integers of 1/2/4/8 bytes, pointers, and 32/64-bit floats — plus:
 
 - **struct, slice, and string** parameters — see [Aggregates](aggregates.md);
 - **fixed-size arrays** passed by value, addressed element-wise — see
   [Aggregates › Fixed-size arrays](aggregates.md#fixed-size-arrays);
-- **SIMD** (SSE/NEON/RVV/LSX) emitted through `Raw` over pointer arguments — see
-  [SIMD](simd.md).
+- **SIMD** (SSE/NEON/RVV/LSX/VSX/s390x vector) emitted through `Raw` over pointer
+  arguments — see [SIMD](simd.md).
 
-The same model drives [amd64](amd64.md), [arm64](index.md), [riscv64](riscv64.md)
-and [loong64](loong64.md).
+The same model drives [amd64](amd64.md), [arm64](index.md), [riscv64](riscv64.md),
+[loong64](loong64.md), [ppc64le](ppc64le.md) and [s390x](s390x.md).
 
 !!! warning "Not yet"
     First-class **vector types** in the typed surface — the builders' `LoadArg`/
@@ -109,7 +109,7 @@ which spills its arguments to a 16-byte frame, non-`NOSPLIT`, runtime-proven.
 ## Builder helpers beyond moves
 
 Besides `LoadArg`/`StoreRet`, the builder offers a few helpers that stay uniform
-across all four targets (everything else is `Raw`):
+across all six targets (everything else is `Raw`):
 
 - **`LoadIndirect(ptrReg, t, reg)` / `StoreIndirect(reg, ptrReg, t)`** — load/store
   through a pointer register (`MOVD (R0), R1`), move width chosen from the type.
@@ -131,4 +131,5 @@ The asmgen CI encodes the correctness order:
 1. **`go vet` asmdecl** — offsets in the `.s` match the Go declaration.
 2. **Generated assembly is committed** — CI regenerates and fails on any diff.
 3. **Runtime test** — the function is actually called and its result checked:
-   natively on amd64 and arm64, and under qemu-user for riscv64 and loong64.
+   natively on amd64 and arm64, and under qemu-user for riscv64, loong64,
+   ppc64le and s390x (the s390x run exercising the big-endian path).

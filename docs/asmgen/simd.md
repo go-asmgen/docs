@@ -40,10 +40,11 @@ MOVOU  X0, (CX)      // store
 RET
 ```
 
-The same packed-add example exists for **all four targets** in
+The same packed-add example exists for **all six targets** in
 [`examples/simd`](https://github.com/go-asmgen/asmgen/tree/main/examples/simd),
-each runtime-tested: amd64 (SSE2) and arm64 (NEON) natively, riscv64 (RVV) and
-loong64 (LSX) under qemu with the vector unit enabled.
+each runtime-tested: amd64 (SSE2) and arm64 (NEON) natively, and riscv64 (RVV),
+loong64 (LSX), ppc64le (VSX) and s390x (vector facility) under qemu with the
+vector unit enabled (s390x exercising the big-endian path).
 
 ## What asmdecl checks here
 
@@ -62,6 +63,8 @@ Every target has runtime-tested packed-add examples:
 | arm64 | NEON | `VLD1`, `VADD.S4`, `VST1` | 128-bit |
 | riscv64 | RVV | `VSETVLI`, `VLE32.V`, `VADD.VV`, `VSE32.V` | scalable (assembler: **Go 1.25**) |
 | loong64 | LSX + **LASX** | `VMOVQ`/`VADDW`; `XVMOVQ`/`XVADDW` | 128 + **256-bit** (**Go 1.25**) |
+| ppc64le | VSX | `LXVD2X`, `VADDUWM`, `STXVD2X` | 128-bit |
+| s390x | vector facility | `VL`, `VAF`, `VST` (big-endian) | 128-bit |
 
 The amd64 (`addI32x8`, AVX2) and loong64 (`addI32x8`, LASX) examples add eight
 int32 lanes at once; the others add four.

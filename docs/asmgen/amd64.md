@@ -3,7 +3,8 @@
 amd64 is already well served by [avo][avo], which encodes instructions at the
 byte level and models the instruction set in depth. go-asmgen supports amd64 not
 to replace that, but so a **single uniform builder** spans every 64-bit Go
-target — the same code shape generates arm64, riscv64, loong64, and amd64.
+target — the same code shape generates arm64, riscv64, loong64, ppc64le, s390x,
+and amd64.
 
 It reuses the shared ABI0 layout unchanged. amd64's move table is a little richer
 than the RISC targets', in two ways:

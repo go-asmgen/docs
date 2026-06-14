@@ -7,14 +7,15 @@ organizations.
 
 - **Pure Go, `CGO_ENABLED=0`** for the library — it is ordinary,
   architecture-independent Go that builds everywhere.
-- **100% test coverage** of the library packages (`abi`, `emit`, and the four
-  builders `amd64`/`arm64`/`riscv64`/`loong64`), enforced as a CI gate. Every
+- **100% test coverage** of the library packages (`abi`, `emit`, and the six
+  builders `amd64`/`arm64`/`riscv64`/`loong64`/`ppc64le`/`s390x`), enforced as a
+  CI gate. Every
   branch must be reachable from a test, or the dead code is removed — the bar is
   never lowered.
 - **Correctness is proven, not asserted.** A new instruction or type case is not
   "done" until `go vet` asmdecl passes on the generated `.s` *and* a runtime
-  test exercises it — natively on amd64 and arm64, under qemu-user for riscv64
-  and loong64.
+  test exercises it — natively on amd64 and arm64, under qemu-user for riscv64,
+  loong64, ppc64le and s390x.
 - **English only** for all repository content (issues, PRs, commits, code
   comments).
 
@@ -31,7 +32,7 @@ organizations.
    For riscv64/loong64, cross-vet + `cmd/asm` build, then run under qemu-user.
 4. Confirm the library still measures 100% coverage:
    ```bash
-   go test -coverprofile=cover.out ./abi/... ./emit/... ./amd64/... ./arm64/... ./riscv64/... ./loong64/...
+   go test -coverprofile=cover.out ./abi/... ./emit/... ./amd64/... ./arm64/... ./riscv64/... ./loong64/... ./ppc64le/... ./s390x/...
    go tool cover -func=cover.out
    ```
 

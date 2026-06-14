@@ -1,14 +1,14 @@
 # asmgen — Overview
 
 `go-asmgen` generates **Go-compatible Plan 9 assembly** for every 64-bit Go
-target — amd64, arm64, riscv64, and loong64. It splits the problem into three
-layers:
+target — amd64, arm64, riscv64, loong64, ppc64le, and s390x. It splits the
+problem into three layers:
 
 - **`abi`** — the architecture-independent ABI0 frame layout (offsets,
-  alignment, word size). All four targets share it.
-- **`amd64` / `arm64` / `riscv64` / `loong64`** — thin per-architecture builders:
-  a move/register table over the shared layout, plus a `Raw` escape hatch for
-  everything else.
+  alignment, word size). All six targets share it.
+- **`amd64` / `arm64` / `riscv64` / `loong64` / `ppc64le` / `s390x`** — thin
+  per-architecture builders: a move/register table over the shared layout, plus a
+  `Raw` escape hatch for everything else.
 - **`emit`** — writes well-formed Plan 9 `.s` lines (the `TEXT` block,
   instruction lines, the file header with `//go:build` and
   `#include "textflag.h"`). It knows nothing about any specific ISA.
