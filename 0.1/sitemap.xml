@@ -2,54 +2,54 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://go-asmgen.github.io/docs/0.1/</loc>
-         <lastmod>2026-06-19</lastmod>
+         <lastmod>2026-06-20</lastmod>
     </url>
     <url>
          <loc>https://go-asmgen.github.io/docs/0.1/contributing/</loc>
-         <lastmod>2026-06-19</lastmod>
+         <lastmod>2026-06-20</lastmod>
     </url>
     <url>
          <loc>https://go-asmgen.github.io/docs/0.1/asmgen/</loc>
-         <lastmod>2026-06-19</lastmod>
+         <lastmod>2026-06-20</lastmod>
     </url>
     <url>
          <loc>https://go-asmgen.github.io/docs/0.1/asmgen/aggregates/</loc>
-         <lastmod>2026-06-19</lastmod>
+         <lastmod>2026-06-20</lastmod>
     </url>
     <url>
          <loc>https://go-asmgen.github.io/docs/0.1/asmgen/amd64/</loc>
-         <lastmod>2026-06-19</lastmod>
+         <lastmod>2026-06-20</lastmod>
     </url>
     <url>
          <loc>https://go-asmgen.github.io/docs/0.1/asmgen/design/</loc>
-         <lastmod>2026-06-19</lastmod>
+         <lastmod>2026-06-20</lastmod>
     </url>
     <url>
          <loc>https://go-asmgen.github.io/docs/0.1/asmgen/loong64/</loc>
-         <lastmod>2026-06-19</lastmod>
+         <lastmod>2026-06-20</lastmod>
     </url>
     <url>
          <loc>https://go-asmgen.github.io/docs/0.1/asmgen/ppc64le/</loc>
-         <lastmod>2026-06-19</lastmod>
+         <lastmod>2026-06-20</lastmod>
     </url>
     <url>
          <loc>https://go-asmgen.github.io/docs/0.1/asmgen/quickstart/</loc>
-         <lastmod>2026-06-19</lastmod>
+         <lastmod>2026-06-20</lastmod>
     </url>
     <url>
          <loc>https://go-asmgen.github.io/docs/0.1/asmgen/riscv64/</loc>
-         <lastmod>2026-06-19</lastmod>
+         <lastmod>2026-06-20</lastmod>
     </url>
     <url>
          <loc>https://go-asmgen.github.io/docs/0.1/asmgen/roadmap/</loc>
-         <lastmod>2026-06-19</lastmod>
+         <lastmod>2026-06-20</lastmod>
     </url>
     <url>
          <loc>https://go-asmgen.github.io/docs/0.1/asmgen/s390x/</loc>
-         <lastmod>2026-06-19</lastmod>
+         <lastmod>2026-06-20</lastmod>
     </url>
     <url>
          <loc>https://go-asmgen.github.io/docs/0.1/asmgen/simd/</loc>
-         <lastmod>2026-06-19</lastmod>
+         <lastmod>2026-06-20</lastmod>
     </url>
 </urlset>
