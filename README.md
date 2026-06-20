@@ -1,3 +1,5 @@
+<p align="center"><img src="https://raw.githubusercontent.com/go-asmgen/brand/main/social/go-asmgen.png" alt="go-asmgen/docs" width="720"></p>
+
 # go-asmgen/docs
 
 Versioned documentation for [go-asmgen](https://github.com/go-asmgen), built

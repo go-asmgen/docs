@@ -1,0 +1,18 @@
+<svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="go-asmgen">
+  <defs>
+    <linearGradient id="gocyan" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#22CCE2"/>
+      <stop offset="1" stop-color="#0079A8"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="56" fill="url(#gocyan)"/>
+  <g fill="none" stroke="#FFFFFF" stroke-width="13" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="76" y="76" width="104" height="104" rx="16"/>
+    <path d="M104 116l16 12-16 12"/>
+    <path d="M138 152h22"/>
+    <path d="M76 96V64M112 96V64M144 96V64M180 96V64"/>
+    <path d="M76 160v32M112 160v32M144 160v32M180 160v32"/>
+    <path d="M64 100H40M64 132H40M64 156H40"/>
+    <path d="M216 100h-24M216 132h-24M216 156h-24"/>
+  </g>
+</svg>
