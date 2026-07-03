@@ -1,9 +1,9 @@
 # wasm — Kernels
 
-The five kernels that ship with v0.1.0. Every one is a `go run` command that
-prints WAT to stdout; every one has a golden-file test that pins the exact
-output byte-for-byte; every one has a wazero cross-check against a Go
-reference.
+The six kernels that ship in the current main. Every one is a `go run`
+command that prints WAT to stdout; every one has a golden-file test that
+pins the exact output byte-for-byte; every one has a wazero cross-check
+against a Go reference.
 
 ## matchlen — `bytes.Equal`-shaped scan
 
@@ -68,7 +68,7 @@ Case-folds ASCII bytes to uppercase 16 lanes at a time. Every byte outside
 `[a..z]` passes through untouched. The kernel showcases the pattern common to
 text-processing kernels: a **signed-compare pair → mask → arithmetic delta**:
 
-```
+```text
 mask   = (bytes ge_s 'a') & (bytes le_s 'z')     ; 0xff where in [a..z]
 delta  = mask & (0x20 × 16)                       ; 0x20 where lowercase
 upper  = i8x16.sub(bytes, delta)                  ; branchless subtract
@@ -88,7 +88,7 @@ Returns the index of the first byte in the scanned region that equals
 its keep — SSE has PMOVMSKB with the same shape (MSB of each lane compressed
 into a scalar bitmask), and wasm-SIMD gives us the same construction:
 
-```
+```text
 key    = i8x16.splat(needle)         ; broadcast search byte
 bytes  = v128.load(src + 16*i)
 mask   = i8x16.bitmask(bytes == key) ; MSB-of-lane → i32 (0..0xffff)
@@ -96,9 +96,33 @@ if mask != 0:
   return i*16 + i32.ctz(mask)
 ```
 
+## isascii — `all(b < 128 for b in buf)` preflight
+
+Signature:
+
+```lisp
+(func $isascii (param $srcPtr i32) (param $nBlocks i32) (result i32))
+```
+
+Returns 1 iff every scanned byte is in the 7-bit ASCII range, else 0.
+Every parser (JSON, HTTP, URL, CSV, XML, protobuf-JSON, …) preflights this
+before choosing between a fast ASCII path and a slower multibyte-aware
+path. The kernel is compact because wasm-SIMD gives it the tightest shape
+possible: `i8x16.bitmask` interprets each lane's MSB as the sign bit, and
+for a byte value the sign bit and the "is >= 128" bit are the same bit.
+
+```text
+bytes = v128.load(src + 16*i)
+if i8x16.bitmask(bytes) != 0:
+  return 0     ; saw a byte >= 128 in this block
+; else advance i
+```
+
+No extra compare, no key vector, no shift — just load, bitmask, i32.eqz.
+
 ## The emit surface, catalogued
 
-Every op the five kernels reach into is a one-line method on `Function`.
+Every op the six kernels reach into is a one-line method on `Function`.
 Extension is by declarative append — see
 [`emit.go`](https://github.com/go-asmgen/wasm/blob/main/emit.go).
 
