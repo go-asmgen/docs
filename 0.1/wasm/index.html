@@ -907,12 +907,11 @@ s390x). It covers <strong>the seventh target: wasm-SIMD (v128)</strong> — the 
 a Go host consumes via <code>//go:wasmimport</code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Was previously a sibling module</p>
-<p>The wasm surface used to ship as a standalone <code>go-asmgen/wasm</code> module
-(tags <code>v0.1.0</code> – <code>v0.3.0</code>, all still valid). It was folded into the
-main <code>go-asmgen/asmgen</code> repo as a peer package. Consumers pinning the
-old path continue to work unchanged; new consumers should pin
+<p>The wasm surface used to ship as a standalone <code>go-asmgen/wasm</code>
+module. It was folded into the main <code>go-asmgen/asmgen</code> repo as a
+peer package; the standalone repo has since been retired. Pin
 <code>github.com/go-asmgen/asmgen/wasm/...</code> and
-<code>github.com/go-asmgen/asmgen/examples/wasm/&lt;kernel&gt;</code> instead.</p>
+<code>github.com/go-asmgen/asmgen/examples/wasm/&lt;kernel&gt;</code>.</p>
 </div>
 <h2 id="why-wasm-needs-a-separate-emitter">Why wasm needs a separate emitter<a class="headerlink" href="#why-wasm-needs-a-separate-emitter" title="Permanent link">&para;</a></h2>
 <p>The other six architectures share Plan 9 assembly and the ABI0 model. wasm has
