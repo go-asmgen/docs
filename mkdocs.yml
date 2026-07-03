@@ -48,6 +48,12 @@ nav:
       - "Fifth target: ppc64le": asmgen/ppc64le.md
       - "Sixth target: s390x": asmgen/s390x.md
       - Roadmap: asmgen/roadmap.md
+  - wasm:
+      - Overview: wasm/index.md
+      - Quick start: wasm/quickstart.md
+      - Kernels: wasm/kernels.md
+      - Design notes: wasm/design.md
+      - Roadmap: wasm/roadmap.md
   - Contributing: contributing.md
 
 markdown_extensions:

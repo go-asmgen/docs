@@ -29,6 +29,21 @@ Start with the [Quick start](asmgen/quickstart.md), read the
 [ppc64le](asmgen/ppc64le.md) and [s390x](asmgen/s390x.md) for how cheaply a
 new ISA drops in.
 
-Source lives at [github.com/go-asmgen/asmgen](https://github.com/go-asmgen/asmgen).
+## The seventh target: wasm-SIMD
+
+The same layering pattern runs one more target — wasm-SIMD (v128) — in a
+sibling module [`go-asmgen/wasm`](https://github.com/go-asmgen/wasm). Go's
+compiler does not emit `v128` from Go source, and Plan 9 assembly has no
+wasm dialect, so wasm-SIMD is necessarily an external-kernel story. The
+emitter builds WAT text programmatically, `wat2wasm` compiles it, and the
+Go host imports it via `//go:wasmimport`.
+
+v0.1.0 ships five kernels — matchlen, hex, popcount, toupper, memchr —
+each byte-equivalent to a hand-written reference and wazero-verified against
+a Go stdlib function. Start with the [wasm overview](wasm/index.md) or the
+[quick start](wasm/quickstart.md).
+
+Source lives at [github.com/go-asmgen/asmgen](https://github.com/go-asmgen/asmgen)
+and [github.com/go-asmgen/wasm](https://github.com/go-asmgen/wasm).
 
 [avo]: https://github.com/mmcloughlin/avo
