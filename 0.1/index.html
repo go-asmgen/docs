@@ -266,6 +266,17 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="." class="md-nav__link md-nav__link--active">
         
   
@@ -275,6 +286,34 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-seventh-target-wasm-simd" class="md-nav__link">
+    <span class="md-ellipsis">
+      The seventh target: wasm-SIMD
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -564,6 +603,158 @@
   
   
   
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    wasm
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            wasm
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="wasm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="wasm/quickstart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick start
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="wasm/kernels/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Kernels
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="wasm/design/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Design notes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="wasm/roadmap/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Roadmap
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
     <li class="md-nav__item">
       <a href="contributing/" class="md-nav__link">
         
@@ -597,6 +788,23 @@
   
     
   
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-seventh-target-wasm-simd" class="md-nav__link">
+    <span class="md-ellipsis">
+      The seventh target: wasm-SIMD
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -669,7 +877,19 @@ amd64-specific work; go-asmgen offers one uniform builder across every target.</
 <a href="asmgen/riscv64/">riscv64</a>, <a href="asmgen/loong64/">loong64</a>,
 <a href="asmgen/ppc64le/">ppc64le</a> and <a href="asmgen/s390x/">s390x</a> for how cheaply a
 new ISA drops in.</p>
-<p>Source lives at <a href="https://github.com/go-asmgen/asmgen">github.com/go-asmgen/asmgen</a>.</p>
+<h2 id="the-seventh-target-wasm-simd">The seventh target: wasm-SIMD<a class="headerlink" href="#the-seventh-target-wasm-simd" title="Permanent link">&para;</a></h2>
+<p>The same layering pattern runs one more target — wasm-SIMD (v128) — in a
+sibling module <a href="https://github.com/go-asmgen/wasm"><code>go-asmgen/wasm</code></a>. Go's
+compiler does not emit <code>v128</code> from Go source, and Plan 9 assembly has no
+wasm dialect, so wasm-SIMD is necessarily an external-kernel story. The
+emitter builds WAT text programmatically, <code>wat2wasm</code> compiles it, and the
+Go host imports it via <code>//go:wasmimport</code>.</p>
+<p>v0.1.0 ships five kernels — matchlen, hex, popcount, toupper, memchr —
+each byte-equivalent to a hand-written reference and wazero-verified against
+a Go stdlib function. Start with the <a href="wasm/">wasm overview</a> or the
+<a href="wasm/quickstart/">quick start</a>.</p>
+<p>Source lives at <a href="https://github.com/go-asmgen/asmgen">github.com/go-asmgen/asmgen</a>
+and <a href="https://github.com/go-asmgen/wasm">github.com/go-asmgen/wasm</a>.</p>
 
 
 

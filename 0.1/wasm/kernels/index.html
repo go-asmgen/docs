@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://go-asmgen.github.io/docs/0.1/asmgen/amd64/">
+        <link rel="canonical" href="https://go-asmgen.github.io/docs/0.1/wasm/kernels/">
       
       
-        <link rel="prev" href="../loong64/">
+        <link rel="prev" href="../quickstart/">
       
       
-        <link rel="next" href="../ppc64le/">
+        <link rel="next" href="../design/">
       
       
       <link rel="icon" href="../../assets/logo.svg">
@@ -24,7 +24,7 @@
     
     
       
-        <title>Fourth target: amd64 - go-asmgen docs</title>
+        <title>Kernels - go-asmgen docs</title>
       
     
     
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#fourth-target-amd64" class="md-skip">
+        <a href="#wasm-kernels" class="md-skip">
           Skip to content
         </a>
       
@@ -115,7 +115,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Fourth target: amd64
+              Kernels
             
           </span>
         </div>
@@ -276,6 +276,284 @@
       
   
   
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    asmgen
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            asmgen
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../asmgen/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../asmgen/quickstart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick start
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../asmgen/design/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ABI0 & design notes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../asmgen/aggregates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Aggregates (structs, slices, strings)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../asmgen/simd/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SIMD (SSE / NEON / VSX / …)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../asmgen/riscv64/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Second architecture: riscv64
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../asmgen/loong64/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Third architecture: loong64
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../asmgen/amd64/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fourth target: amd64
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../asmgen/ppc64le/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fifth target: ppc64le
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../asmgen/s390x/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Sixth target: s390x
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../asmgen/roadmap/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Roadmap
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
@@ -293,24 +571,24 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
             
   
   <span class="md-ellipsis">
-    asmgen
+    wasm
   </span>
   
 
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_2">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
-            asmgen
+            wasm
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -360,111 +638,6 @@
                 
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../design/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    ABI0 & design notes
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../aggregates/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Aggregates (structs, slices, strings)
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../simd/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    SIMD (SSE / NEON / VSX / …)
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../riscv64/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Second architecture: riscv64
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../loong64/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Third architecture: loong64
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
     
   
   
@@ -481,7 +654,7 @@
           
   
   <span class="md-ellipsis">
-    Fourth target: amd64
+    Kernels
   </span>
   
 
@@ -492,7 +665,7 @@
         
   
   <span class="md-ellipsis">
-    Fourth target: amd64
+    Kernels
   </span>
   
 
@@ -514,9 +687,54 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#validation" class="md-nav__link">
+  <a href="#matchlen-bytesequal-shaped-scan" class="md-nav__link">
     <span class="md-ellipsis">
-      Validation
+      matchlen — bytes.Equal-shaped scan
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hex-encodinghex-shaped-encoder" class="md-nav__link">
+    <span class="md-ellipsis">
+      hex — encoding/hex-shaped encoder
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#popcount-mathbitsonescount-shaped-reduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      popcount — math/bits.OnesCount-shaped reduction
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#toupper-stringstoupper-for-ascii" class="md-nav__link">
+    <span class="md-ellipsis">
+      toupper — strings.ToUpper for ASCII
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#memchr-bytesindexbyte-shaped-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      memchr — bytes.IndexByte-shaped search
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-emit-surface-catalogued" class="md-nav__link">
+    <span class="md-ellipsis">
+      The emit surface, catalogued
     </span>
   </a>
   
@@ -538,180 +756,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ppc64le/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Fifth target: ppc64le
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../s390x/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Sixth target: s390x
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../roadmap/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Roadmap
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
-        
-          
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
-            
-  
-  <span class="md-ellipsis">
-    wasm
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3">
-            <span class="md-nav__icon md-icon"></span>
-            wasm
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../wasm/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Overview
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../wasm/quickstart/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Quick start
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../wasm/kernels/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Kernels
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../wasm/design/" class="md-nav__link">
+      <a href="../design/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -732,7 +777,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../wasm/roadmap/" class="md-nav__link">
+      <a href="../roadmap/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -800,9 +845,54 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#validation" class="md-nav__link">
+  <a href="#matchlen-bytesequal-shaped-scan" class="md-nav__link">
     <span class="md-ellipsis">
-      Validation
+      matchlen — bytes.Equal-shaped scan
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hex-encodinghex-shaped-encoder" class="md-nav__link">
+    <span class="md-ellipsis">
+      hex — encoding/hex-shaped encoder
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#popcount-mathbitsonescount-shaped-reduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      popcount — math/bits.OnesCount-shaped reduction
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#toupper-stringstoupper-for-ascii" class="md-nav__link">
+    <span class="md-ellipsis">
+      toupper — strings.ToUpper for ASCII
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#memchr-bytesindexbyte-shaped-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      memchr — bytes.IndexByte-shaped search
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-emit-surface-catalogued" class="md-nav__link">
+    <span class="md-ellipsis">
+      The emit surface, catalogued
     </span>
   </a>
   
@@ -823,71 +913,123 @@
                   
 
 
-<h1 id="fourth-target-amd64">Fourth target: amd64<a class="headerlink" href="#fourth-target-amd64" title="Permanent link">&para;</a></h1>
-<p>amd64 is already well served by <a href="https://github.com/mmcloughlin/avo">avo</a>, which encodes instructions at the
-byte level and models the instruction set in depth. go-asmgen supports amd64 not
-to replace that, but so a <strong>single uniform builder</strong> spans every 64-bit Go
-target — the same code shape generates arm64, riscv64, loong64, ppc64le, s390x,
-and amd64.</p>
-<p>It reuses the shared ABI0 layout unchanged. amd64's move table is a little richer
-than the RISC targets', in two ways:</p>
+<h1 id="wasm-kernels">wasm — Kernels<a class="headerlink" href="#wasm-kernels" title="Permanent link">&para;</a></h1>
+<p>The five kernels that ship with v0.1.0. Every one is a <code>go run</code> command that
+prints WAT to stdout; every one has a golden-file test that pins the exact
+output byte-for-byte; every one has a wazero cross-check against a Go
+reference.</p>
+<h2 id="matchlen-bytesequal-shaped-scan">matchlen — <code>bytes.Equal</code>-shaped scan<a class="headerlink" href="#matchlen-bytesequal-shaped-scan" title="Permanent link">&para;</a></h2>
+<p>Signature:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">(</span><span class="nv">func</span><span class="w"> </span><span class="nv">$matchlen16</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$ptrA</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$ptrB</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$limit</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">                  </span><span class="p">(</span><span class="nv">result</span><span class="w"> </span><span class="nv">i32</span><span class="p">))</span>
+</code></pre></div>
+<p>Returns the number of leading bytes at <code>ptrA</code> that match the corresponding
+bytes at <code>ptrB</code>, up to <code>limit</code>. Two-loop shape: a 16-byte SIMD fast loop for
+whole-chunk equality, then a scalar tail that finds the exact first-mismatch
+offset within the byte after the fast loop bails.</p>
+<p>Emit-surface ops it exercises: <code>v128.load</code>, <code>i8x16.eq</code>, <code>i8x16.all_true</code>,
+<code>i32.load8_u</code>, and the control-flow primitives <code>block</code> / <code>loop</code> / <code>br_if</code>.</p>
+<h2 id="hex-encodinghex-shaped-encoder">hex — <code>encoding/hex</code>-shaped encoder<a class="headerlink" href="#hex-encodinghex-shaped-encoder" title="Permanent link">&para;</a></h2>
+<p>Signature:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">(</span><span class="nv">func</span><span class="w"> </span><span class="nv">$hex_encode</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$dstPtr</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$srcPtr</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$nBlocks</span><span class="w"> </span><span class="nv">i32</span><span class="p">))</span>
+</code></pre></div>
+<p>Converts each 16-byte input chunk to 32 hex chars, matching Go's
+<code>encoding/hex.EncodeToString</code> byte-for-byte. Uses the classic SSSE3 recipe:</p>
 <ul>
-<li><strong>Sub-word loads use explicit sign/zero-extending mnemonics.</strong> Where arm64 has
-  <code>MOVB</code>/<code>MOVBU</code>, amd64 has <code>MOVBQSX</code> (sign-extend byte→quad) / <code>MOVBQZX</code>
-  (zero-extend), and likewise <code>MOVWQSX</code>/<code>MOVWQZX</code> and <code>MOVLQSX</code>/<code>MOVLQZX</code>.</li>
-<li><strong>Floats use the SSE scalar moves</strong> <code>MOVSS</code> (single) / <code>MOVSD</code> (double) on the
-  X registers, rather than a dedicated float move like arm64's <code>FMOVS</code>/<code>FMOVD</code>.</li>
+<li>Split each byte into its low and high nibbles with <code>i8x16.shr_u</code> + a
+  low-nibble mask.</li>
+<li>Look up each nibble in a 16-entry LUT via <code>i8x16.swizzle</code> — the wasm-SIMD
+  analogue of PSHUFB.</li>
+<li>Interleave the two chars per byte via a fixed <code>i8x16.shuffle</code> pattern.</li>
 </ul>
+<h2 id="popcount-mathbitsonescount-shaped-reduction">popcount — <code>math/bits.OnesCount</code>-shaped reduction<a class="headerlink" href="#popcount-mathbitsonescount-shaped-reduction" title="Permanent link">&para;</a></h2>
+<p>Signature:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">(</span><span class="nv">func</span><span class="w"> </span><span class="nv">$popcount</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$srcPtr</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$nBlocks</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">result</span><span class="w"> </span><span class="nv">i32</span><span class="p">))</span>
+</code></pre></div>
+<p>Counts set bits across <code>nBlocks × 16</code> input bytes. This is the kernel where
+wasm-SIMD <code>i8x16.popcnt</code> earns its keep — SSE has popcount only on scalar
+GPR64, and NEON's <code>CNT</code> is a nibble-level count. Wasm-SIMD's per-byte popcnt
+plus the pairwise-widening reduction chain
+(<code>i16x8.extadd_pairwise_i8x16_u</code> → <code>i32x4.extadd_pairwise_i16x8_u</code> →
+<code>i32x4.add</code>) fits a whole-buffer popcount in ~5 v128 ops per 16 input bytes,
+with the final horizontal sum via four <code>i32x4.extract_lane</code> + three
+<code>i32.add</code>.</p>
+<h2 id="toupper-stringstoupper-for-ascii">toupper — <code>strings.ToUpper</code> for ASCII<a class="headerlink" href="#toupper-stringstoupper-for-ascii" title="Permanent link">&para;</a></h2>
+<p>Signature:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">(</span><span class="nv">func</span><span class="w"> </span><span class="nv">$toupper</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$dstPtr</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$srcPtr</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$nBlocks</span><span class="w"> </span><span class="nv">i32</span><span class="p">))</span>
+</code></pre></div>
+<p>Case-folds ASCII bytes to uppercase 16 lanes at a time. Every byte outside
+<code>[a..z]</code> passes through untouched. The kernel showcases the pattern common to
+text-processing kernels: a <strong>signed-compare pair → mask → arithmetic delta</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>mask   = (bytes ge_s &#39;a&#39;) &amp; (bytes le_s &#39;z&#39;)     ; 0xff where in [a..z]
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>delta  = mask &amp; (0x20 × 16)                       ; 0x20 where lowercase
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>upper  = i8x16.sub(bytes, delta)                  ; branchless subtract
+</code></pre></div>
+<h2 id="memchr-bytesindexbyte-shaped-search">memchr — <code>bytes.IndexByte</code>-shaped search<a class="headerlink" href="#memchr-bytesindexbyte-shaped-search" title="Permanent link">&para;</a></h2>
+<p>Signature:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">(</span><span class="nv">func</span><span class="w"> </span><span class="nv">$memchr</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$srcPtr</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$nBlocks</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$needle</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">              </span><span class="p">(</span><span class="nv">result</span><span class="w"> </span><span class="nv">i32</span><span class="p">))</span>
+</code></pre></div>
+<p>Returns the index of the first byte in the scanned region that equals
+<code>needle</code>, or <code>-1</code> if none match. The kernel is where <code>i8x16.bitmask</code> earns
+its keep — SSE has PMOVMSKB with the same shape (MSB of each lane compressed
+into a scalar bitmask), and wasm-SIMD gives us the same construction:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>key    = i8x16.splat(needle)         ; broadcast search byte
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>bytes  = v128.load(src + 16*i)
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>mask   = i8x16.bitmask(bytes == key) ; MSB-of-lane → i32 (0..0xffff)
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>if mask != 0:
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>  return i*16 + i32.ctz(mask)
+</code></pre></div>
+<h2 id="the-emit-surface-catalogued">The emit surface, catalogued<a class="headerlink" href="#the-emit-surface-catalogued" title="Permanent link">&para;</a></h2>
+<p>Every op the five kernels reach into is a one-line method on <code>Function</code>.
+Extension is by declarative append — see
+<a href="https://github.com/go-asmgen/wasm/blob/main/emit.go"><code>emit.go</code></a>.</p>
 <table>
 <thead>
 <tr>
-<th>Type</th>
-<th>arm64</th>
-<th>amd64</th>
+<th>Family</th>
+<th>Ops</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>int64</code> / <code>uint64</code> / pointer</td>
-<td><code>MOVD</code></td>
-<td><code>MOVQ</code></td>
+<td>Memory</td>
+<td><code>v128.load</code>, <code>v128.store</code>, <code>i32.load8_u</code></td>
 </tr>
 <tr>
-<td><code>int8</code> (load, sign)</td>
-<td><code>MOVB</code></td>
-<td><code>MOVBQSX</code></td>
+<td>Locals + stack</td>
+<td><code>local.get/set/tee</code>, <code>i32.const</code></td>
 </tr>
 <tr>
-<td><code>uint8</code> (load, zero)</td>
-<td><code>MOVBU</code></td>
-<td><code>MOVBQZX</code></td>
+<td>v128 boolean</td>
+<td><code>v128.and</code>, <code>v128.or</code>, <code>v128.xor</code>, <code>v128.zero</code></td>
 </tr>
 <tr>
-<td><code>int32</code> (load, sign)</td>
-<td><code>MOVW</code>…</td>
-<td><code>MOVLQSX</code></td>
+<td>i8x16 compare / arith</td>
+<td><code>i8x16.eq</code>, <code>i8x16.ge_s</code>, <code>i8x16.le_s</code>, <code>i8x16.all_true</code>, <code>i8x16.sub</code>, <code>i8x16.shr_u</code>, <code>i8x16.popcnt</code>, <code>i8x16.splat</code></td>
 </tr>
 <tr>
-<td>store <code>int8</code>/<code>int16</code>/<code>int32</code></td>
-<td><code>MOVB</code>/<code>MOVH</code>/<code>MOVW</code></td>
-<td><code>MOVB</code>/<code>MOVW</code>/<code>MOVL</code></td>
+<td>Horizontal aggregation</td>
+<td><code>i8x16.bitmask</code></td>
 </tr>
 <tr>
-<td><code>float32</code> / <code>float64</code></td>
-<td><code>FMOVS</code> / <code>FMOVD</code></td>
-<td><code>MOVSS</code> / <code>MOVSD</code></td>
+<td>Shuffle / swizzle</td>
+<td><code>i8x16.swizzle</code>, <code>i8x16.shuffle</code>, <code>v128.const</code></td>
+</tr>
+<tr>
+<td>Widening reductions</td>
+<td><code>i16x8.extadd_pairwise_i8x16_u</code>, <code>i32x4.extadd_pairwise_i16x8_u</code>, <code>i32x4.add</code>, <code>i32x4.extract_lane</code></td>
+</tr>
+<tr>
+<td>Scalar</td>
+<td><code>i32.add</code>, <code>i32.sub</code>, <code>i32.mul</code>, <code>i32.ctz</code>, <code>i32.eqz</code>, <code>i32.gt_s</code>, <code>i32.ge_s</code>, <code>i32.ne</code></td>
+</tr>
+<tr>
+<td>Control flow</td>
+<td><code>block</code>, <code>loop</code>, <code>br_if</code>, <code>br</code>, <code>return</code></td>
 </tr>
 </tbody>
 </table>
-<p>amd64 arithmetic is two-operand (<code>ADDQ b, a</code> computes <code>a += b</code>), so the example
-generator accumulates into the first register. The ABI0 offsets are identical to
-the other targets.</p>
-<h2 id="validation">Validation<a class="headerlink" href="#validation" title="Permanent link">&para;</a></h2>
-<p>amd64 is the easiest target to runtime-test: the GitHub-hosted ubuntu runner is
-amd64, so the generated assembly runs natively — no emulation. Locally on Apple
-Silicon it runs under Rosetta (<code>GOARCH=amd64 go test</code>). The asmgen CI has a
-dedicated native <code>asm-amd64</code> job covering the scalar and SSE-SIMD examples.</p>
-<p>See also <a href="../simd/">SIMD</a> for the SSE packed-add example.</p>
 
 
 
