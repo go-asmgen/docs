@@ -759,6 +759,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#json_clean-json-string-bulk-copy-preflight" class="md-nav__link">
+    <span class="md-ellipsis">
+      json_clean — JSON-string bulk-copy preflight
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#the-emit-surface-catalogued" class="md-nav__link">
     <span class="md-ellipsis">
       The emit surface, catalogued
@@ -944,6 +953,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#json_clean-json-string-bulk-copy-preflight" class="md-nav__link">
+    <span class="md-ellipsis">
+      json_clean — JSON-string bulk-copy preflight
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#the-emit-surface-catalogued" class="md-nav__link">
     <span class="md-ellipsis">
       The emit surface, catalogued
@@ -968,7 +986,7 @@
 
 
 <h1 id="wasm-kernels">wasm — Kernels<a class="headerlink" href="#wasm-kernels" title="Permanent link">&para;</a></h1>
-<p>The eight kernels that ship in the current main. Every one is a <code>go run</code>
+<p>The nine kernels that ship in the current main. Every one is a <code>go run</code>
 command that prints WAT to stdout; every one has a golden-file test that
 pins the exact output byte-for-byte; every one has a wazero cross-check
 against a Go reference.</p>
@@ -1094,8 +1112,33 @@ number of non-continuation bytes: <code>16 - popcnt(mask)</code>.</p>
 leader byte, so the count of leaders equals the count of runes. Malformed
 inputs give an approximation (the count of bytes whose top two bits aren't
 <code>10</code>).</p>
+<h2 id="json_clean-json-string-bulk-copy-preflight">json_clean — JSON-string bulk-copy preflight<a class="headerlink" href="#json_clean-json-string-bulk-copy-preflight" title="Permanent link">&para;</a></h2>
+<p>Signature:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="p">(</span><span class="nv">func</span><span class="w"> </span><span class="nv">$json_clean</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$srcPtr</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$nBlocks</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">result</span><span class="w"> </span><span class="nv">i32</span><span class="p">))</span>
+</code></pre></div>
+<p>Returns 1 iff every byte in the scanned buffer can be copied verbatim
+into the current JSON string body — no <code>"</code> (0x22) closing the string,
+no <code>\</code> (0x5c) starting an escape, no control character (0x00..0x1f)
+that would need <code>\uXXXX</code> escaping. A parser can then take the fast
+<code>memcpy</code>-style bulk-copy path when this returns 1 and drop to the
+byte-by-byte slow path on 0. This is the hottest inner check in almost
+every JSON string-parsing loop.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>bytes    = v128.load(src + 16*i)
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>quotes   = i8x16.eq(bytes, 0x22 × 16)                ; 0xff on `&quot;`
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>slashes  = i8x16.eq(bytes, 0x5c × 16)                ; 0xff on `\`
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>controls = i8x16.eq(v128.and(bytes, 0xe0 × 16), 0)   ; 0xff on 0x00..0x1f
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>dirty    = quotes | slashes | controls
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>if i8x16.bitmask(dirty) != 0:
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>  return 0
+</code></pre></div>
+<p>The control-char detection uses <code>(bytes &amp; 0xe0) == 0</code> instead of the
+obvious <code>i8x16.le_s(bytes, 0x1f)</code> because signed less-than would
+misclassify high-bit bytes (0x80..0xff, negative under i8) as controls
+— the wazero verifier caught this trap on the first implementation.
+<code>bytes &amp; 0xe0 == 0</code> is true iff the top three bits are all clear, which
+happens exactly for byte values 0x00..0x1f regardless of signedness.</p>
 <h2 id="the-emit-surface-catalogued">The emit surface, catalogued<a class="headerlink" href="#the-emit-surface-catalogued" title="Permanent link">&para;</a></h2>
-<p>Every op the eight kernels reach into is a one-line method on <code>Function</code>.
+<p>Every op the nine kernels reach into is a one-line method on <code>Function</code>.
 Extension is by declarative append — see
 <a href="https://github.com/go-asmgen/wasm/blob/main/emit.go"><code>emit.go</code></a>.</p>
 <table>

@@ -912,7 +912,7 @@ kernel and dropped straight into a <code>//go:wasmimport</code> consumer.</p>
   swizzle, widening reductions (extadd_pairwise), and enough scalar plumbing
   for the surrounding control flow.</li>
 </ul>
-<p>Eight kernels, each with 100% statement coverage, a golden-file test, and
+<p>Nine kernels, each with 100% statement coverage, a golden-file test, and
 a wazero end-to-end cross-check against a Go reference:</p>
 <table>
 <thead>
@@ -962,6 +962,11 @@ a wazero end-to-end cross-check against a Go reference:</p>
 <td><code>utf8len</code></td>
 <td><code>utf8.RuneCount</code> (valid UTF-8)</td>
 <td><code>i8x16.bitmask</code> + scalar <code>i32.popcnt</code> reducer</td>
+</tr>
+<tr>
+<td><code>json_clean</code></td>
+<td>JSON-string bulk-copy preflight</td>
+<td>2× <code>i8x16.eq</code> + <code>v128.and</code>/zero-eq (avoids signed-le_s trap)</td>
 </tr>
 </tbody>
 </table>
