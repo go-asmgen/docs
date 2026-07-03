@@ -11,9 +11,9 @@ generation into three layers:
 - `emit` — writes `.s` file text: the `TEXT` block, `#include`s, `//go:build`
   header, instruction lines.
 
-`go-asmgen/wasm` slots into that architecture as a peer of the six per-arch
-builders — a **seventh target** — but with two structural differences forced
-by wasm itself:
+The `wasm` package inside `go-asmgen/asmgen` slots into that architecture
+as a peer of the six per-arch builders — a **seventh target** — but with
+two structural differences forced by wasm itself:
 
 1. **Not a shared-ABI target.** The wasm ABI is stack-based (locals plus a
    value stack), not the FP/SP/register-file model ABI0 codifies. The

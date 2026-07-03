@@ -25,26 +25,26 @@ Adding a new kernel is a `main.go` in a new subdirectory plus a
 `main_test.go` with the golden-file pattern; adding a new op is one line in
 `emit.go`. Nothing structural changes.
 
-## Fold into the main asmgen module
+## ~~Fold into the main asmgen module~~ — done
 
-Today, `go-asmgen/wasm` is a stand-alone module — one `go.mod`, one
-emitter package, five kernel packages. The natural next step is to fold it
-into the main `asmgen` module as a peer of `amd64` / `arm64` / … :
+The wasm surface used to ship as a stand-alone `go-asmgen/wasm` module.
+As of `go-asmgen/asmgen@v0.6.0` it lives inside the main asmgen module
+as a peer of `amd64` / `arm64` / …:
 
-- **`wasm/`** — the emit surface.
-- **`examples/wasm/…`** — one subdirectory per shipped kernel,
-  each with the `go:generate` line and the committed `.wat` / `.wasm`.
+- [`wasm/`](https://github.com/go-asmgen/asmgen/tree/main/wasm) —
+  the emit surface.
+- [`examples/wasm/`](https://github.com/go-asmgen/asmgen/tree/main/examples/wasm)
+  — one subdirectory per shipped kernel, each with the `go:generate`
+  line and the committed `.wat.golden`.
+- A `wasm-e2e` job in the top-level `ci.yml` regenerates every kernel,
+  drift-gates against the committed golden, `wat2wasm`-compiles, and
+  runs the wazero verifier — one job for all nine kernels because
+  wasm-SIMD is arch-agnostic.
 
-The `abi` package needs a small extension to lower Go slice headers
-(`base, len, cap`) into wasm `(i32, i32, i32)` param triples for
-`//go:wasmimport` consumers. Everything else transfers as-is — the emit
-surface stays the same, the golden-file tests move under `examples/`, and
-the CI job that regenerates + drift-gates + wazero-verifies each kernel
-folds into the top-level `ci.yml`.
-
-The fold is deferred because the emitter surface is still growing (see the
-kernel-catalogue items above). Once utf-8 validation and base64 lands, the
-emit signature stabilises and the fold is a mechanical move.
+A future extension to the shared `abi` package would lower Go slice
+headers (`base, len, cap`) into wasm `(i32, i32, i32)` param triples
+for `//go:wasmimport` consumers automatically. Not blocking anything
+today — every shipped kernel hand-writes the ABI at its call sites.
 
 ## Grow the consumer ecosystem
 
