@@ -53,6 +53,7 @@ nav:
       - Quick start: wasm/quickstart.md
       - Kernels: wasm/kernels.md
       - Design notes: wasm/design.md
+      - Consumer CI: wasm/consumer-ci.md
       - Roadmap: wasm/roadmap.md
   - Contributing: contributing.md
 
