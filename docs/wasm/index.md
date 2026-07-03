@@ -8,12 +8,11 @@ s390x). It covers **the seventh target: wasm-SIMD (v128)** — the module text
 a Go host consumes via `//go:wasmimport`.
 
 !!! note "Was previously a sibling module"
-    The wasm surface used to ship as a standalone `go-asmgen/wasm` module
-    (tags `v0.1.0` – `v0.3.0`, all still valid). It was folded into the
-    main `go-asmgen/asmgen` repo as a peer package. Consumers pinning the
-    old path continue to work unchanged; new consumers should pin
+    The wasm surface used to ship as a standalone `go-asmgen/wasm`
+    module. It was folded into the main `go-asmgen/asmgen` repo as a
+    peer package; the standalone repo has since been retired. Pin
     `github.com/go-asmgen/asmgen/wasm/...` and
-    `github.com/go-asmgen/asmgen/examples/wasm/<kernel>` instead.
+    `github.com/go-asmgen/asmgen/examples/wasm/<kernel>`.
 
 ## Why wasm needs a separate emitter
 
