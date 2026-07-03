@@ -759,9 +759,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#fold-into-the-main-asmgen-module" class="md-nav__link">
+  <a href="#fold-into-the-main-asmgen-module-done" class="md-nav__link">
     <span class="md-ellipsis">
-      Fold into the main asmgen module
+      ~~Fold into the main asmgen module~~ — done
     </span>
   </a>
   
@@ -857,9 +857,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#fold-into-the-main-asmgen-module" class="md-nav__link">
+  <a href="#fold-into-the-main-asmgen-module-done" class="md-nav__link">
     <span class="md-ellipsis">
-      Fold into the main asmgen module
+      ~~Fold into the main asmgen module~~ — done
     </span>
   </a>
   
@@ -921,24 +921,25 @@ bit-count, ASCII case-fold, byte-search. Next up:</p>
 <p>Adding a new kernel is a <code>main.go</code> in a new subdirectory plus a
 <code>main_test.go</code> with the golden-file pattern; adding a new op is one line in
 <code>emit.go</code>. Nothing structural changes.</p>
-<h2 id="fold-into-the-main-asmgen-module">Fold into the main asmgen module<a class="headerlink" href="#fold-into-the-main-asmgen-module" title="Permanent link">&para;</a></h2>
-<p>Today, <code>go-asmgen/wasm</code> is a stand-alone module — one <code>go.mod</code>, one
-emitter package, five kernel packages. The natural next step is to fold it
-into the main <code>asmgen</code> module as a peer of <code>amd64</code> / <code>arm64</code> / … :</p>
+<h2 id="fold-into-the-main-asmgen-module-done">~~Fold into the main asmgen module~~ — done<a class="headerlink" href="#fold-into-the-main-asmgen-module-done" title="Permanent link">&para;</a></h2>
+<p>The wasm surface used to ship as a stand-alone <code>go-asmgen/wasm</code> module.
+As of <code>go-asmgen/asmgen@v0.6.0</code> it lives inside the main asmgen module
+as a peer of <code>amd64</code> / <code>arm64</code> / …:</p>
 <ul>
-<li><strong><code>wasm/</code></strong> — the emit surface.</li>
-<li><strong><code>examples/wasm/…</code></strong> — one subdirectory per shipped kernel,
-  each with the <code>go:generate</code> line and the committed <code>.wat</code> / <code>.wasm</code>.</li>
+<li><a href="https://github.com/go-asmgen/asmgen/tree/main/wasm"><code>wasm/</code></a> —
+  the emit surface.</li>
+<li><a href="https://github.com/go-asmgen/asmgen/tree/main/examples/wasm"><code>examples/wasm/</code></a>
+  — one subdirectory per shipped kernel, each with the <code>go:generate</code>
+  line and the committed <code>.wat.golden</code>.</li>
+<li>A <code>wasm-e2e</code> job in the top-level <code>ci.yml</code> regenerates every kernel,
+  drift-gates against the committed golden, <code>wat2wasm</code>-compiles, and
+  runs the wazero verifier — one job for all nine kernels because
+  wasm-SIMD is arch-agnostic.</li>
 </ul>
-<p>The <code>abi</code> package needs a small extension to lower Go slice headers
-(<code>base, len, cap</code>) into wasm <code>(i32, i32, i32)</code> param triples for
-<code>//go:wasmimport</code> consumers. Everything else transfers as-is — the emit
-surface stays the same, the golden-file tests move under <code>examples/</code>, and
-the CI job that regenerates + drift-gates + wazero-verifies each kernel
-folds into the top-level <code>ci.yml</code>.</p>
-<p>The fold is deferred because the emitter surface is still growing (see the
-kernel-catalogue items above). Once utf-8 validation and base64 lands, the
-emit signature stabilises and the fold is a mechanical move.</p>
+<p>A future extension to the shared <code>abi</code> package would lower Go slice
+headers (<code>base, len, cap</code>) into wasm <code>(i32, i32, i32)</code> param triples
+for <code>//go:wasmimport</code> consumers automatically. Not blocking anything
+today — every shipped kernel hand-writes the ABI at its call sites.</p>
 <h2 id="grow-the-consumer-ecosystem">Grow the consumer ecosystem<a class="headerlink" href="#grow-the-consumer-ecosystem" title="Permanent link">&para;</a></h2>
 <p>Each shipped kernel deserves a <code>go-simd/*-wasm</code> consumer alongside the
 existing <a href="https://github.com/go-simd/matchlen-wasm"><code>go-simd/matchlen-wasm</code></a>:</p>

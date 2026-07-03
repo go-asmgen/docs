@@ -945,9 +945,9 @@ generation into three layers:</p>
 <li><code>emit</code> — writes <code>.s</code> file text: the <code>TEXT</code> block, <code>#include</code>s, <code>//go:build</code>
   header, instruction lines.</li>
 </ul>
-<p><code>go-asmgen/wasm</code> slots into that architecture as a peer of the six per-arch
-builders — a <strong>seventh target</strong> — but with two structural differences forced
-by wasm itself:</p>
+<p>The <code>wasm</code> package inside <code>go-asmgen/asmgen</code> slots into that architecture
+as a peer of the six per-arch builders — a <strong>seventh target</strong> — but with
+two structural differences forced by wasm itself:</p>
 <ol>
 <li><strong>Not a shared-ABI target.</strong> The wasm ABI is stack-based (locals plus a
    value stack), not the FP/SP/register-file model ABI0 codifies. The
