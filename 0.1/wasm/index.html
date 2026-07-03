@@ -899,13 +899,21 @@
 
 
 <h1 id="wasm-overview">wasm — Overview<a class="headerlink" href="#wasm-overview" title="Permanent link">&para;</a></h1>
-<p><a href="https://github.com/go-asmgen/wasm"><code>go-asmgen/wasm</code></a> is a WebAssembly text
-(<code>.wat</code>) emitter modeled on
-<a href="https://github.com/go-asmgen/asmgen/tree/main/emit"><code>go-asmgen/emit</code></a>. Where
-the main <code>asmgen</code> module builds Plan 9 assembly kernels for the six 64-bit Go
-targets (amd64 / arm64 / ppc64le / riscv64 / loong64 / s390x), this module
-covers <strong>the seventh target: wasm-SIMD (v128)</strong> — the module text a Go host
-consumes via <code>//go:wasmimport</code>.</p>
+<p><a href="https://github.com/go-asmgen/asmgen/tree/main/wasm"><code>go-asmgen/asmgen/wasm</code></a>
+is a WebAssembly text (<code>.wat</code>) emitter modeled on
+<a href="https://github.com/go-asmgen/asmgen/tree/main/emit"><code>emit</code></a>, shipped alongside
+the six existing arch packages (amd64 / arm64 / ppc64le / riscv64 / loong64 /
+s390x). It covers <strong>the seventh target: wasm-SIMD (v128)</strong> — the module text
+a Go host consumes via <code>//go:wasmimport</code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Was previously a sibling module</p>
+<p>The wasm surface used to ship as a standalone <code>go-asmgen/wasm</code> module
+(tags <code>v0.1.0</code> – <code>v0.3.0</code>, all still valid). It was folded into the
+main <code>go-asmgen/asmgen</code> repo as a peer package. Consumers pinning the
+old path continue to work unchanged; new consumers should pin
+<code>github.com/go-asmgen/asmgen/wasm/...</code> and
+<code>github.com/go-asmgen/asmgen/examples/wasm/&lt;kernel&gt;</code> instead.</p>
+</div>
 <h2 id="why-wasm-needs-a-separate-emitter">Why wasm needs a separate emitter<a class="headerlink" href="#why-wasm-needs-a-separate-emitter" title="Permanent link">&para;</a></h2>
 <p>The other six architectures share Plan 9 assembly and the ABI0 model. wasm has
 neither:</p>
@@ -922,7 +930,7 @@ module uses — a per-target emit surface over a shared abstract model —
 produces well-formed WAT programmatically, byte-equivalent to a hand-authored
 kernel and dropped straight into a <code>//go:wasmimport</code> consumer.</p>
 <h2 id="what-the-module-ships">What the module ships<a class="headerlink" href="#what-the-module-ships" title="Permanent link">&para;</a></h2>
-<p>A single package, <code>github.com/go-asmgen/wasm</code>, that exposes:</p>
+<p>A single package, <code>github.com/go-asmgen/asmgen/wasm</code>, that exposes:</p>
 <ul>
 <li><code>Module</code> — a whole WAT <code>(module ...)</code> with imports and functions.</li>
 <li><code>Function</code> — one <code>(func $name (export "name") ...)</code> with params, results,

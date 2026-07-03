@@ -999,55 +999,62 @@ performance-sensitive consumer adds <code>wasm-bench</code>; a consumer that car
 about a specific arch's dispatch quality adds a per-arch bench with a
 label gate that keeps the shared runner from being flooded.</p>
 <h2 id="wasm-drift-enforce-generator-committed-source">wasm-drift — enforce generator = committed source<a class="headerlink" href="#wasm-drift-enforce-generator-committed-source" title="Permanent link">&para;</a></h2>
-<p>The kernel source of truth is the pinned generator (<code>go run
-github.com/go-asmgen/wasm/&lt;kernel&gt;@vX.Y.Z</code>). The drift workflow
+<p>The kernel source of truth is the pinned generator. The drift workflow
 regenerates it and diffs vs the committed <code>.wat</code> / <code>.wasm</code>. Any hand-
 edit fails CI immediately.</p>
-<p>Consumer's <code>generate.go</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">//go:generate sh -c &quot;go run github.com/go-asmgen/wasm/matchlen@v0.3.0 &gt; matchlen.wat&quot;</span>
+<p>Consumer's <code>generate.go</code>, current form used by <code>matchlen-wasm</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">//go:generate sh -c &quot;go run github.com/go-asmgen/wasm/matchlen@v0.1.0 &gt; matchlen.wat&quot;</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kn">package</span><span class="w"> </span><span class="nx">matchlenwasm</span>
 </code></pre></div>
+<p>New consumers should pin the folded-into-asmgen path instead:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1">//go:generate sh -c &quot;go run github.com/go-asmgen/asmgen/examples/wasm/matchlen@latest &gt; matchlen.wat&quot;</span>
+</code></pre></div>
+<p>Both paths resolve to byte-identical generator output — the standalone
+<code>github.com/go-asmgen/wasm/*@v0.1.0..v0.3.0</code> tags are immutable and stay
+valid indefinitely. See the
+<a href="https://github.com/go-asmgen/wasm">migration notice</a> for the full
+before/after table.</p>
 <p>Consumer's <code>.github/workflows/wasm-drift.yml</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">wasm-drift</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nt">on</span><span class="p">:</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="nt">push</span><span class="p">:</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">main</span><span class="p p-Indicator">]</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="nt">paths</span><span class="p">:</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;matchlen.wat&#39;</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;matchlen.wasm&#39;</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;generate.go&#39;</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;Makefile&#39;</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;.github/workflows/wasm-drift.yml&#39;</span>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="nt">jobs</span><span class="p">:</span>
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">  </span><span class="nt">drift</span><span class="p">:</span>
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-24.04</span>
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span>
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-go@v5</span>
-<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
-<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">          </span><span class="nt">go-version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;stable&#39;</span>
-<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install WABT</span>
-<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sudo apt-get update &amp;&amp; sudo apt-get install -y wabt</span>
-<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Regenerate + rebuild</span>
-<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a><span class="w">          </span><span class="no">cp matchlen.wat  matchlen.wat.committed</span>
-<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a><span class="w">          </span><span class="no">cp matchlen.wasm matchlen.wasm.committed</span>
-<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a><span class="w">          </span><span class="no">go generate ./...</span>
-<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a><span class="w">          </span><span class="no">wat2wasm matchlen.wat -o matchlen.wasm</span>
-<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Check for drift</span>
-<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a><span class="w">          </span><span class="no">diff -u matchlen.wat.committed matchlen.wat || {</span>
-<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a><span class="w">            </span><span class="no">echo &quot;::error::matchlen.wat drifted from pinned generator&quot;</span>
-<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a><span class="w">            </span><span class="no">exit 1</span>
-<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a><span class="w">          </span><span class="no">}</span>
-<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a><span class="w">          </span><span class="no">diff -q matchlen.wasm.committed matchlen.wasm || {</span>
-<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a><span class="w">            </span><span class="no">echo &quot;::error::matchlen.wasm not rebuilt from matchlen.wat&quot;</span>
-<a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a><span class="w">            </span><span class="no">exit 1</span>
-<a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a><span class="w">          </span><span class="no">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">wasm-drift</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nt">on</span><span class="p">:</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">main</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="nt">paths</span><span class="p">:</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;matchlen.wat&#39;</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;matchlen.wasm&#39;</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;generate.go&#39;</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;Makefile&#39;</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;.github/workflows/wasm-drift.yml&#39;</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="nt">jobs</span><span class="p">:</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">  </span><span class="nt">drift</span><span class="p">:</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-24.04</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-go@v5</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="w">          </span><span class="nt">go-version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;stable&#39;</span>
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install WABT</span>
+<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sudo apt-get update &amp;&amp; sudo apt-get install -y wabt</span>
+<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Regenerate + rebuild</span>
+<a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a><span class="w">          </span><span class="no">cp matchlen.wat  matchlen.wat.committed</span>
+<a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a><span class="w">          </span><span class="no">cp matchlen.wasm matchlen.wasm.committed</span>
+<a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a><span class="w">          </span><span class="no">go generate ./...</span>
+<a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a><span class="w">          </span><span class="no">wat2wasm matchlen.wat -o matchlen.wasm</span>
+<a id="__codelineno-3-30" name="__codelineno-3-30" href="#__codelineno-3-30"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Check for drift</span>
+<a id="__codelineno-3-31" name="__codelineno-3-31" href="#__codelineno-3-31"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-3-32" name="__codelineno-3-32" href="#__codelineno-3-32"></a><span class="w">          </span><span class="no">diff -u matchlen.wat.committed matchlen.wat || {</span>
+<a id="__codelineno-3-33" name="__codelineno-3-33" href="#__codelineno-3-33"></a><span class="w">            </span><span class="no">echo &quot;::error::matchlen.wat drifted from pinned generator&quot;</span>
+<a id="__codelineno-3-34" name="__codelineno-3-34" href="#__codelineno-3-34"></a><span class="w">            </span><span class="no">exit 1</span>
+<a id="__codelineno-3-35" name="__codelineno-3-35" href="#__codelineno-3-35"></a><span class="w">          </span><span class="no">}</span>
+<a id="__codelineno-3-36" name="__codelineno-3-36" href="#__codelineno-3-36"></a><span class="w">          </span><span class="no">diff -q matchlen.wasm.committed matchlen.wasm || {</span>
+<a id="__codelineno-3-37" name="__codelineno-3-37" href="#__codelineno-3-37"></a><span class="w">            </span><span class="no">echo &quot;::error::matchlen.wasm not rebuilt from matchlen.wat&quot;</span>
+<a id="__codelineno-3-38" name="__codelineno-3-38" href="#__codelineno-3-38"></a><span class="w">            </span><span class="no">exit 1</span>
+<a id="__codelineno-3-39" name="__codelineno-3-39" href="#__codelineno-3-39"></a><span class="w">          </span><span class="no">}</span>
 </code></pre></div>
 <p>Trip-up: someone hand-edits <code>matchlen.wat</code> to add a comment. Regen wipes
 the comment, diff fails, PR is blocked with an actionable error message.</p>
@@ -1073,27 +1080,27 @@ The scanner tracks the current section header (<code>sec/op</code>, <code>B/s</c
 <code>allocs/op</code>) and applies polarity per section — <code>sec/op +N%</code> is a
 regression, <code>B/s -N%</code> is a regression, small speedups on either side
 are ignored.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="sr">/sec\/op/</span>          <span class="p">{</span> <span class="nx">section</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">;</span> <span class="kr">next</span> <span class="p">}</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="sr">/B\/s/</span>             <span class="p">{</span> <span class="nx">section</span><span class="o">=</span><span class="s2">&quot;throughput&quot;</span><span class="p">;</span> <span class="kr">next</span> <span class="p">}</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="sr">/allocs\/op|B\/op/</span> <span class="p">{</span> <span class="nx">section</span><span class="o">=</span><span class="s2">&quot;alloc&quot;</span><span class="p">;</span> <span class="kr">next</span> <span class="p">}</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="sr">/^goos:|^goarch:|^pkg:|^cpu:/</span> <span class="p">{</span> <span class="kr">next</span> <span class="p">}</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="sr">/^[[:space:]]*$/</span>               <span class="p">{</span> <span class="kr">next</span> <span class="p">}</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="sr">/^[[:space:]]*│/</span>               <span class="p">{</span> <span class="kr">next</span> <span class="p">}</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="p">{</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>  <span class="k">for</span> <span class="p">(</span><span class="nx">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;=</span><span class="nb">NF</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    <span class="k">if</span> <span class="p">(</span><span class="kr">match</span><span class="p">(</span><span class="o">$</span><span class="nx">i</span><span class="p">,</span> <span class="sr">/^\+[0-9]+(\.[0-9]+)?%$/</span><span class="p">))</span> <span class="p">{</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>      <span class="nx">val</span> <span class="o">=</span> <span class="kr">substr</span><span class="p">(</span><span class="o">$</span><span class="nx">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kr">length</span><span class="p">(</span><span class="o">$</span><span class="nx">i</span><span class="p">)</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">0</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>      <span class="k">if</span> <span class="p">(</span><span class="nx">section</span><span class="o">==</span><span class="s2">&quot;time&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">val</span> <span class="o">&gt;</span> <span class="nx">thr</span><span class="p">)</span>
-<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>        <span class="p">{</span> <span class="kr">print</span> <span class="o">$</span><span class="mi">1</span><span class="p">,</span> <span class="o">$</span><span class="nx">i</span><span class="p">;</span> <span class="nx">found</span><span class="o">=</span><span class="mi">1</span> <span class="p">}</span>
-<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    <span class="p">}</span>
-<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>    <span class="k">if</span> <span class="p">(</span><span class="kr">match</span><span class="p">(</span><span class="o">$</span><span class="nx">i</span><span class="p">,</span> <span class="sr">/^-[0-9]+(\.[0-9]+)?%$/</span><span class="p">))</span> <span class="p">{</span>
-<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>      <span class="nx">val</span> <span class="o">=</span> <span class="kr">substr</span><span class="p">(</span><span class="o">$</span><span class="nx">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kr">length</span><span class="p">(</span><span class="o">$</span><span class="nx">i</span><span class="p">)</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">0</span>
-<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>      <span class="k">if</span> <span class="p">(</span><span class="nx">section</span><span class="o">==</span><span class="s2">&quot;throughput&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">val</span> <span class="o">&gt;</span> <span class="nx">thr</span><span class="p">)</span>
-<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>        <span class="p">{</span> <span class="kr">print</span> <span class="o">$</span><span class="mi">1</span><span class="p">,</span> <span class="o">$</span><span class="nx">i</span><span class="p">,</span> <span class="s2">&quot;(throughput)&quot;</span><span class="p">;</span> <span class="nx">found</span><span class="o">=</span><span class="mi">1</span> <span class="p">}</span>
-<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>    <span class="p">}</span>
-<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>  <span class="p">}</span>
-<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="p">}</span>
-<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="nb">END</span> <span class="p">{</span> <span class="k">exit</span> <span class="o">!</span><span class="nx">found</span> <span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="sr">/sec\/op/</span>          <span class="p">{</span> <span class="nx">section</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">;</span> <span class="kr">next</span> <span class="p">}</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="sr">/B\/s/</span>             <span class="p">{</span> <span class="nx">section</span><span class="o">=</span><span class="s2">&quot;throughput&quot;</span><span class="p">;</span> <span class="kr">next</span> <span class="p">}</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="sr">/allocs\/op|B\/op/</span> <span class="p">{</span> <span class="nx">section</span><span class="o">=</span><span class="s2">&quot;alloc&quot;</span><span class="p">;</span> <span class="kr">next</span> <span class="p">}</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="sr">/^goos:|^goarch:|^pkg:|^cpu:/</span> <span class="p">{</span> <span class="kr">next</span> <span class="p">}</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="sr">/^[[:space:]]*$/</span>               <span class="p">{</span> <span class="kr">next</span> <span class="p">}</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="sr">/^[[:space:]]*│/</span>               <span class="p">{</span> <span class="kr">next</span> <span class="p">}</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="p">{</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>  <span class="k">for</span> <span class="p">(</span><span class="nx">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;=</span><span class="nb">NF</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    <span class="k">if</span> <span class="p">(</span><span class="kr">match</span><span class="p">(</span><span class="o">$</span><span class="nx">i</span><span class="p">,</span> <span class="sr">/^\+[0-9]+(\.[0-9]+)?%$/</span><span class="p">))</span> <span class="p">{</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>      <span class="nx">val</span> <span class="o">=</span> <span class="kr">substr</span><span class="p">(</span><span class="o">$</span><span class="nx">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kr">length</span><span class="p">(</span><span class="o">$</span><span class="nx">i</span><span class="p">)</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">0</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>      <span class="k">if</span> <span class="p">(</span><span class="nx">section</span><span class="o">==</span><span class="s2">&quot;time&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">val</span> <span class="o">&gt;</span> <span class="nx">thr</span><span class="p">)</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>        <span class="p">{</span> <span class="kr">print</span> <span class="o">$</span><span class="mi">1</span><span class="p">,</span> <span class="o">$</span><span class="nx">i</span><span class="p">;</span> <span class="nx">found</span><span class="o">=</span><span class="mi">1</span> <span class="p">}</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>    <span class="p">}</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>    <span class="k">if</span> <span class="p">(</span><span class="kr">match</span><span class="p">(</span><span class="o">$</span><span class="nx">i</span><span class="p">,</span> <span class="sr">/^-[0-9]+(\.[0-9]+)?%$/</span><span class="p">))</span> <span class="p">{</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>      <span class="nx">val</span> <span class="o">=</span> <span class="kr">substr</span><span class="p">(</span><span class="o">$</span><span class="nx">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kr">length</span><span class="p">(</span><span class="o">$</span><span class="nx">i</span><span class="p">)</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">0</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>      <span class="k">if</span> <span class="p">(</span><span class="nx">section</span><span class="o">==</span><span class="s2">&quot;throughput&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">val</span> <span class="o">&gt;</span> <span class="nx">thr</span><span class="p">)</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>        <span class="p">{</span> <span class="kr">print</span> <span class="o">$</span><span class="mi">1</span><span class="p">,</span> <span class="o">$</span><span class="nx">i</span><span class="p">,</span> <span class="s2">&quot;(throughput)&quot;</span><span class="p">;</span> <span class="nx">found</span><span class="o">=</span><span class="mi">1</span> <span class="p">}</span>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>    <span class="p">}</span>
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>  <span class="p">}</span>
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="p">}</span>
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="nb">END</span> <span class="p">{</span> <span class="k">exit</span> <span class="o">!</span><span class="nx">found</span> <span class="p">}</span>
 </code></pre></div>
 <p>Gotchas the scanner encodes:</p>
 <ul>
@@ -1114,32 +1121,32 @@ same baseline/candidate + benchstat pattern. The one addition is a
 traffic, so a PR only triggers the actual SSH bench when a maintainer
 has stuck the <code>bench-z15</code> label on it.</p>
 <p>Gate structure:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">jobs</span><span class="p">:</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">gate</span><span class="p">:</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-24.04</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nt">outputs</span><span class="p">:</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">      </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ steps.decide.outputs.run }}</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">      </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ steps.decide.outputs.role }}</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">decide</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">          </span><span class="no">case &quot;${{ github.event_name }}&quot; in</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">            </span><span class="no">pull_request)</span>
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">              </span><span class="no">if [ &quot;${{ contains(github.event.pull_request.labels.*.name,</span>
-<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">                                 </span><span class="no">&#39;bench-z15&#39;) }}&quot; = &quot;true&quot; ]; then</span>
-<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">                </span><span class="no">echo &quot;run=true&quot;  &gt;&gt; $GITHUB_OUTPUT</span>
-<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">                </span><span class="no">echo &quot;role=candidate&quot; &gt;&gt; $GITHUB_OUTPUT</span>
-<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">              </span><span class="no">else</span>
-<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">                </span><span class="no">echo &quot;run=false&quot; &gt;&gt; $GITHUB_OUTPUT</span>
-<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w">              </span><span class="no">fi</span>
-<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="w">              </span><span class="no">;;</span>
-<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="w">            </span><span class="no">*) echo &quot;run=true; role=baseline&quot; &gt;&gt; $GITHUB_OUTPUT ;;</span>
-<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="w">          </span><span class="no">esac</span>
-<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a>
-<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="w">  </span><span class="nt">bench</span><span class="p">:</span>
-<a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="w">    </span><span class="nt">needs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gate</span>
-<a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a><span class="w">    </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">needs.gate.outputs.run == &#39;true&#39;</span>
-<a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a><span class="w">    </span><span class="c1"># ... rest of the bench job</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">jobs</span><span class="p">:</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">gate</span><span class="p">:</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-24.04</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="nt">outputs</span><span class="p">:</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">      </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ steps.decide.outputs.run }}</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">      </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ steps.decide.outputs.role }}</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">decide</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">          </span><span class="no">case &quot;${{ github.event_name }}&quot; in</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">            </span><span class="no">pull_request)</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">              </span><span class="no">if [ &quot;${{ contains(github.event.pull_request.labels.*.name,</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">                                 </span><span class="no">&#39;bench-z15&#39;) }}&quot; = &quot;true&quot; ]; then</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">                </span><span class="no">echo &quot;run=true&quot;  &gt;&gt; $GITHUB_OUTPUT</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">                </span><span class="no">echo &quot;role=candidate&quot; &gt;&gt; $GITHUB_OUTPUT</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">              </span><span class="no">else</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="w">                </span><span class="no">echo &quot;run=false&quot; &gt;&gt; $GITHUB_OUTPUT</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="w">              </span><span class="no">fi</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="w">              </span><span class="no">;;</span>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="w">            </span><span class="no">*) echo &quot;run=true; role=baseline&quot; &gt;&gt; $GITHUB_OUTPUT ;;</span>
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="w">          </span><span class="no">esac</span>
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>
+<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="w">  </span><span class="nt">bench</span><span class="p">:</span>
+<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a><span class="w">    </span><span class="nt">needs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gate</span>
+<a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a><span class="w">    </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">needs.gate.outputs.run == &#39;true&#39;</span>
+<a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a><span class="w">    </span><span class="c1"># ... rest of the bench job</span>
 </code></pre></div>
 <p>A PR without the label sees <code>gate</code> pass in 5 seconds and <code>bench</code> skip —
 the LPAR is untouched.</p>
