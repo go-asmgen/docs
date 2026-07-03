@@ -741,6 +741,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#utf8len-utf8runecount-for-valid-utf-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      utf8len — utf8.RuneCount for valid UTF-8
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#the-emit-surface-catalogued" class="md-nav__link">
     <span class="md-ellipsis">
       The emit surface, catalogued
@@ -908,6 +917,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#utf8len-utf8runecount-for-valid-utf-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      utf8len — utf8.RuneCount for valid UTF-8
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#the-emit-surface-catalogued" class="md-nav__link">
     <span class="md-ellipsis">
       The emit surface, catalogued
@@ -932,7 +950,7 @@
 
 
 <h1 id="wasm-kernels">wasm — Kernels<a class="headerlink" href="#wasm-kernels" title="Permanent link">&para;</a></h1>
-<p>The six kernels that ship in the current main. Every one is a <code>go run</code>
+<p>The seven kernels that ship in the current main. Every one is a <code>go run</code>
 command that prints WAT to stdout; every one has a golden-file test that
 pins the exact output byte-for-byte; every one has a wazero cross-check
 against a Go reference.</p>
@@ -1014,8 +1032,29 @@ for a byte value the sign bit and the "is &gt;= 128" bit are the same bit.</p>
 <a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>; else advance i
 </code></pre></div>
 <p>No extra compare, no key vector, no shift — just load, bitmask, i32.eqz.</p>
+<h2 id="utf8len-utf8runecount-for-valid-utf-8">utf8len — <code>utf8.RuneCount</code> for valid UTF-8<a class="headerlink" href="#utf8len-utf8runecount-for-valid-utf-8" title="Permanent link">&para;</a></h2>
+<p>Signature:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">(</span><span class="nv">func</span><span class="w"> </span><span class="nv">$utf8len</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$srcPtr</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$nBlocks</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">result</span><span class="w"> </span><span class="nv">i32</span><span class="p">))</span>
+</code></pre></div>
+<p>Counts runes (Unicode code points) in a scanned buffer of valid UTF-8
+bytes. The technique is a two-step horizontal reduction that mirrors
+popcount at a coarser grain: continuation bytes have the exact <code>10xxxxxx</code>
+pattern, so ANDing the input with <code>0xc0×16</code> and comparing to <code>0x80×16</code>
+gives <code>0xff</code> exactly on continuation lanes. <code>i8x16.bitmask</code> compresses
+those 16 truth bits to a scalar i32, and the new <code>i32.popcnt</code> op counts
+how many of the 16 lanes were continuations. The rune count is the
+number of non-continuation bytes: <code>16 - popcnt(mask)</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>bytes = v128.load(src + 16*i)
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>bit10 = i8x16.eq( bytes &amp; (0xc0 × 16), 0x80 × 16 )   ; 0xff on cont
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>cont  = i32.popcnt( i8x16.bitmask(bit10) )           ; count in block
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>count += 16 - cont                                     ; rune starts
+</code></pre></div>
+<p>This is exact on valid UTF-8 — every rune has exactly one non-continuation
+leader byte, so the count of leaders equals the count of runes. Malformed
+inputs give an approximation (the count of bytes whose top two bits aren't
+<code>10</code>).</p>
 <h2 id="the-emit-surface-catalogued">The emit surface, catalogued<a class="headerlink" href="#the-emit-surface-catalogued" title="Permanent link">&para;</a></h2>
-<p>Every op the six kernels reach into is a one-line method on <code>Function</code>.
+<p>Every op the seven kernels reach into is a one-line method on <code>Function</code>.
 Extension is by declarative append — see
 <a href="https://github.com/go-asmgen/wasm/blob/main/emit.go"><code>emit.go</code></a>.</p>
 <table>
@@ -1056,7 +1095,7 @@ Extension is by declarative append — see
 </tr>
 <tr>
 <td>Scalar</td>
-<td><code>i32.add</code>, <code>i32.sub</code>, <code>i32.mul</code>, <code>i32.ctz</code>, <code>i32.eqz</code>, <code>i32.gt_s</code>, <code>i32.ge_s</code>, <code>i32.ne</code></td>
+<td><code>i32.add</code>, <code>i32.sub</code>, <code>i32.mul</code>, <code>i32.ctz</code>, <code>i32.popcnt</code>, <code>i32.eqz</code>, <code>i32.gt_s</code>, <code>i32.ge_s</code>, <code>i32.ne</code></td>
 </tr>
 <tr>
 <td>Control flow</td>
