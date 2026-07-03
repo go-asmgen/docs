@@ -1,6 +1,6 @@
 # wasm — Kernels
 
-The eight kernels that ship in the current main. Every one is a `go run`
+The nine kernels that ship in the current main. Every one is a `go run`
 command that prints WAT to stdout; every one has a golden-file test that
 pins the exact output byte-for-byte; every one has a wazero cross-check
 against a Go reference.
@@ -181,9 +181,42 @@ leader byte, so the count of leaders equals the count of runes. Malformed
 inputs give an approximation (the count of bytes whose top two bits aren't
 `10`).
 
+## json_clean — JSON-string bulk-copy preflight
+
+Signature:
+
+```lisp
+(func $json_clean (param $srcPtr i32) (param $nBlocks i32) (result i32))
+```
+
+Returns 1 iff every byte in the scanned buffer can be copied verbatim
+into the current JSON string body — no `"` (0x22) closing the string,
+no `\` (0x5c) starting an escape, no control character (0x00..0x1f)
+that would need `\uXXXX` escaping. A parser can then take the fast
+`memcpy`-style bulk-copy path when this returns 1 and drop to the
+byte-by-byte slow path on 0. This is the hottest inner check in almost
+every JSON string-parsing loop.
+
+```text
+bytes    = v128.load(src + 16*i)
+quotes   = i8x16.eq(bytes, 0x22 × 16)                ; 0xff on `"`
+slashes  = i8x16.eq(bytes, 0x5c × 16)                ; 0xff on `\`
+controls = i8x16.eq(v128.and(bytes, 0xe0 × 16), 0)   ; 0xff on 0x00..0x1f
+dirty    = quotes | slashes | controls
+if i8x16.bitmask(dirty) != 0:
+  return 0
+```
+
+The control-char detection uses `(bytes & 0xe0) == 0` instead of the
+obvious `i8x16.le_s(bytes, 0x1f)` because signed less-than would
+misclassify high-bit bytes (0x80..0xff, negative under i8) as controls
+— the wazero verifier caught this trap on the first implementation.
+`bytes & 0xe0 == 0` is true iff the top three bits are all clear, which
+happens exactly for byte values 0x00..0x1f regardless of signedness.
+
 ## The emit surface, catalogued
 
-Every op the eight kernels reach into is a one-line method on `Function`.
+Every op the nine kernels reach into is a one-line method on `Function`.
 Extension is by declarative append — see
 [`emit.go`](https://github.com/go-asmgen/wasm/blob/main/emit.go).
 
