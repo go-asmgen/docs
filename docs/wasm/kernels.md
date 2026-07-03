@@ -1,6 +1,6 @@
 # wasm — Kernels
 
-The seven kernels that ship in the current main. Every one is a `go run`
+The eight kernels that ship in the current main. Every one is a `go run`
 command that prints WAT to stdout; every one has a golden-file test that
 pins the exact output byte-for-byte; every one has a wazero cross-check
 against a Go reference.
@@ -120,6 +120,38 @@ if i8x16.bitmask(bytes) != 0:
 
 No extra compare, no key vector, no shift — just load, bitmask, i32.eqz.
 
+## hex_decode — `encoding/hex.DecodeString`-shape (companion to `hex`)
+
+Signature:
+
+```lisp
+(func $hex_decode (param $dstPtr i32) (param $srcPtr i32) (param $nBlocks i32))
+```
+
+Each block consumes 16 hex characters and writes 8 raw bytes — the exact
+inverse of the encoder's 16-byte → 32-char expansion. The kernel showcases
+the "three-range arithmetic offset" pattern that recurs in every ASCII-to-
+value conversion (base16, base32, base64, url-percent decoding):
+
+```text
+digit    = (chars >= '0') & (chars <= '9')                  ; 0xff on 0-9
+upper    = (chars >= 'A') & (chars <= 'F')                  ; 0xff on A-F
+lower    = (chars >= 'a') & (chars <= 'f')                  ; 0xff on a-f
+offset   = (digit & 48) | (upper & 55) | (lower & 87)       ; per-lane
+nibbles  = chars - offset                                    ; each lane 0..15
+```
+
+The three offsets encode the ASCII → nibble arithmetic: `'0'-0 = 48` for
+digits, `'A'-10 = 55` for uppercase, `'a'-10 = 87` for lowercase. AND-with-
+mask + OR combines them into a single per-lane offset vector so each lane
+subtracts exactly the offset for its own range.
+
+Pack: gather even-indexed nibbles into the low 8 lanes via `i8x16.shuffle`,
+shift left 4, OR with the odd-indexed nibbles gathered the same way, and
+store just the low 8 bytes via `v128.store64_lane offset=0 0`. New emit-
+surface ops: `i8x16.shl` (per-lane left shift, symmetric to `i8x16.shr_u`)
+and `v128.store64_lane` (partial store of one i64 lane of a v128).
+
 ## utf8len — `utf8.RuneCount` for valid UTF-8
 
 Signature:
@@ -151,16 +183,16 @@ inputs give an approximation (the count of bytes whose top two bits aren't
 
 ## The emit surface, catalogued
 
-Every op the seven kernels reach into is a one-line method on `Function`.
+Every op the eight kernels reach into is a one-line method on `Function`.
 Extension is by declarative append — see
 [`emit.go`](https://github.com/go-asmgen/wasm/blob/main/emit.go).
 
 | Family | Ops |
 |---|---|
-| Memory | `v128.load`, `v128.store`, `i32.load8_u` |
+| Memory | `v128.load`, `v128.store`, `v128.store64_lane`, `i32.load8_u` |
 | Locals + stack | `local.get/set/tee`, `i32.const` |
 | v128 boolean | `v128.and`, `v128.or`, `v128.xor`, `v128.zero` |
-| i8x16 compare / arith | `i8x16.eq`, `i8x16.ge_s`, `i8x16.le_s`, `i8x16.all_true`, `i8x16.sub`, `i8x16.shr_u`, `i8x16.popcnt`, `i8x16.splat` |
+| i8x16 compare / arith | `i8x16.eq`, `i8x16.ge_s`, `i8x16.le_s`, `i8x16.all_true`, `i8x16.sub`, `i8x16.shr_u`, `i8x16.shl`, `i8x16.popcnt`, `i8x16.splat` |
 | Horizontal aggregation | `i8x16.bitmask` |
 | Shuffle / swizzle | `i8x16.swizzle`, `i8x16.shuffle`, `v128.const` |
 | Widening reductions | `i16x8.extadd_pairwise_i8x16_u`, `i32x4.extadd_pairwise_i16x8_u`, `i32x4.add`, `i32x4.extract_lane` |
