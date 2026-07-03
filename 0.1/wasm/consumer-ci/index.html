@@ -1,0 +1,1304 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Ergonomic generation of Go-compatible Plan 9 assembly for non-amd64 architectures, delegating encoding to cmd/asm.">
+      
+      
+      
+        <link rel="canonical" href="https://go-asmgen.github.io/docs/0.1/wasm/consumer-ci/">
+      
+      
+        <link rel="prev" href="../design/">
+      
+      
+        <link rel="next" href="../roadmap/">
+      
+      
+      <link rel="icon" href="../../assets/logo.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
+    
+    
+      
+        <title>Consumer CI - go-asmgen docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6f8fc17f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#wasm-consumer-ci-pattern" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="go-asmgen docs" class="md-header__button md-logo" aria-label="go-asmgen docs" data-md-component="logo">
+      
+  <img src="../../assets/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            go-asmgen docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Consumer CI
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/go-asmgen" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    go-asmgen
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="go-asmgen docs" class="md-nav__button md-logo" aria-label="go-asmgen docs" data-md-component="logo">
+      
+  <img src="../../assets/logo.svg" alt="logo">
+
+    </a>
+    go-asmgen docs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/go-asmgen" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    go-asmgen
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    asmgen
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            asmgen
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../asmgen/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../asmgen/quickstart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick start
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../asmgen/design/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ABI0 & design notes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../asmgen/aggregates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Aggregates (structs, slices, strings)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../asmgen/simd/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SIMD (SSE / NEON / VSX / …)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../asmgen/riscv64/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Second architecture: riscv64
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../asmgen/loong64/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Third architecture: loong64
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../asmgen/amd64/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fourth target: amd64
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../asmgen/ppc64le/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fifth target: ppc64le
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../asmgen/s390x/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Sixth target: s390x
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../asmgen/roadmap/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Roadmap
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    wasm
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            wasm
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick start
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kernels/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Kernels
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../design/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Design notes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Consumer CI
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Consumer CI
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-three-workflow-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      The three-workflow layer
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wasm-drift-enforce-generator-committed-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      wasm-drift — enforce generator = committed source
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wasm-bench-portable-regression-detection-under-wazero" class="md-nav__link">
+    <span class="md-ellipsis">
+      wasm-bench — portable regression detection under wazero
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="wasm-bench — portable regression detection under wazero">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-awk-regression-scanner" class="md-nav__link">
+    <span class="md-ellipsis">
+      The awk regression scanner
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#z15-bench-arch-native-regression-detection-on-real-hardware" class="md-nav__link">
+    <span class="md-ellipsis">
+      z15-bench — arch-native regression detection on real hardware
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#proof-end-to-end-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Proof: end-to-end validation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adopting-the-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adopting the pattern
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../roadmap/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Roadmap
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-three-workflow-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      The three-workflow layer
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wasm-drift-enforce-generator-committed-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      wasm-drift — enforce generator = committed source
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wasm-bench-portable-regression-detection-under-wazero" class="md-nav__link">
+    <span class="md-ellipsis">
+      wasm-bench — portable regression detection under wazero
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="wasm-bench — portable regression detection under wazero">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-awk-regression-scanner" class="md-nav__link">
+    <span class="md-ellipsis">
+      The awk regression scanner
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#z15-bench-arch-native-regression-detection-on-real-hardware" class="md-nav__link">
+    <span class="md-ellipsis">
+      z15-bench — arch-native regression detection on real hardware
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#proof-end-to-end-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Proof: end-to-end validation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adopting-the-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adopting the pattern
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="wasm-consumer-ci-pattern">wasm — Consumer CI pattern<a class="headerlink" href="#wasm-consumer-ci-pattern" title="Permanent link">&para;</a></h1>
+<p>A wasm consumer that pins one of the shipped kernels ends up owning three
+CI concerns the emitter can't answer for them: <strong>is the committed
+<code>.wat</code> / <code>.wasm</code> still what the generator emits?</strong> (drift), <strong>has any PR
+made the kernel slower under wazero?</strong> (portable regression), and
+optionally <strong>has any PR made it slower on real hardware?</strong> (arch-native
+regression). This page documents the pattern that the reference
+consumer, <a href="https://github.com/go-simd/matchlen-wasm"><code>go-simd/matchlen-wasm</code></a>,
+uses to answer all three, with the workflow shapes and the numbers
+from a full end-to-end validation.</p>
+<h2 id="the-three-workflow-layer">The three-workflow layer<a class="headerlink" href="#the-three-workflow-layer" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>                ┌──────────────────────────────────────────┐
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>   PR opens ──▶ │  wasm-drift        (always)              │
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>                │  regen .wat + wat2wasm → diff vs main    │
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>                │  fail on any hand-edit drift             │
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>                └──────────────────────────────────────────┘
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>                        ↓ passes
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>                ┌──────────────────────────────────────────┐
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>                │  wasm-bench        (always)              │
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>                │  candidate role: benchstat vs baseline   │
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>                │  fail on &gt;5% regression                  │
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>                └──────────────────────────────────────────┘
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>                        ↓ passes
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>                ┌──────────────────────────────────────────┐
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>                │  z15-bench         (bench-z15 label)     │
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>                │  SSH to real IBM z15 LPAR, s390x bench   │
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>                │  fail on &gt;5% regression on real HW       │
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>                └──────────────────────────────────────────┘
+</code></pre></div>
+<p>The three workflows are independent — any one can be omitted, and they
+compose cleanly. A minimal consumer ships only <code>wasm-drift</code>; a
+performance-sensitive consumer adds <code>wasm-bench</code>; a consumer that cares
+about a specific arch's dispatch quality adds a per-arch bench with a
+label gate that keeps the shared runner from being flooded.</p>
+<h2 id="wasm-drift-enforce-generator-committed-source">wasm-drift — enforce generator = committed source<a class="headerlink" href="#wasm-drift-enforce-generator-committed-source" title="Permanent link">&para;</a></h2>
+<p>The kernel source of truth is the pinned generator (<code>go run
+github.com/go-asmgen/wasm/&lt;kernel&gt;@vX.Y.Z</code>). The drift workflow
+regenerates it and diffs vs the committed <code>.wat</code> / <code>.wasm</code>. Any hand-
+edit fails CI immediately.</p>
+<p>Consumer's <code>generate.go</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">//go:generate sh -c &quot;go run github.com/go-asmgen/wasm/matchlen@v0.3.0 &gt; matchlen.wat&quot;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kn">package</span><span class="w"> </span><span class="nx">matchlenwasm</span>
+</code></pre></div>
+<p>Consumer's <code>.github/workflows/wasm-drift.yml</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">wasm-drift</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nt">on</span><span class="p">:</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">main</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="nt">paths</span><span class="p">:</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;matchlen.wat&#39;</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;matchlen.wasm&#39;</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;generate.go&#39;</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;Makefile&#39;</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;.github/workflows/wasm-drift.yml&#39;</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="nt">jobs</span><span class="p">:</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">  </span><span class="nt">drift</span><span class="p">:</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-24.04</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-go@v5</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">          </span><span class="nt">go-version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;stable&#39;</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install WABT</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sudo apt-get update &amp;&amp; sudo apt-get install -y wabt</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Regenerate + rebuild</span>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a><span class="w">          </span><span class="no">cp matchlen.wat  matchlen.wat.committed</span>
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a><span class="w">          </span><span class="no">cp matchlen.wasm matchlen.wasm.committed</span>
+<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a><span class="w">          </span><span class="no">go generate ./...</span>
+<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a><span class="w">          </span><span class="no">wat2wasm matchlen.wat -o matchlen.wasm</span>
+<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Check for drift</span>
+<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a><span class="w">          </span><span class="no">diff -u matchlen.wat.committed matchlen.wat || {</span>
+<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a><span class="w">            </span><span class="no">echo &quot;::error::matchlen.wat drifted from pinned generator&quot;</span>
+<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a><span class="w">            </span><span class="no">exit 1</span>
+<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a><span class="w">          </span><span class="no">}</span>
+<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a><span class="w">          </span><span class="no">diff -q matchlen.wasm.committed matchlen.wasm || {</span>
+<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a><span class="w">            </span><span class="no">echo &quot;::error::matchlen.wasm not rebuilt from matchlen.wat&quot;</span>
+<a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a><span class="w">            </span><span class="no">exit 1</span>
+<a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a><span class="w">          </span><span class="no">}</span>
+</code></pre></div>
+<p>Trip-up: someone hand-edits <code>matchlen.wat</code> to add a comment. Regen wipes
+the comment, diff fails, PR is blocked with an actionable error message.</p>
+<h2 id="wasm-bench-portable-regression-detection-under-wazero">wasm-bench — portable regression detection under wazero<a class="headerlink" href="#wasm-bench-portable-regression-detection-under-wazero" title="Permanent link">&para;</a></h2>
+<p><code>wasm-bench</code> runs the wazero-hosted benchmark on stock ubuntu-24.04 —
+cheap enough (~30s per size × 22 benchmarks × 6 count = ~3 min) to fire
+on every PR without a gate.</p>
+<p>The workflow splits into two roles by trigger:</p>
+<ul>
+<li><strong>BASELINE</strong> on push-to-main / schedule / dispatch: publishes
+  <code>bench.out</code> as artifact <code>wasm-baseline</code> (90-day retention).</li>
+<li><strong>CANDIDATE</strong> on <code>pull_request</code>: downloads the freshest main-branch
+  baseline via <code>gh</code> CLI, runs the same bench, <code>benchstat</code>s the two,
+  posts the diff table as an upserting PR comment (marker-based so
+  re-runs replace the previous comment), and fails on any benchmark
+  regressed beyond <code>REGRESSION_THRESHOLD_PCT</code> (default 5%).</li>
+</ul>
+<h3 id="the-awk-regression-scanner">The awk regression scanner<a class="headerlink" href="#the-awk-regression-scanner" title="Permanent link">&para;</a></h3>
+<p>The tricky part is parsing modern <code>benchstat -format text</code> output — it
+uses Unicode box-drawing characters, strips the <code>Benchmark</code> prefix, and
+prints <code>~</code> on statistically insignificant deltas so noise self-drops.
+The scanner tracks the current section header (<code>sec/op</code>, <code>B/s</code>,
+<code>allocs/op</code>) and applies polarity per section — <code>sec/op +N%</code> is a
+regression, <code>B/s -N%</code> is a regression, small speedups on either side
+are ignored.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="sr">/sec\/op/</span>          <span class="p">{</span> <span class="nx">section</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">;</span> <span class="kr">next</span> <span class="p">}</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="sr">/B\/s/</span>             <span class="p">{</span> <span class="nx">section</span><span class="o">=</span><span class="s2">&quot;throughput&quot;</span><span class="p">;</span> <span class="kr">next</span> <span class="p">}</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="sr">/allocs\/op|B\/op/</span> <span class="p">{</span> <span class="nx">section</span><span class="o">=</span><span class="s2">&quot;alloc&quot;</span><span class="p">;</span> <span class="kr">next</span> <span class="p">}</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="sr">/^goos:|^goarch:|^pkg:|^cpu:/</span> <span class="p">{</span> <span class="kr">next</span> <span class="p">}</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="sr">/^[[:space:]]*$/</span>               <span class="p">{</span> <span class="kr">next</span> <span class="p">}</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="sr">/^[[:space:]]*│/</span>               <span class="p">{</span> <span class="kr">next</span> <span class="p">}</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="p">{</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>  <span class="k">for</span> <span class="p">(</span><span class="nx">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;=</span><span class="nb">NF</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    <span class="k">if</span> <span class="p">(</span><span class="kr">match</span><span class="p">(</span><span class="o">$</span><span class="nx">i</span><span class="p">,</span> <span class="sr">/^\+[0-9]+(\.[0-9]+)?%$/</span><span class="p">))</span> <span class="p">{</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>      <span class="nx">val</span> <span class="o">=</span> <span class="kr">substr</span><span class="p">(</span><span class="o">$</span><span class="nx">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kr">length</span><span class="p">(</span><span class="o">$</span><span class="nx">i</span><span class="p">)</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">0</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>      <span class="k">if</span> <span class="p">(</span><span class="nx">section</span><span class="o">==</span><span class="s2">&quot;time&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">val</span> <span class="o">&gt;</span> <span class="nx">thr</span><span class="p">)</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>        <span class="p">{</span> <span class="kr">print</span> <span class="o">$</span><span class="mi">1</span><span class="p">,</span> <span class="o">$</span><span class="nx">i</span><span class="p">;</span> <span class="nx">found</span><span class="o">=</span><span class="mi">1</span> <span class="p">}</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    <span class="p">}</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>    <span class="k">if</span> <span class="p">(</span><span class="kr">match</span><span class="p">(</span><span class="o">$</span><span class="nx">i</span><span class="p">,</span> <span class="sr">/^-[0-9]+(\.[0-9]+)?%$/</span><span class="p">))</span> <span class="p">{</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>      <span class="nx">val</span> <span class="o">=</span> <span class="kr">substr</span><span class="p">(</span><span class="o">$</span><span class="nx">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kr">length</span><span class="p">(</span><span class="o">$</span><span class="nx">i</span><span class="p">)</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">0</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>      <span class="k">if</span> <span class="p">(</span><span class="nx">section</span><span class="o">==</span><span class="s2">&quot;throughput&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">val</span> <span class="o">&gt;</span> <span class="nx">thr</span><span class="p">)</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>        <span class="p">{</span> <span class="kr">print</span> <span class="o">$</span><span class="mi">1</span><span class="p">,</span> <span class="o">$</span><span class="nx">i</span><span class="p">,</span> <span class="s2">&quot;(throughput)&quot;</span><span class="p">;</span> <span class="nx">found</span><span class="o">=</span><span class="mi">1</span> <span class="p">}</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>    <span class="p">}</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>  <span class="p">}</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="p">}</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="nb">END</span> <span class="p">{</span> <span class="k">exit</span> <span class="o">!</span><span class="nx">found</span> <span class="p">}</span>
+</code></pre></div>
+<p>Gotchas the scanner encodes:</p>
+<ul>
+<li>Modern benchstat strips the <code>Benchmark</code> prefix — anchoring on
+  <code>^Benchmark</code> would silently match nothing.</li>
+<li>Insignificant deltas print as <code>~ (p=0.234 n=6)</code>; the signed-percent
+  regex doesn't match <code>~</code>, so noise drops automatically.</li>
+<li>The B/s section's polarity is inverted — a <code>-N%</code> means slower, and
+  the section-tracker steers the scanner into the right test.</li>
+<li>Everything after <code>allocs/op</code> / <code>B/op</code> is memory data, not perf —
+  section resets to <code>alloc</code> and no rows there are flagged.</li>
+</ul>
+<h2 id="z15-bench-arch-native-regression-detection-on-real-hardware">z15-bench — arch-native regression detection on real hardware<a class="headerlink" href="#z15-bench-arch-native-regression-detection-on-real-hardware" title="Permanent link">&para;</a></h2>
+<p><code>z15-bench</code> SSHes into a real IBM z15 LPAR (<code>linux1@148.100.85.193</code>)
+via <code>webfactory/ssh-agent</code>, runs the s390x bench there, and applies the
+same baseline/candidate + benchstat pattern. The one addition is a
+<strong>label gate</strong> — the shared LPAR would drown under one-bench-per-PR
+traffic, so a PR only triggers the actual SSH bench when a maintainer
+has stuck the <code>bench-z15</code> label on it.</p>
+<p>Gate structure:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">jobs</span><span class="p">:</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">gate</span><span class="p">:</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-24.04</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nt">outputs</span><span class="p">:</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">      </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ steps.decide.outputs.run }}</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">      </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ steps.decide.outputs.role }}</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">decide</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">          </span><span class="no">case &quot;${{ github.event_name }}&quot; in</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">            </span><span class="no">pull_request)</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">              </span><span class="no">if [ &quot;${{ contains(github.event.pull_request.labels.*.name,</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">                                 </span><span class="no">&#39;bench-z15&#39;) }}&quot; = &quot;true&quot; ]; then</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">                </span><span class="no">echo &quot;run=true&quot;  &gt;&gt; $GITHUB_OUTPUT</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">                </span><span class="no">echo &quot;role=candidate&quot; &gt;&gt; $GITHUB_OUTPUT</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">              </span><span class="no">else</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">                </span><span class="no">echo &quot;run=false&quot; &gt;&gt; $GITHUB_OUTPUT</span>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w">              </span><span class="no">fi</span>
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="w">              </span><span class="no">;;</span>
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="w">            </span><span class="no">*) echo &quot;run=true; role=baseline&quot; &gt;&gt; $GITHUB_OUTPUT ;;</span>
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="w">          </span><span class="no">esac</span>
+<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a>
+<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="w">  </span><span class="nt">bench</span><span class="p">:</span>
+<a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="w">    </span><span class="nt">needs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gate</span>
+<a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a><span class="w">    </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">needs.gate.outputs.run == &#39;true&#39;</span>
+<a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a><span class="w">    </span><span class="c1"># ... rest of the bench job</span>
+</code></pre></div>
+<p>A PR without the label sees <code>gate</code> pass in 5 seconds and <code>bench</code> skip —
+the LPAR is untouched.</p>
+<h2 id="proof-end-to-end-validation">Proof: end-to-end validation<a class="headerlink" href="#proof-end-to-end-validation" title="Permanent link">&para;</a></h2>
+<p>The reference consumer's pipeline was validated with two self-check PRs:</p>
+<p><strong>PR #1 — positive path.</strong> Docstring-only edit to <code>matchlen_wasm.go</code> (no
+<code>.wat</code> / <code>.wasm</code> change). Expected verdict: pass.</p>
+<ul>
+<li><code>wasm-drift</code>: correctly didn't fire — its <code>paths</code> filter doesn't
+  include the Go wrapper.</li>
+<li><code>wasm-bench</code>: ran the candidate role, downloaded main-branch
+  baseline, benchstat compared 22 benchmarks × 4 sections. One
+  statistically-significant delta (<code>MatchlenWasm/8B-4 -0.74%, p=0.041</code>)
+  — well under 5%. Verdict: <code>✅ No regression above the 5% threshold</code>.</li>
+<li><code>z15-bench</code>: label gate skipped the SSH bench (<code>gate</code> job 5s, <code>bench</code>
+  job 0s / skipped) — LPAR untouched.</li>
+</ul>
+<p><strong>PR #2 — negative path.</strong> 50 pointless multiplications injected into
+the wasm bench inner loop (~50 ns/iter overhead). Expected verdict:
+fail.</p>
+<ul>
+<li><code>wasm-bench</code>: candidate role ran the same bench harness on the PR
+  head; benchstat correctly showed 8 regressed <code>MatchlenWasm</code> rows
+  above threshold:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>Slowdown</th>
+<th>p-value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MatchlenWasm/8B-4</code></td>
+<td>+19.92%</td>
+<td>0.002</td>
+</tr>
+<tr>
+<td><code>MatchlenWasm/16B-4</code></td>
+<td>+24.02%</td>
+<td>0.002</td>
+</tr>
+<tr>
+<td><code>MatchlenWasm/32B-4</code></td>
+<td>+22.69%</td>
+<td>0.002</td>
+</tr>
+<tr>
+<td><code>MatchlenWasm/64B-4</code></td>
+<td>+21.71%</td>
+<td>0.002</td>
+</tr>
+<tr>
+<td><code>MatchlenWasm/128B-4</code></td>
+<td>+19.92%</td>
+<td>0.002</td>
+</tr>
+<tr>
+<td><code>MatchlenWasm/256B-4</code></td>
+<td>+16.49%</td>
+<td>0.002</td>
+</tr>
+<tr>
+<td><code>MatchlenWasm/1KiB-4</code></td>
+<td>+7.86%</td>
+<td>0.002</td>
+</tr>
+</tbody>
+</table>
+<p>Correctly NOT flagged: <code>MatchlenWasm/4KiB-4 (+2.70%)</code> — under 5%
+  threshold. Correctly NOT flagged: <code>16KiB..1MiB</code> — 50 ns dwarfed by
+  µs-scale baselines so no significant delta. Correctly NOT flagged:
+  <code>MatchlenScalar</code> speedups (<code>-0.28%</code>, <code>-0.16%</code>) — negative deltas on
+  sec/op are speedups, not regressions.</p>
+<p>Verdict: <code>❌ One or more benchmarks regressed beyond the 5%
+  threshold</code>. <code>Fail on regression</code> step exited non-zero → whole job
+  went red.</p>
+<p>Between the two PRs the pipeline demonstrated <strong>no false positives</strong>
+(PR #1) and <strong>no false negatives</strong> (PR #2), and honored the 5%
+threshold exactly. The runs are on record at
+<a href="https://github.com/go-simd/matchlen-wasm/pull/1">go-simd/matchlen-wasm/pull/1</a>
+and
+<a href="https://github.com/go-simd/matchlen-wasm/pull/2">/pull/2</a>.</p>
+<h2 id="adopting-the-pattern">Adopting the pattern<a class="headerlink" href="#adopting-the-pattern" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Copy <code>generate.go</code> from <code>matchlen-wasm</code> and update the kernel name.</li>
+<li>Copy <code>.github/workflows/wasm-drift.yml</code> — adjust the <code>paths</code> list to
+   match your kernel's asset names.</li>
+<li>Copy <code>.github/workflows/wasm-bench.yml</code> — adjust the <code>paths</code> list
+   and the bench command in the <code>Run wazero-hosted matchlen bench</code> step
+   to point at your kernel package.</li>
+<li>Optionally copy <code>.github/workflows/z15-bench.yml</code> — same shape,
+   drops in as-is if you have an SSH-reachable s390x host and can add
+   the <code>LINUX1_SSH_KEY</code> + <code>LINUX1_KNOWN_HOSTS</code> secrets.</li>
+<li>Verify with a self-check PR that trips no change — pipeline should
+   run and pass with a "no regression" comment.</li>
+</ol>
+<p>The workflow files are stable across kernels; the only per-kernel edit
+is the paths list. Once the reference set is copied, adding a new
+kernel to a consumer is a <code>//go:generate</code> line and a bench harness.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.sections", "navigation.top", "navigation.instant", "content.code.copy", "search.suggest"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
+      
+    
+  </body>
+</html>
