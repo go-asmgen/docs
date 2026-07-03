@@ -741,6 +741,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#hex_decode-encodinghexdecodestring-shape-companion-to-hex" class="md-nav__link">
+    <span class="md-ellipsis">
+      hex_decode — encoding/hex.DecodeString-shape (companion to hex)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#utf8len-utf8runecount-for-valid-utf-8" class="md-nav__link">
     <span class="md-ellipsis">
       utf8len — utf8.RuneCount for valid UTF-8
@@ -917,6 +926,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#hex_decode-encodinghexdecodestring-shape-companion-to-hex" class="md-nav__link">
+    <span class="md-ellipsis">
+      hex_decode — encoding/hex.DecodeString-shape (companion to hex)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#utf8len-utf8runecount-for-valid-utf-8" class="md-nav__link">
     <span class="md-ellipsis">
       utf8len — utf8.RuneCount for valid UTF-8
@@ -950,7 +968,7 @@
 
 
 <h1 id="wasm-kernels">wasm — Kernels<a class="headerlink" href="#wasm-kernels" title="Permanent link">&para;</a></h1>
-<p>The seven kernels that ship in the current main. Every one is a <code>go run</code>
+<p>The eight kernels that ship in the current main. Every one is a <code>go run</code>
 command that prints WAT to stdout; every one has a golden-file test that
 pins the exact output byte-for-byte; every one has a wazero cross-check
 against a Go reference.</p>
@@ -1032,9 +1050,32 @@ for a byte value the sign bit and the "is &gt;= 128" bit are the same bit.</p>
 <a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>; else advance i
 </code></pre></div>
 <p>No extra compare, no key vector, no shift — just load, bitmask, i32.eqz.</p>
+<h2 id="hex_decode-encodinghexdecodestring-shape-companion-to-hex">hex_decode — <code>encoding/hex.DecodeString</code>-shape (companion to <code>hex</code>)<a class="headerlink" href="#hex_decode-encodinghexdecodestring-shape-companion-to-hex" title="Permanent link">&para;</a></h2>
+<p>Signature:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">(</span><span class="nv">func</span><span class="w"> </span><span class="nv">$hex_decode</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$dstPtr</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$srcPtr</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$nBlocks</span><span class="w"> </span><span class="nv">i32</span><span class="p">))</span>
+</code></pre></div>
+<p>Each block consumes 16 hex characters and writes 8 raw bytes — the exact
+inverse of the encoder's 16-byte → 32-char expansion. The kernel showcases
+the "three-range arithmetic offset" pattern that recurs in every ASCII-to-
+value conversion (base16, base32, base64, url-percent decoding):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>digit    = (chars &gt;= &#39;0&#39;) &amp; (chars &lt;= &#39;9&#39;)                  ; 0xff on 0-9
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>upper    = (chars &gt;= &#39;A&#39;) &amp; (chars &lt;= &#39;F&#39;)                  ; 0xff on A-F
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>lower    = (chars &gt;= &#39;a&#39;) &amp; (chars &lt;= &#39;f&#39;)                  ; 0xff on a-f
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>offset   = (digit &amp; 48) | (upper &amp; 55) | (lower &amp; 87)       ; per-lane
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>nibbles  = chars - offset                                    ; each lane 0..15
+</code></pre></div>
+<p>The three offsets encode the ASCII → nibble arithmetic: <code>'0'-0 = 48</code> for
+digits, <code>'A'-10 = 55</code> for uppercase, <code>'a'-10 = 87</code> for lowercase. AND-with-
+mask + OR combines them into a single per-lane offset vector so each lane
+subtracts exactly the offset for its own range.</p>
+<p>Pack: gather even-indexed nibbles into the low 8 lanes via <code>i8x16.shuffle</code>,
+shift left 4, OR with the odd-indexed nibbles gathered the same way, and
+store just the low 8 bytes via <code>v128.store64_lane offset=0 0</code>. New emit-
+surface ops: <code>i8x16.shl</code> (per-lane left shift, symmetric to <code>i8x16.shr_u</code>)
+and <code>v128.store64_lane</code> (partial store of one i64 lane of a v128).</p>
 <h2 id="utf8len-utf8runecount-for-valid-utf-8">utf8len — <code>utf8.RuneCount</code> for valid UTF-8<a class="headerlink" href="#utf8len-utf8runecount-for-valid-utf-8" title="Permanent link">&para;</a></h2>
 <p>Signature:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">(</span><span class="nv">func</span><span class="w"> </span><span class="nv">$utf8len</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$srcPtr</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$nBlocks</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">result</span><span class="w"> </span><span class="nv">i32</span><span class="p">))</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="p">(</span><span class="nv">func</span><span class="w"> </span><span class="nv">$utf8len</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$srcPtr</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$nBlocks</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">result</span><span class="w"> </span><span class="nv">i32</span><span class="p">))</span>
 </code></pre></div>
 <p>Counts runes (Unicode code points) in a scanned buffer of valid UTF-8
 bytes. The technique is a two-step horizontal reduction that mirrors
@@ -1044,17 +1085,17 @@ gives <code>0xff</code> exactly on continuation lanes. <code>i8x16.bitmask</code
 those 16 truth bits to a scalar i32, and the new <code>i32.popcnt</code> op counts
 how many of the 16 lanes were continuations. The rune count is the
 number of non-continuation bytes: <code>16 - popcnt(mask)</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>bytes = v128.load(src + 16*i)
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>bit10 = i8x16.eq( bytes &amp; (0xc0 × 16), 0x80 × 16 )   ; 0xff on cont
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>cont  = i32.popcnt( i8x16.bitmask(bit10) )           ; count in block
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>count += 16 - cont                                     ; rune starts
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>bytes = v128.load(src + 16*i)
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>bit10 = i8x16.eq( bytes &amp; (0xc0 × 16), 0x80 × 16 )   ; 0xff on cont
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>cont  = i32.popcnt( i8x16.bitmask(bit10) )           ; count in block
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>count += 16 - cont                                     ; rune starts
 </code></pre></div>
 <p>This is exact on valid UTF-8 — every rune has exactly one non-continuation
 leader byte, so the count of leaders equals the count of runes. Malformed
 inputs give an approximation (the count of bytes whose top two bits aren't
 <code>10</code>).</p>
 <h2 id="the-emit-surface-catalogued">The emit surface, catalogued<a class="headerlink" href="#the-emit-surface-catalogued" title="Permanent link">&para;</a></h2>
-<p>Every op the seven kernels reach into is a one-line method on <code>Function</code>.
+<p>Every op the eight kernels reach into is a one-line method on <code>Function</code>.
 Extension is by declarative append — see
 <a href="https://github.com/go-asmgen/wasm/blob/main/emit.go"><code>emit.go</code></a>.</p>
 <table>
@@ -1067,7 +1108,7 @@ Extension is by declarative append — see
 <tbody>
 <tr>
 <td>Memory</td>
-<td><code>v128.load</code>, <code>v128.store</code>, <code>i32.load8_u</code></td>
+<td><code>v128.load</code>, <code>v128.store</code>, <code>v128.store64_lane</code>, <code>i32.load8_u</code></td>
 </tr>
 <tr>
 <td>Locals + stack</td>
@@ -1079,7 +1120,7 @@ Extension is by declarative append — see
 </tr>
 <tr>
 <td>i8x16 compare / arith</td>
-<td><code>i8x16.eq</code>, <code>i8x16.ge_s</code>, <code>i8x16.le_s</code>, <code>i8x16.all_true</code>, <code>i8x16.sub</code>, <code>i8x16.shr_u</code>, <code>i8x16.popcnt</code>, <code>i8x16.splat</code></td>
+<td><code>i8x16.eq</code>, <code>i8x16.ge_s</code>, <code>i8x16.le_s</code>, <code>i8x16.all_true</code>, <code>i8x16.sub</code>, <code>i8x16.shr_u</code>, <code>i8x16.shl</code>, <code>i8x16.popcnt</code>, <code>i8x16.splat</code></td>
 </tr>
 <tr>
 <td>Horizontal aggregation</td>

@@ -912,7 +912,7 @@ kernel and dropped straight into a <code>//go:wasmimport</code> consumer.</p>
   swizzle, widening reductions (extadd_pairwise), and enough scalar plumbing
   for the surrounding control flow.</li>
 </ul>
-<p>Seven kernels, each with 100% statement coverage, a golden-file test, and
+<p>Eight kernels, each with 100% statement coverage, a golden-file test, and
 a wazero end-to-end cross-check against a Go reference:</p>
 <table>
 <thead>
@@ -932,6 +932,11 @@ a wazero end-to-end cross-check against a Go reference:</p>
 <td><code>hex</code></td>
 <td><code>encoding/hex</code></td>
 <td><code>i8x16.shr_u</code>, <code>i8x16.swizzle</code>, <code>i8x16.shuffle</code></td>
+</tr>
+<tr>
+<td><code>hex_decode</code></td>
+<td><code>encoding/hex.DecodeString</code></td>
+<td>3× <code>i8x16.ge_s</code>/<code>le_s</code>, <code>i8x16.shl</code>, <code>v128.store64_lane</code></td>
 </tr>
 <tr>
 <td><code>popcount</code></td>
