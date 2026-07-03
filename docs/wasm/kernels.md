@@ -1,6 +1,6 @@
 # wasm — Kernels
 
-The six kernels that ship in the current main. Every one is a `go run`
+The seven kernels that ship in the current main. Every one is a `go run`
 command that prints WAT to stdout; every one has a golden-file test that
 pins the exact output byte-for-byte; every one has a wazero cross-check
 against a Go reference.
@@ -120,9 +120,38 @@ if i8x16.bitmask(bytes) != 0:
 
 No extra compare, no key vector, no shift — just load, bitmask, i32.eqz.
 
+## utf8len — `utf8.RuneCount` for valid UTF-8
+
+Signature:
+
+```lisp
+(func $utf8len (param $srcPtr i32) (param $nBlocks i32) (result i32))
+```
+
+Counts runes (Unicode code points) in a scanned buffer of valid UTF-8
+bytes. The technique is a two-step horizontal reduction that mirrors
+popcount at a coarser grain: continuation bytes have the exact `10xxxxxx`
+pattern, so ANDing the input with `0xc0×16` and comparing to `0x80×16`
+gives `0xff` exactly on continuation lanes. `i8x16.bitmask` compresses
+those 16 truth bits to a scalar i32, and the new `i32.popcnt` op counts
+how many of the 16 lanes were continuations. The rune count is the
+number of non-continuation bytes: `16 - popcnt(mask)`.
+
+```text
+bytes = v128.load(src + 16*i)
+bit10 = i8x16.eq( bytes & (0xc0 × 16), 0x80 × 16 )   ; 0xff on cont
+cont  = i32.popcnt( i8x16.bitmask(bit10) )           ; count in block
+count += 16 - cont                                     ; rune starts
+```
+
+This is exact on valid UTF-8 — every rune has exactly one non-continuation
+leader byte, so the count of leaders equals the count of runes. Malformed
+inputs give an approximation (the count of bytes whose top two bits aren't
+`10`).
+
 ## The emit surface, catalogued
 
-Every op the six kernels reach into is a one-line method on `Function`.
+Every op the seven kernels reach into is a one-line method on `Function`.
 Extension is by declarative append — see
 [`emit.go`](https://github.com/go-asmgen/wasm/blob/main/emit.go).
 
@@ -135,5 +164,5 @@ Extension is by declarative append — see
 | Horizontal aggregation | `i8x16.bitmask` |
 | Shuffle / swizzle | `i8x16.swizzle`, `i8x16.shuffle`, `v128.const` |
 | Widening reductions | `i16x8.extadd_pairwise_i8x16_u`, `i32x4.extadd_pairwise_i16x8_u`, `i32x4.add`, `i32x4.extract_lane` |
-| Scalar | `i32.add`, `i32.sub`, `i32.mul`, `i32.ctz`, `i32.eqz`, `i32.gt_s`, `i32.ge_s`, `i32.ne` |
+| Scalar | `i32.add`, `i32.sub`, `i32.mul`, `i32.ctz`, `i32.popcnt`, `i32.eqz`, `i32.gt_s`, `i32.ge_s`, `i32.ne` |
 | Control flow | `block`, `loop`, `br_if`, `br`, `return` |
