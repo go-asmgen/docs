@@ -16,7 +16,7 @@ Every kernel in `go-asmgen/wasm` is a `go run` command that prints WAT to
 stdout:
 
 ```bash
-go run github.com/go-asmgen/wasm/matchlen@v0.1.0 > matchlen.wat
+go run github.com/go-asmgen/asmgen/examples/wasm/matchlen@latest > matchlen.wat
 ```
 
 Or, if you're inside a Go module and want it pinned to the exact version your
@@ -24,8 +24,15 @@ code was written against, drop a `//go:generate` directive at package scope
 so `go generate ./...` regenerates it:
 
 ```go
-//go:generate sh -c "go run github.com/go-asmgen/wasm/matchlen@v0.1.0 > matchlen.wat"
+//go:generate sh -c "go run github.com/go-asmgen/asmgen/examples/wasm/matchlen@latest > matchlen.wat"
 ```
+
+!!! note "Legacy path still works"
+    The standalone module path `github.com/go-asmgen/wasm/matchlen@v0.1.0`
+    (and `@v0.2.0`, `@v0.3.0`) resolves to exactly the same generator
+    output — no rush to migrate. See
+    [the notice on the standalone repo](https://github.com/go-asmgen/wasm)
+    for the migration table.
 
 The output is a well-formed WAT module — one `(func $matchlen16 ...)` with
 the emit-surface stack ops laid out in evaluation order:

@@ -1,12 +1,19 @@
 # wasm — Overview
 
-[`go-asmgen/wasm`](https://github.com/go-asmgen/wasm) is a WebAssembly text
-(`.wat`) emitter modeled on
-[`go-asmgen/emit`](https://github.com/go-asmgen/asmgen/tree/main/emit). Where
-the main `asmgen` module builds Plan 9 assembly kernels for the six 64-bit Go
-targets (amd64 / arm64 / ppc64le / riscv64 / loong64 / s390x), this module
-covers **the seventh target: wasm-SIMD (v128)** — the module text a Go host
-consumes via `//go:wasmimport`.
+[`go-asmgen/asmgen/wasm`](https://github.com/go-asmgen/asmgen/tree/main/wasm)
+is a WebAssembly text (`.wat`) emitter modeled on
+[`emit`](https://github.com/go-asmgen/asmgen/tree/main/emit), shipped alongside
+the six existing arch packages (amd64 / arm64 / ppc64le / riscv64 / loong64 /
+s390x). It covers **the seventh target: wasm-SIMD (v128)** — the module text
+a Go host consumes via `//go:wasmimport`.
+
+!!! note "Was previously a sibling module"
+    The wasm surface used to ship as a standalone `go-asmgen/wasm` module
+    (tags `v0.1.0` – `v0.3.0`, all still valid). It was folded into the
+    main `go-asmgen/asmgen` repo as a peer package. Consumers pinning the
+    old path continue to work unchanged; new consumers should pin
+    `github.com/go-asmgen/asmgen/wasm/...` and
+    `github.com/go-asmgen/asmgen/examples/wasm/<kernel>` instead.
 
 ## Why wasm needs a separate emitter
 
@@ -27,7 +34,7 @@ kernel and dropped straight into a `//go:wasmimport` consumer.
 
 ## What the module ships
 
-A single package, `github.com/go-asmgen/wasm`, that exposes:
+A single package, `github.com/go-asmgen/asmgen/wasm`, that exposes:
 
 - `Module` — a whole WAT `(module ...)` with imports and functions.
 - `Function` — one `(func $name (export "name") ...)` with params, results,

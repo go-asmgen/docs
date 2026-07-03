@@ -40,18 +40,29 @@ label gate that keeps the shared runner from being flooded.
 
 ## wasm-drift — enforce generator = committed source
 
-The kernel source of truth is the pinned generator (`go run
-github.com/go-asmgen/wasm/<kernel>@vX.Y.Z`). The drift workflow
+The kernel source of truth is the pinned generator. The drift workflow
 regenerates it and diffs vs the committed `.wat` / `.wasm`. Any hand-
 edit fails CI immediately.
 
-Consumer's `generate.go`:
+Consumer's `generate.go`, current form used by `matchlen-wasm`:
 
 ```go
-//go:generate sh -c "go run github.com/go-asmgen/wasm/matchlen@v0.3.0 > matchlen.wat"
+//go:generate sh -c "go run github.com/go-asmgen/wasm/matchlen@v0.1.0 > matchlen.wat"
 
 package matchlenwasm
 ```
+
+New consumers should pin the folded-into-asmgen path instead:
+
+```go
+//go:generate sh -c "go run github.com/go-asmgen/asmgen/examples/wasm/matchlen@latest > matchlen.wat"
+```
+
+Both paths resolve to byte-identical generator output — the standalone
+`github.com/go-asmgen/wasm/*@v0.1.0..v0.3.0` tags are immutable and stay
+valid indefinitely. See the
+[migration notice](https://github.com/go-asmgen/wasm) for the full
+before/after table.
 
 Consumer's `.github/workflows/wasm-drift.yml`:
 

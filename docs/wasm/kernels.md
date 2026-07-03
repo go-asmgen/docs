@@ -218,7 +218,7 @@ happens exactly for byte values 0x00..0x1f regardless of signedness.
 
 Every op the nine kernels reach into is a one-line method on `Function`.
 Extension is by declarative append — see
-[`emit.go`](https://github.com/go-asmgen/wasm/blob/main/emit.go).
+[`emit.go`](https://github.com/go-asmgen/asmgen/blob/main/wasm/emit.go).
 
 | Family | Ops |
 |---|---|
