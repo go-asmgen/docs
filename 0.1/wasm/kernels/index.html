@@ -732,6 +732,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#isascii-allb-128-for-b-in-buf-preflight" class="md-nav__link">
+    <span class="md-ellipsis">
+      isascii — all(b &lt; 128 for b in buf) preflight
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#the-emit-surface-catalogued" class="md-nav__link">
     <span class="md-ellipsis">
       The emit surface, catalogued
@@ -890,6 +899,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#isascii-allb-128-for-b-in-buf-preflight" class="md-nav__link">
+    <span class="md-ellipsis">
+      isascii — all(b &lt; 128 for b in buf) preflight
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#the-emit-surface-catalogued" class="md-nav__link">
     <span class="md-ellipsis">
       The emit surface, catalogued
@@ -914,10 +932,10 @@
 
 
 <h1 id="wasm-kernels">wasm — Kernels<a class="headerlink" href="#wasm-kernels" title="Permanent link">&para;</a></h1>
-<p>The five kernels that ship with v0.1.0. Every one is a <code>go run</code> command that
-prints WAT to stdout; every one has a golden-file test that pins the exact
-output byte-for-byte; every one has a wazero cross-check against a Go
-reference.</p>
+<p>The six kernels that ship in the current main. Every one is a <code>go run</code>
+command that prints WAT to stdout; every one has a golden-file test that
+pins the exact output byte-for-byte; every one has a wazero cross-check
+against a Go reference.</p>
 <h2 id="matchlen-bytesequal-shaped-scan">matchlen — <code>bytes.Equal</code>-shaped scan<a class="headerlink" href="#matchlen-bytesequal-shaped-scan" title="Permanent link">&para;</a></h2>
 <p>Signature:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">(</span><span class="nv">func</span><span class="w"> </span><span class="nv">$matchlen16</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$ptrA</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$ptrB</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$limit</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span>
@@ -980,8 +998,24 @@ into a scalar bitmask), and wasm-SIMD gives us the same construction:</p>
 <a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>if mask != 0:
 <a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>  return i*16 + i32.ctz(mask)
 </code></pre></div>
+<h2 id="isascii-allb-128-for-b-in-buf-preflight">isascii — <code>all(b &lt; 128 for b in buf)</code> preflight<a class="headerlink" href="#isascii-allb-128-for-b-in-buf-preflight" title="Permanent link">&para;</a></h2>
+<p>Signature:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">(</span><span class="nv">func</span><span class="w"> </span><span class="nv">$isascii</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$srcPtr</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$nBlocks</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">result</span><span class="w"> </span><span class="nv">i32</span><span class="p">))</span>
+</code></pre></div>
+<p>Returns 1 iff every scanned byte is in the 7-bit ASCII range, else 0.
+Every parser (JSON, HTTP, URL, CSV, XML, protobuf-JSON, …) preflights this
+before choosing between a fast ASCII path and a slower multibyte-aware
+path. The kernel is compact because wasm-SIMD gives it the tightest shape
+possible: <code>i8x16.bitmask</code> interprets each lane's MSB as the sign bit, and
+for a byte value the sign bit and the "is &gt;= 128" bit are the same bit.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>bytes = v128.load(src + 16*i)
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>if i8x16.bitmask(bytes) != 0:
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>  return 0     ; saw a byte &gt;= 128 in this block
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>; else advance i
+</code></pre></div>
+<p>No extra compare, no key vector, no shift — just load, bitmask, i32.eqz.</p>
 <h2 id="the-emit-surface-catalogued">The emit surface, catalogued<a class="headerlink" href="#the-emit-surface-catalogued" title="Permanent link">&para;</a></h2>
-<p>Every op the five kernels reach into is a one-line method on <code>Function</code>.
+<p>Every op the six kernels reach into is a one-line method on <code>Function</code>.
 Extension is by declarative append — see
 <a href="https://github.com/go-asmgen/wasm/blob/main/emit.go"><code>emit.go</code></a>.</p>
 <table>

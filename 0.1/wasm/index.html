@@ -912,7 +912,7 @@ kernel and dropped straight into a <code>//go:wasmimport</code> consumer.</p>
   swizzle, widening reductions (extadd_pairwise), and enough scalar plumbing
   for the surrounding control flow.</li>
 </ul>
-<p>Five kernels, each with 100% statement coverage, a golden-file test, and a
+<p>Six kernels, each with 100% statement coverage, a golden-file test, and a
 wazero end-to-end cross-check against a Go reference:</p>
 <table>
 <thead>
@@ -947,6 +947,11 @@ wazero end-to-end cross-check against a Go reference:</p>
 <td><code>memchr</code></td>
 <td><code>bytes.IndexByte</code></td>
 <td><code>i8x16.splat</code>, <code>i8x16.bitmask</code>, <code>i32.ctz</code></td>
+</tr>
+<tr>
+<td><code>isascii</code></td>
+<td>ASCII-only preflight</td>
+<td><code>i8x16.bitmask</code> (MSB-of-lane as "is &gt;= 128")</td>
 </tr>
 </tbody>
 </table>
