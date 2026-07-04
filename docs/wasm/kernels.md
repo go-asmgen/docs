@@ -1,6 +1,6 @@
 # wasm — Kernels
 
-The eleven kernels that ship in the current main. Every one is a `go run`
+The twelve kernels that ship in the current main. Every one is a `go run`
 command that prints WAT to stdout; every one has a golden-file test that
 pins the exact output byte-for-byte; every one has a wazero cross-check
 against a Go reference.
@@ -296,9 +296,46 @@ Per 12-byte block:
     during development: an initial -16 (240) landed idx=63 at '+'
     instead of '/'. The correct value is -12 (244).
 
+## indexany4 — `bytes.IndexAny` with a 4-needle fixed set
+
+Signature:
+
+```lisp
+(func $indexany4 (param $srcPtr i32) (param $nBlocks i32)
+                 (param $n1 i32) (param $n2 i32)
+                 (param $n3 i32) (param $n4 i32)
+                 (result i32))
+```
+
+Returns the index of the first byte in the scanned region that equals
+any of the four needles, or `-1` if none match. Same shape as `memchr`
+but with 4 broadcast-key vectors and 4 compares OR-ed together:
+
+```text
+bytes = v128.load(src + 16*i)
+m     = i8x16.eq(bytes, k1)
+      | i8x16.eq(bytes, k2)
+      | i8x16.eq(bytes, k3)
+      | i8x16.eq(bytes, k4)
+bm    = i8x16.bitmask(m)      ; MSB-of-lane bits → i32
+if bm != 0:
+  return i*16 + i32.ctz(bm)
+```
+
+The caller duplicates entries in n1..n4 when they have fewer than four
+distinct needles (e.g. `bytes.IndexAny(buf, ",")` sets
+`n1=n2=n3=n4=','`). Consumers with more than four either loop the
+kernel per set of four or fall back to scalar — both cheaper than the
+boundary cost past ~1 KiB.
+
+No new emit-surface ops: `indexany4` reuses `i8x16.splat`, `i8x16.eq`,
+`v128.or`, `i8x16.bitmask`, `i32.ctz`, `i32.eqz`, `i32.mul`, `i32.add`
+that `memchr` already introduced. It's the cleanest demonstration of
+how the emit surface composes into new kernels without churn.
+
 ## The emit surface, catalogued
 
-Every op the eleven kernels reach into is a one-line method on `Function`.
+Every op the twelve kernels reach into is a one-line method on `Function`.
 Extension is by declarative append — see
 [`emit.go`](https://github.com/go-asmgen/asmgen/blob/main/wasm/emit.go).
 

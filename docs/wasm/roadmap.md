@@ -5,11 +5,11 @@ priority, not commitment.
 
 ## Grow the kernel catalogue
 
-Eleven kernels ship today (matchlen, hex, hex_decode, popcount, toupper,
-memchr, isascii, utf8len, json_clean, adler32, base64_encode) covering
-byte-compare, hex encode/decode, bit-count, ASCII case-fold, byte-search,
-ASCII / UTF-8 preflight, JSON-string preflight, checksum, and base64
-encode. Still on the wishlist:
+Twelve kernels ship today (matchlen, hex, hex_decode, popcount, toupper,
+memchr, isascii, utf8len, json_clean, adler32, base64_encode, indexany4)
+covering byte-compare, hex encode/decode, bit-count, ASCII case-fold,
+byte-search, ASCII / UTF-8 preflight, JSON-string preflight, checksum,
+base64 encode, and multi-needle byte-search. Still on the wishlist:
 
 - **~~base64 encode~~** — done. Lemire's SSE algorithm ported to
   wasm-SIMD; PMULHUW emulated via `i32x4.extmul_low/high_i16x8_u +
@@ -27,8 +27,8 @@ encode. Still on the wishlist:
 - **crc32** — checksum families used everywhere in zlib-family formats.
   Wasm-SIMD lacks PCLMULQDQ, so a table-based approach is more
   tractable than the carry-less-multiply route.
-- **`bytes.IndexAny`** — multi-needle memchr. Extends memchr with a
-  small needle-set LUT and a per-lane compare-any pattern.
+- **~~`bytes.IndexAny`~~** — done as `indexany4`, a 4-needle fixed-size
+  variant. See the [Kernels](kernels.md) page.
 
 Adding a new kernel is a `main.go` in a new subdirectory plus a
 `main_test.go` with the golden-file pattern; adding a new op is one line in
