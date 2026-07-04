@@ -44,7 +44,7 @@ A single package, `github.com/go-asmgen/asmgen/wasm`, that exposes:
   swizzle, widening reductions (extadd_pairwise), and enough scalar plumbing
   for the surrounding control flow.
 
-Twelve kernels, each with 100% statement coverage, a golden-file test,
+Thirteen kernels, each with 100% statement coverage, a golden-file test,
 and a wazero end-to-end cross-check against a Go reference:
 
 | Kernel | Reference | Wasm-SIMD ops it showcases |
@@ -61,6 +61,7 @@ and a wazero end-to-end cross-check against a Go reference:
 | `adler32` | `hash/adler32` | `i16x8.extmul_low/high_i8x16_u` for the weighted-byte sum |
 | `base64_encode` | `encoding/base64.StdEncoding` | Lemire's PMULHUW emulated via `i32x4.extmul + shr_u + i16x8.narrow` |
 | `indexany4` | `bytes.IndexAny` (fixed 4-needle set) | 4× `i8x16.eq` + `v128.or` + `i8x16.bitmask` + `i32.ctz` |
+| `base64_decode` | `encoding/base64.StdEncoding` (decode) | 5-range mask+sub + 3× `i8x16.shl` + 2× `i8x16.shr_u` + 4 shuffle merges |
 
 ## What the module does not do
 

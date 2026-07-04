@@ -1,6 +1,6 @@
 # wasm — Kernels
 
-The twelve kernels that ship in the current main. Every one is a `go run`
+The thirteen kernels that ship in the current main. Every one is a `go run`
 command that prints WAT to stdout; every one has a golden-file test that
 pins the exact output byte-for-byte; every one has a wazero cross-check
 against a Go reference.
@@ -333,9 +333,52 @@ No new emit-surface ops: `indexany4` reuses `i8x16.splat`, `i8x16.eq`,
 that `memchr` already introduced. It's the cleanest demonstration of
 how the emit surface composes into new kernels without churn.
 
+## base64_decode — `encoding/base64.StdEncoding` (decode)
+
+Signature:
+
+```lisp
+(func $base64_decode (param $dstPtr i32) (param $srcPtr i32) (param $nBlocks i32))
+```
+
+16 input chars → 12 output bytes per iteration, matching StdEncoding
+decode. A direct byte-level inverse of the encoder's Lemire dance.
+
+Per 16-char block:
+
+1. Convert each char to a 6-bit index via range-mask + subtract (same
+   pattern hex_decode introduced, extended to five ranges: `'0'..'9'`,
+   `'A'..'Z'`, `'a'..'z'`, `'+'`, `'/'`). Invalid chars end up as
+   garbage indexes; caller pre-validates if needed.
+
+2. Pack four consecutive 6-bit indexes back into 3 output bytes:
+
+    ```text
+    b0 = (i0 << 2) | (i1 >> 4)
+    b1 = (i1 << 4) | (i2 >> 2)
+    b2 = (i2 << 6) | i3
+    ```
+
+3. Since each output byte's shifts differ per group position and
+   wasm-SIMD's `i8x16.shl` / `.shr_u` are lane-uniform, precompute three
+   shifted-left versions of the index vector (shl2, shl4, shl6) and two
+   shifted-right versions (shr4, shr2). Assemble the output with
+   **four shuffle merges** — two for the "left" halves (picking shl2 /
+   shl4 / shl6 per output position) and two for the "right" halves
+   (picking shr4 / shr2 / idx), then OR the two together.
+
+4. `v128.store` writes 16 bytes per block — positions 12-15 are junk.
+   Caller advances dstPtr by 12 per block so the next iteration's junk
+   overwrites the previous, and reserves `nBlocks*12 + 4` bytes so the
+   last block's junk store lands in-bounds.
+
+No new emit-surface ops: uses the same `i8x16.shl` / `.shr_u` /
+`.shuffle` / `.eq` / `.ge_s` / `.le_s` / `.sub` / `v128.and` / `.or` /
+`.store` set the other kernels have introduced.
+
 ## The emit surface, catalogued
 
-Every op the twelve kernels reach into is a one-line method on `Function`.
+Every op the thirteen kernels reach into is a one-line method on `Function`.
 Extension is by declarative append — see
 [`emit.go`](https://github.com/go-asmgen/asmgen/blob/main/wasm/emit.go).
 

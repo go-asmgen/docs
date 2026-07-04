@@ -5,11 +5,12 @@ priority, not commitment.
 
 ## Grow the kernel catalogue
 
-Twelve kernels ship today (matchlen, hex, hex_decode, popcount, toupper,
-memchr, isascii, utf8len, json_clean, adler32, base64_encode, indexany4)
-covering byte-compare, hex encode/decode, bit-count, ASCII case-fold,
-byte-search, ASCII / UTF-8 preflight, JSON-string preflight, checksum,
-base64 encode, and multi-needle byte-search. Still on the wishlist:
+Thirteen kernels ship today (matchlen, hex, hex_decode, popcount, toupper,
+memchr, isascii, utf8len, json_clean, adler32, base64_encode, indexany4,
+base64_decode) covering byte-compare, hex encode/decode, bit-count, ASCII
+case-fold, byte-search, ASCII / UTF-8 preflight, JSON-string preflight,
+checksum, base64 encode/decode, and multi-needle byte-search. Still on
+the wishlist:
 
 - **~~base64 encode~~** — done. Lemire's SSE algorithm ported to
   wasm-SIMD; PMULHUW emulated via `i32x4.extmul_low/high_i16x8_u +
@@ -21,9 +22,9 @@ base64 encode, and multi-needle byte-search. Still on the wishlist:
   input; the full-validation kernel would use `v128.const` LUTs and
   `i8x16.swizzle` to classify byte-triplets and reject any invalid
   sequence.
-- **base64 decode** — the natural companion to base64_encode. Same
-  three-range arithmetic offset pattern hex_decode uses, extended to
-  the 6-bit-nibble packing base64 needs.
+- **~~base64 decode~~** — done. Byte-level shift+shuffle+OR approach
+  with a 5-range char→index step; no new emit ops. See the
+  [Kernels](kernels.md) page.
 - **crc32** — checksum families used everywhere in zlib-family formats.
   Wasm-SIMD lacks PCLMULQDQ, so a table-based approach is more
   tractable than the carry-less-multiply route.
