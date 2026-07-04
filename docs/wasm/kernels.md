@@ -1,6 +1,6 @@
 # wasm — Kernels
 
-The nine kernels that ship in the current main. Every one is a `go run`
+The eleven kernels that ship in the current main. Every one is a `go run`
 command that prints WAT to stdout; every one has a golden-file test that
 pins the exact output byte-for-byte; every one has a wazero cross-check
 against a Go reference.
@@ -214,9 +214,91 @@ misclassify high-bit bytes (0x80..0xff, negative under i8) as controls
 `bytes & 0xe0 == 0` is true iff the top three bits are all clear, which
 happens exactly for byte values 0x00..0x1f regardless of signedness.
 
+## adler32 — `hash/adler32.Checksum` (Adler-32 rolling sum)
+
+Signature:
+
+```lisp
+(func $adler32 (param $srcPtr i32) (param $nBlocks i32)
+               (param $aInit i32) (param $bInit i32)
+               (param $aOut i32) (param $bOut i32))
+```
+
+Updates the two running u32 sums `a` and `b` from initial values,
+processing `nBlocks × 16` bytes without any modulo (caller batches
+NMAX=5552-byte segments and reduces between calls). The kernel writes
+the final `a` and `b` back through caller-provided pointers so the
+caller can control when to fold in mod-65521.
+
+Per 16-byte block:
+
+```text
+bytes  = v128.load(src + 16*i)
+; delta_a = sum(bytes) via the popcount-style pairwise-widen reduction
+pair16 = i16x8.extadd_pairwise_i8x16_u(bytes)
+pair32 = i32x4.extadd_pairwise_i16x8_u(pair16)
+; delta_b_weighted = sum(bytes[k] * (16-k)) using widening extmul
+coef     = [16, 15, 14, ..., 1]
+prod_lo  = i16x8.extmul_low_i8x16_u(bytes, coef)
+prod_hi  = i16x8.extmul_high_i8x16_u(bytes, coef)
+sum_prod = i32x4.add(extadd_pairwise(prod_lo), extadd_pairwise(prod_hi))
+; scalar update
+b = b + 16*a + horizontal_sum(sum_prod)
+a = a + horizontal_sum(pair32)
+```
+
+The `i16x8.extmul_low/high_i8x16_u` ops widen and multiply pairwise in
+one instruction — no PMULLW+PMULHW dance. Max product 255×16=4080 fits
+in u16 so the intermediate representation stays exact.
+
+## base64_encode — `encoding/base64.StdEncoding` (Lemire's algorithm)
+
+Signature:
+
+```lisp
+(func $base64_encode (param $dstPtr i32) (param $srcPtr i32)
+                     (param $nBlocks i32))
+```
+
+12 input bytes → 16 output ASCII chars per iteration, matching
+StdEncoding. The algorithm is Lemire's SSE encoder
+(arXiv:1704.00605) adapted for wasm-SIMD, which lacks PMULHUW.
+
+Per 12-byte block:
+
+1. Load 16 bytes (12 real + 4 tail; tail bytes shuffle into ignored
+   positions).
+2. Byte-shuffle so each 3-byte triplet maps to two big-endian u16
+   lanes `(b0<<8|b1)` and `(b1<<8|b2)` — 24 bits spread across two
+   adjacent i16 words with 4 bits of overlap.
+3. Extract the four 6-bit indexes per triplet in two rounds:
+    - **Round 1 (PMULHUW-style)**: mask `0x0fc0_fc00`, multiply by
+      `0x0400_0040`. Wasm-SIMD lacks PMULHUW, so this is emulated with
+      `i32x4.extmul_low/high_i16x8_u` + `i32x4.shr_u` by 16 +
+      `i16x8.narrow_i32x4_u`.
+    - **Round 2 (PMULLW-style)**: mask `0x003f_03f0`, multiply by
+      `0x0100_0010` via `i16x8.mul` (which IS PMULLW).
+4. OR the two rounds — the v128 now holds all 16 6-bit indexes
+   sequentially in its byte lanes.
+5. Range-add ASCII conversion (each conditional is a mask
+   AND-ed with the offset, summed via `i8x16.add`):
+
+    ```text
+    result = idx + 65
+             + (idx > 25 ? +6   : 0)   ; 'a'..'z' offset
+             + (idx > 51 ? -75  : 0)   ; '0'..'9' offset
+             + (idx == 62 ? -15 : 0)   ; '+'
+             + (idx == 63 ? -12 : 0)   ; '/'
+    ```
+
+    Negative offsets go modular (-75 → 181, -15 → 241, -12 → 244).
+    The wazero verifier caught a real bug on the `/` correction
+    during development: an initial -16 (240) landed idx=63 at '+'
+    instead of '/'. The correct value is -12 (244).
+
 ## The emit surface, catalogued
 
-Every op the nine kernels reach into is a one-line method on `Function`.
+Every op the eleven kernels reach into is a one-line method on `Function`.
 Extension is by declarative append — see
 [`emit.go`](https://github.com/go-asmgen/asmgen/blob/main/wasm/emit.go).
 

@@ -5,21 +5,30 @@ priority, not commitment.
 
 ## Grow the kernel catalogue
 
-The kernels shipped in v0.1.0 (matchlen, hex, popcount, toupper, memchr)
-cover the most common wasm-consumer patterns: byte-compare, ASCII encode,
-bit-count, ASCII case-fold, byte-search. Next up:
+Eleven kernels ship today (matchlen, hex, hex_decode, popcount, toupper,
+memchr, isascii, utf8len, json_clean, adler32, base64_encode) covering
+byte-compare, hex encode/decode, bit-count, ASCII case-fold, byte-search,
+ASCII / UTF-8 preflight, JSON-string preflight, checksum, and base64
+encode. Still on the wishlist:
 
-- **utf-8 validation** — the classic wasm-SIMD showcase. Lemire &
-  Keiser's algorithm uses `v128.const` LUTs, `i8x16.swizzle` for range
-  lookup, and `i8x16.shr_u` for continuation-byte checks. The kernel
-  exercises the shuffle/LUT surface aggressively.
-- **base64 encode** — Lemire's SSE algorithm ported. Needs `i16x8.mul` and
-  its friends for the 3-byte-to-4-char index-extraction step; adds
-  saturating i16x8 arithmetic to the emit surface.
-- **adler32 / crc32** — checksum families used everywhere in zlib-family
-  formats. `i16x8.mul` again, plus i32x4 multiply-accumulate patterns.
-- **`bytes.IndexAny`** — multi-needle memchr. Extends memchr with a small
-  needle-set LUT and a per-lane compare-any pattern.
+- **~~base64 encode~~** — done. Lemire's SSE algorithm ported to
+  wasm-SIMD; PMULHUW emulated via `i32x4.extmul_low/high_i16x8_u +
+  i32x4.shr_u + i16x8.narrow_i32x4_u`. See [Kernels](kernels.md).
+- **~~adler32~~** — done via `i16x8.extmul_low/high_i8x16_u` for the
+  weighted-byte sum. See [Kernels](kernels.md).
+- **utf-8 full validation** (Lemire & Keiser) — the classic wasm-SIMD
+  showcase. `utf8len` already handles rune-counting for known-valid
+  input; the full-validation kernel would use `v128.const` LUTs and
+  `i8x16.swizzle` to classify byte-triplets and reject any invalid
+  sequence.
+- **base64 decode** — the natural companion to base64_encode. Same
+  three-range arithmetic offset pattern hex_decode uses, extended to
+  the 6-bit-nibble packing base64 needs.
+- **crc32** — checksum families used everywhere in zlib-family formats.
+  Wasm-SIMD lacks PCLMULQDQ, so a table-based approach is more
+  tractable than the carry-less-multiply route.
+- **`bytes.IndexAny`** — multi-needle memchr. Extends memchr with a
+  small needle-set LUT and a per-lane compare-any pattern.
 
 Adding a new kernel is a `main.go` in a new subdirectory plus a
 `main_test.go` with the golden-file pattern; adding a new op is one line in
