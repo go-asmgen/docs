@@ -786,6 +786,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#indexany4-bytesindexany-with-a-4-needle-fixed-set" class="md-nav__link">
+    <span class="md-ellipsis">
+      indexany4 — bytes.IndexAny with a 4-needle fixed set
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#the-emit-surface-catalogued" class="md-nav__link">
     <span class="md-ellipsis">
       The emit surface, catalogued
@@ -1019,6 +1028,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#indexany4-bytesindexany-with-a-4-needle-fixed-set" class="md-nav__link">
+    <span class="md-ellipsis">
+      indexany4 — bytes.IndexAny with a 4-needle fixed set
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#the-emit-surface-catalogued" class="md-nav__link">
     <span class="md-ellipsis">
       The emit surface, catalogued
@@ -1043,7 +1061,7 @@
 
 
 <h1 id="wasm-kernels">wasm — Kernels<a class="headerlink" href="#wasm-kernels" title="Permanent link">&para;</a></h1>
-<p>The eleven kernels that ship in the current main. Every one is a <code>go run</code>
+<p>The twelve kernels that ship in the current main. Every one is a <code>go run</code>
 command that prints WAT to stdout; every one has a golden-file test that
 pins the exact output byte-for-byte; every one has a wazero cross-check
 against a Go reference.</p>
@@ -1263,8 +1281,36 @@ during development: an initial -16 (240) landed idx=63 at '+'
 instead of '/'. The correct value is -12 (244).</p>
 </li>
 </ol>
+<h2 id="indexany4-bytesindexany-with-a-4-needle-fixed-set">indexany4 — <code>bytes.IndexAny</code> with a 4-needle fixed set<a class="headerlink" href="#indexany4-bytesindexany-with-a-4-needle-fixed-set" title="Permanent link">&para;</a></h2>
+<p>Signature:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="p">(</span><span class="nv">func</span><span class="w"> </span><span class="nv">$indexany4</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$srcPtr</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$nBlocks</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">                 </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$n1</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$n2</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">                 </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$n3</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$n4</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="w">                 </span><span class="p">(</span><span class="nv">result</span><span class="w"> </span><span class="nv">i32</span><span class="p">))</span>
+</code></pre></div>
+<p>Returns the index of the first byte in the scanned region that equals
+any of the four needles, or <code>-1</code> if none match. Same shape as <code>memchr</code>
+but with 4 broadcast-key vectors and 4 compares OR-ed together:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>bytes = v128.load(src + 16*i)
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>m     = i8x16.eq(bytes, k1)
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>      | i8x16.eq(bytes, k2)
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>      | i8x16.eq(bytes, k3)
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>      | i8x16.eq(bytes, k4)
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a>bm    = i8x16.bitmask(m)      ; MSB-of-lane bits → i32
+<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a>if bm != 0:
+<a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a>  return i*16 + i32.ctz(bm)
+</code></pre></div>
+<p>The caller duplicates entries in n1..n4 when they have fewer than four
+distinct needles (e.g. <code>bytes.IndexAny(buf, ",")</code> sets
+<code>n1=n2=n3=n4=','</code>). Consumers with more than four either loop the
+kernel per set of four or fall back to scalar — both cheaper than the
+boundary cost past ~1 KiB.</p>
+<p>No new emit-surface ops: <code>indexany4</code> reuses <code>i8x16.splat</code>, <code>i8x16.eq</code>,
+<code>v128.or</code>, <code>i8x16.bitmask</code>, <code>i32.ctz</code>, <code>i32.eqz</code>, <code>i32.mul</code>, <code>i32.add</code>
+that <code>memchr</code> already introduced. It's the cleanest demonstration of
+how the emit surface composes into new kernels without churn.</p>
 <h2 id="the-emit-surface-catalogued">The emit surface, catalogued<a class="headerlink" href="#the-emit-surface-catalogued" title="Permanent link">&para;</a></h2>
-<p>Every op the eleven kernels reach into is a one-line method on <code>Function</code>.
+<p>Every op the twelve kernels reach into is a one-line method on <code>Function</code>.
 Extension is by declarative append — see
 <a href="https://github.com/go-asmgen/asmgen/blob/main/wasm/emit.go"><code>emit.go</code></a>.</p>
 <table>

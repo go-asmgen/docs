@@ -940,7 +940,7 @@ kernel and dropped straight into a <code>//go:wasmimport</code> consumer.</p>
   swizzle, widening reductions (extadd_pairwise), and enough scalar plumbing
   for the surrounding control flow.</li>
 </ul>
-<p>Eleven kernels, each with 100% statement coverage, a golden-file test,
+<p>Twelve kernels, each with 100% statement coverage, a golden-file test,
 and a wazero end-to-end cross-check against a Go reference:</p>
 <table>
 <thead>
@@ -1005,6 +1005,11 @@ and a wazero end-to-end cross-check against a Go reference:</p>
 <td><code>base64_encode</code></td>
 <td><code>encoding/base64.StdEncoding</code></td>
 <td>Lemire's PMULHUW emulated via <code>i32x4.extmul + shr_u + i16x8.narrow</code></td>
+</tr>
+<tr>
+<td><code>indexany4</code></td>
+<td><code>bytes.IndexAny</code> (fixed 4-needle set)</td>
+<td>4× <code>i8x16.eq</code> + <code>v128.or</code> + <code>i8x16.bitmask</code> + <code>i32.ctz</code></td>
 </tr>
 </tbody>
 </table>
