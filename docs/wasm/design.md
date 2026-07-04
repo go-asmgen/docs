@@ -76,7 +76,7 @@ inside the `(func ...)` block; blocks and loops open/close via `Block` /
   empty signatures; when a value is needed on exit, they either compute it
   outside the block or `(return)` directly. Adding block signatures is a
   drop-in extension.
-- **`if`/`else`.** The five kernels model conditionals as
+- **`if`/`else`.** The shipped kernels model conditionals as
   `block { br_if end; ... }` — a "skip if" pattern. Native `if`/`else` would
   produce more idiomatic WAT for some kernels; it's not yet wired.
 - **Multi-value returns.** The wasm `multi-value` proposal is baseline in

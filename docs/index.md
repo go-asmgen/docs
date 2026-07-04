@@ -31,19 +31,20 @@ new ISA drops in.
 
 ## The seventh target: wasm-SIMD
 
-The same layering pattern runs one more target — wasm-SIMD (v128) — in a
-sibling module [`go-asmgen/wasm`](https://github.com/go-asmgen/wasm). Go's
-compiler does not emit `v128` from Go source, and Plan 9 assembly has no
-wasm dialect, so wasm-SIMD is necessarily an external-kernel story. The
-emitter builds WAT text programmatically, `wat2wasm` compiles it, and the
-Go host imports it via `//go:wasmimport`.
+The same layering pattern runs one more target — wasm-SIMD (v128) — as
+the [`wasm/`](https://github.com/go-asmgen/asmgen/tree/main/wasm) peer
+package inside this module. Go's compiler does not emit `v128` from Go
+source, and Plan 9 assembly has no wasm dialect, so wasm-SIMD is
+necessarily an external-kernel story. The emitter builds WAT text
+programmatically, `wat2wasm` compiles it, and the Go host imports it
+via `//go:wasmimport`.
 
-v0.1.0 ships five kernels — matchlen, hex, popcount, toupper, memchr —
-each byte-equivalent to a hand-written reference and wazero-verified against
-a Go stdlib function. Start with the [wasm overview](wasm/index.md) or the
-[quick start](wasm/quickstart.md).
+Thirteen kernels ship today — matchlen, hex, hex_decode, popcount,
+toupper, memchr, isascii, utf8len, json_clean, adler32, base64_encode,
+indexany4, base64_decode — each byte-equivalent to a hand-written
+reference and wazero-verified against a Go stdlib function. Start with
+the [wasm overview](wasm/index.md) or the [quick start](wasm/quickstart.md).
 
-Source lives at [github.com/go-asmgen/asmgen](https://github.com/go-asmgen/asmgen)
-and [github.com/go-asmgen/wasm](https://github.com/go-asmgen/wasm).
+Source lives at [github.com/go-asmgen/asmgen](https://github.com/go-asmgen/asmgen).
 
 [avo]: https://github.com/mmcloughlin/avo

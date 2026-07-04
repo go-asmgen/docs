@@ -76,11 +76,10 @@ and a wazero end-to-end cross-check against a Go reference:
 
 - **[Quick start](quickstart.md)** — generate a kernel, compile it, verify it
   under wazero.
-- **[Kernels](kernels.md)** — the nine shipped kernels with signatures and
-  emit-surface excerpts.
+- **[Kernels](kernels.md)** — the thirteen shipped kernels with signatures
+  and emit-surface excerpts.
 - **[Design notes](design.md)** — how the wasm module maps to the asmgen
   layering, what changed, what stayed the same.
 - **[Consumer CI](consumer-ci.md)** — drift + bench + arch-native CI pattern
   used by `matchlen-wasm`, end-to-end validated.
-- **[Roadmap](roadmap.md)** — utf-8 full validation, base64, adler32,
-  folding into the main `asmgen` module.
+- **[Roadmap](roadmap.md)** — utf-8 full validation (Lemire-Keiser), crc32.

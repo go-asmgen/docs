@@ -48,7 +48,7 @@ as a peer of `amd64` / `arm64` / …:
   line and the committed `.wat.golden`.
 - A `wasm-e2e` job in the top-level `ci.yml` regenerates every kernel,
   drift-gates against the committed golden, `wat2wasm`-compiles, and
-  runs the wazero verifier — one job for all nine kernels because
+  runs the wazero verifier — one job for all thirteen kernels because
   wasm-SIMD is arch-agnostic.
 
 A future extension to the shared `abi` package would lower Go slice
