@@ -1003,7 +1003,7 @@ inside the <code>(func ...)</code> block; blocks and loops open/close via <code>
   empty signatures; when a value is needed on exit, they either compute it
   outside the block or <code>(return)</code> directly. Adding block signatures is a
   drop-in extension.</li>
-<li><strong><code>if</code>/<code>else</code>.</strong> The five kernels model conditionals as
+<li><strong><code>if</code>/<code>else</code>.</strong> The shipped kernels model conditionals as
   <code>block { br_if end; ... }</code> — a "skip if" pattern. Native <code>if</code>/<code>else</code> would
   produce more idiomatic WAT for some kernels; it's not yet wired.</li>
 <li><strong>Multi-value returns.</strong> The wasm <code>multi-value</code> proposal is baseline in

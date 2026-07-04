@@ -943,7 +943,7 @@ as a peer of <code>amd64</code> / <code>arm64</code> / …:</p>
   line and the committed <code>.wat.golden</code>.</li>
 <li>A <code>wasm-e2e</code> job in the top-level <code>ci.yml</code> regenerates every kernel,
   drift-gates against the committed golden, <code>wat2wasm</code>-compiles, and
-  runs the wazero verifier — one job for all nine kernels because
+  runs the wazero verifier — one job for all thirteen kernels because
   wasm-SIMD is arch-agnostic.</li>
 </ul>
 <p>A future extension to the shared <code>abi</code> package would lower Go slice
