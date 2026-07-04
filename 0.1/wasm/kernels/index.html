@@ -795,6 +795,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#base64_decode-encodingbase64stdencoding-decode" class="md-nav__link">
+    <span class="md-ellipsis">
+      base64_decode — encoding/base64.StdEncoding (decode)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#the-emit-surface-catalogued" class="md-nav__link">
     <span class="md-ellipsis">
       The emit surface, catalogued
@@ -1037,6 +1046,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#base64_decode-encodingbase64stdencoding-decode" class="md-nav__link">
+    <span class="md-ellipsis">
+      base64_decode — encoding/base64.StdEncoding (decode)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#the-emit-surface-catalogued" class="md-nav__link">
     <span class="md-ellipsis">
       The emit surface, catalogued
@@ -1061,7 +1079,7 @@
 
 
 <h1 id="wasm-kernels">wasm — Kernels<a class="headerlink" href="#wasm-kernels" title="Permanent link">&para;</a></h1>
-<p>The twelve kernels that ship in the current main. Every one is a <code>go run</code>
+<p>The thirteen kernels that ship in the current main. Every one is a <code>go run</code>
 command that prints WAT to stdout; every one has a golden-file test that
 pins the exact output byte-for-byte; every one has a wazero cross-check
 against a Go reference.</p>
@@ -1309,8 +1327,48 @@ boundary cost past ~1 KiB.</p>
 <code>v128.or</code>, <code>i8x16.bitmask</code>, <code>i32.ctz</code>, <code>i32.eqz</code>, <code>i32.mul</code>, <code>i32.add</code>
 that <code>memchr</code> already introduced. It's the cleanest demonstration of
 how the emit surface composes into new kernels without churn.</p>
+<h2 id="base64_decode-encodingbase64stdencoding-decode">base64_decode — <code>encoding/base64.StdEncoding</code> (decode)<a class="headerlink" href="#base64_decode-encodingbase64stdencoding-decode" title="Permanent link">&para;</a></h2>
+<p>Signature:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="p">(</span><span class="nv">func</span><span class="w"> </span><span class="nv">$base64_decode</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$dstPtr</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$srcPtr</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$nBlocks</span><span class="w"> </span><span class="nv">i32</span><span class="p">))</span>
+</code></pre></div>
+<p>16 input chars → 12 output bytes per iteration, matching StdEncoding
+decode. A direct byte-level inverse of the encoder's Lemire dance.</p>
+<p>Per 16-char block:</p>
+<ol>
+<li>
+<p>Convert each char to a 6-bit index via range-mask + subtract (same
+   pattern hex_decode introduced, extended to five ranges: <code>'0'..'9'</code>,
+   <code>'A'..'Z'</code>, <code>'a'..'z'</code>, <code>'+'</code>, <code>'/'</code>). Invalid chars end up as
+   garbage indexes; caller pre-validates if needed.</p>
+</li>
+<li>
+<p>Pack four consecutive 6-bit indexes back into 3 output bytes:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>b0 = (i0 &lt;&lt; 2) | (i1 &gt;&gt; 4)
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>b1 = (i1 &lt;&lt; 4) | (i2 &gt;&gt; 2)
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>b2 = (i2 &lt;&lt; 6) | i3
+</code></pre></div>
+</li>
+<li>
+<p>Since each output byte's shifts differ per group position and
+   wasm-SIMD's <code>i8x16.shl</code> / <code>.shr_u</code> are lane-uniform, precompute three
+   shifted-left versions of the index vector (shl2, shl4, shl6) and two
+   shifted-right versions (shr4, shr2). Assemble the output with
+   <strong>four shuffle merges</strong> — two for the "left" halves (picking shl2 /
+   shl4 / shl6 per output position) and two for the "right" halves
+   (picking shr4 / shr2 / idx), then OR the two together.</p>
+</li>
+<li>
+<p><code>v128.store</code> writes 16 bytes per block — positions 12-15 are junk.
+   Caller advances dstPtr by 12 per block so the next iteration's junk
+   overwrites the previous, and reserves <code>nBlocks*12 + 4</code> bytes so the
+   last block's junk store lands in-bounds.</p>
+</li>
+</ol>
+<p>No new emit-surface ops: uses the same <code>i8x16.shl</code> / <code>.shr_u</code> /
+<code>.shuffle</code> / <code>.eq</code> / <code>.ge_s</code> / <code>.le_s</code> / <code>.sub</code> / <code>v128.and</code> / <code>.or</code> /
+<code>.store</code> set the other kernels have introduced.</p>
 <h2 id="the-emit-surface-catalogued">The emit surface, catalogued<a class="headerlink" href="#the-emit-surface-catalogued" title="Permanent link">&para;</a></h2>
-<p>Every op the twelve kernels reach into is a one-line method on <code>Function</code>.
+<p>Every op the thirteen kernels reach into is a one-line method on <code>Function</code>.
 Extension is by declarative append — see
 <a href="https://github.com/go-asmgen/asmgen/blob/main/wasm/emit.go"><code>emit.go</code></a>.</p>
 <table>

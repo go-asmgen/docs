@@ -940,7 +940,7 @@ kernel and dropped straight into a <code>//go:wasmimport</code> consumer.</p>
   swizzle, widening reductions (extadd_pairwise), and enough scalar plumbing
   for the surrounding control flow.</li>
 </ul>
-<p>Twelve kernels, each with 100% statement coverage, a golden-file test,
+<p>Thirteen kernels, each with 100% statement coverage, a golden-file test,
 and a wazero end-to-end cross-check against a Go reference:</p>
 <table>
 <thead>
@@ -1010,6 +1010,11 @@ and a wazero end-to-end cross-check against a Go reference:</p>
 <td><code>indexany4</code></td>
 <td><code>bytes.IndexAny</code> (fixed 4-needle set)</td>
 <td>4× <code>i8x16.eq</code> + <code>v128.or</code> + <code>i8x16.bitmask</code> + <code>i32.ctz</code></td>
+</tr>
+<tr>
+<td><code>base64_decode</code></td>
+<td><code>encoding/base64.StdEncoding</code> (decode)</td>
+<td>5-range mask+sub + 3× <code>i8x16.shl</code> + 2× <code>i8x16.shr_u</code> + 4 shuffle merges</td>
 </tr>
 </tbody>
 </table>
