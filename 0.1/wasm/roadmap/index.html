@@ -902,21 +902,30 @@
 <p>Where the WAT emitter sits today and what is planned. The order below is
 priority, not commitment.</p>
 <h2 id="grow-the-kernel-catalogue">Grow the kernel catalogue<a class="headerlink" href="#grow-the-kernel-catalogue" title="Permanent link">&para;</a></h2>
-<p>The kernels shipped in v0.1.0 (matchlen, hex, popcount, toupper, memchr)
-cover the most common wasm-consumer patterns: byte-compare, ASCII encode,
-bit-count, ASCII case-fold, byte-search. Next up:</p>
+<p>Eleven kernels ship today (matchlen, hex, hex_decode, popcount, toupper,
+memchr, isascii, utf8len, json_clean, adler32, base64_encode) covering
+byte-compare, hex encode/decode, bit-count, ASCII case-fold, byte-search,
+ASCII / UTF-8 preflight, JSON-string preflight, checksum, and base64
+encode. Still on the wishlist:</p>
 <ul>
-<li><strong>utf-8 validation</strong> — the classic wasm-SIMD showcase. Lemire &amp;
-  Keiser's algorithm uses <code>v128.const</code> LUTs, <code>i8x16.swizzle</code> for range
-  lookup, and <code>i8x16.shr_u</code> for continuation-byte checks. The kernel
-  exercises the shuffle/LUT surface aggressively.</li>
-<li><strong>base64 encode</strong> — Lemire's SSE algorithm ported. Needs <code>i16x8.mul</code> and
-  its friends for the 3-byte-to-4-char index-extraction step; adds
-  saturating i16x8 arithmetic to the emit surface.</li>
-<li><strong>adler32 / crc32</strong> — checksum families used everywhere in zlib-family
-  formats. <code>i16x8.mul</code> again, plus i32x4 multiply-accumulate patterns.</li>
-<li><strong><code>bytes.IndexAny</code></strong> — multi-needle memchr. Extends memchr with a small
-  needle-set LUT and a per-lane compare-any pattern.</li>
+<li><strong>~~base64 encode~~</strong> — done. Lemire's SSE algorithm ported to
+  wasm-SIMD; PMULHUW emulated via <code>i32x4.extmul_low/high_i16x8_u +
+  i32x4.shr_u + i16x8.narrow_i32x4_u</code>. See <a href="../kernels/">Kernels</a>.</li>
+<li><strong>~~adler32~~</strong> — done via <code>i16x8.extmul_low/high_i8x16_u</code> for the
+  weighted-byte sum. See <a href="../kernels/">Kernels</a>.</li>
+<li><strong>utf-8 full validation</strong> (Lemire &amp; Keiser) — the classic wasm-SIMD
+  showcase. <code>utf8len</code> already handles rune-counting for known-valid
+  input; the full-validation kernel would use <code>v128.const</code> LUTs and
+  <code>i8x16.swizzle</code> to classify byte-triplets and reject any invalid
+  sequence.</li>
+<li><strong>base64 decode</strong> — the natural companion to base64_encode. Same
+  three-range arithmetic offset pattern hex_decode uses, extended to
+  the 6-bit-nibble packing base64 needs.</li>
+<li><strong>crc32</strong> — checksum families used everywhere in zlib-family formats.
+  Wasm-SIMD lacks PCLMULQDQ, so a table-based approach is more
+  tractable than the carry-less-multiply route.</li>
+<li><strong><code>bytes.IndexAny</code></strong> — multi-needle memchr. Extends memchr with a
+  small needle-set LUT and a per-lane compare-any pattern.</li>
 </ul>
 <p>Adding a new kernel is a <code>main.go</code> in a new subdirectory plus a
 <code>main_test.go</code> with the golden-file pattern; adding a new op is one line in

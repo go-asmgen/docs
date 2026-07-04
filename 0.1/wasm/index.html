@@ -940,8 +940,8 @@ kernel and dropped straight into a <code>//go:wasmimport</code> consumer.</p>
   swizzle, widening reductions (extadd_pairwise), and enough scalar plumbing
   for the surrounding control flow.</li>
 </ul>
-<p>Nine kernels, each with 100% statement coverage, a golden-file test, and
-a wazero end-to-end cross-check against a Go reference:</p>
+<p>Eleven kernels, each with 100% statement coverage, a golden-file test,
+and a wazero end-to-end cross-check against a Go reference:</p>
 <table>
 <thead>
 <tr>
@@ -995,6 +995,16 @@ a wazero end-to-end cross-check against a Go reference:</p>
 <td><code>json_clean</code></td>
 <td>JSON-string bulk-copy preflight</td>
 <td>2× <code>i8x16.eq</code> + <code>v128.and</code>/zero-eq (avoids signed-le_s trap)</td>
+</tr>
+<tr>
+<td><code>adler32</code></td>
+<td><code>hash/adler32</code></td>
+<td><code>i16x8.extmul_low/high_i8x16_u</code> for the weighted-byte sum</td>
+</tr>
+<tr>
+<td><code>base64_encode</code></td>
+<td><code>encoding/base64.StdEncoding</code></td>
+<td>Lemire's PMULHUW emulated via <code>i32x4.extmul + shr_u + i16x8.narrow</code></td>
 </tr>
 </tbody>
 </table>

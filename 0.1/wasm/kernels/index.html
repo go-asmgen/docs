@@ -768,6 +768,24 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#adler32-hashadler32checksum-adler-32-rolling-sum" class="md-nav__link">
+    <span class="md-ellipsis">
+      adler32 — hash/adler32.Checksum (Adler-32 rolling sum)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#base64_encode-encodingbase64stdencoding-lemires-algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      base64_encode — encoding/base64.StdEncoding (Lemire's algorithm)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#the-emit-surface-catalogued" class="md-nav__link">
     <span class="md-ellipsis">
       The emit surface, catalogued
@@ -983,6 +1001,24 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#adler32-hashadler32checksum-adler-32-rolling-sum" class="md-nav__link">
+    <span class="md-ellipsis">
+      adler32 — hash/adler32.Checksum (Adler-32 rolling sum)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#base64_encode-encodingbase64stdencoding-lemires-algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      base64_encode — encoding/base64.StdEncoding (Lemire's algorithm)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#the-emit-surface-catalogued" class="md-nav__link">
     <span class="md-ellipsis">
       The emit surface, catalogued
@@ -1007,7 +1043,7 @@
 
 
 <h1 id="wasm-kernels">wasm — Kernels<a class="headerlink" href="#wasm-kernels" title="Permanent link">&para;</a></h1>
-<p>The nine kernels that ship in the current main. Every one is a <code>go run</code>
+<p>The eleven kernels that ship in the current main. Every one is a <code>go run</code>
 command that prints WAT to stdout; every one has a golden-file test that
 pins the exact output byte-for-byte; every one has a wazero cross-check
 against a Go reference.</p>
@@ -1158,8 +1194,77 @@ misclassify high-bit bytes (0x80..0xff, negative under i8) as controls
 — the wazero verifier caught this trap on the first implementation.
 <code>bytes &amp; 0xe0 == 0</code> is true iff the top three bits are all clear, which
 happens exactly for byte values 0x00..0x1f regardless of signedness.</p>
+<h2 id="adler32-hashadler32checksum-adler-32-rolling-sum">adler32 — <code>hash/adler32.Checksum</code> (Adler-32 rolling sum)<a class="headerlink" href="#adler32-hashadler32checksum-adler-32-rolling-sum" title="Permanent link">&para;</a></h2>
+<p>Signature:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="p">(</span><span class="nv">func</span><span class="w"> </span><span class="nv">$adler32</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$srcPtr</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$nBlocks</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">               </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$aInit</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$bInit</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">               </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$aOut</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$bOut</span><span class="w"> </span><span class="nv">i32</span><span class="p">))</span>
+</code></pre></div>
+<p>Updates the two running u32 sums <code>a</code> and <code>b</code> from initial values,
+processing <code>nBlocks × 16</code> bytes without any modulo (caller batches
+NMAX=5552-byte segments and reduces between calls). The kernel writes
+the final <code>a</code> and <code>b</code> back through caller-provided pointers so the
+caller can control when to fold in mod-65521.</p>
+<p>Per 16-byte block:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>bytes  = v128.load(src + 16*i)
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>; delta_a = sum(bytes) via the popcount-style pairwise-widen reduction
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>pair16 = i16x8.extadd_pairwise_i8x16_u(bytes)
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>pair32 = i32x4.extadd_pairwise_i16x8_u(pair16)
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>; delta_b_weighted = sum(bytes[k] * (16-k)) using widening extmul
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>coef     = [16, 15, 14, ..., 1]
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>prod_lo  = i16x8.extmul_low_i8x16_u(bytes, coef)
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>prod_hi  = i16x8.extmul_high_i8x16_u(bytes, coef)
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>sum_prod = i32x4.add(extadd_pairwise(prod_lo), extadd_pairwise(prod_hi))
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>; scalar update
+<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a>b = b + 16*a + horizontal_sum(sum_prod)
+<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a>a = a + horizontal_sum(pair32)
+</code></pre></div>
+<p>The <code>i16x8.extmul_low/high_i8x16_u</code> ops widen and multiply pairwise in
+one instruction — no PMULLW+PMULHW dance. Max product 255×16=4080 fits
+in u16 so the intermediate representation stays exact.</p>
+<h2 id="base64_encode-encodingbase64stdencoding-lemires-algorithm">base64_encode — <code>encoding/base64.StdEncoding</code> (Lemire's algorithm)<a class="headerlink" href="#base64_encode-encodingbase64stdencoding-lemires-algorithm" title="Permanent link">&para;</a></h2>
+<p>Signature:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="p">(</span><span class="nv">func</span><span class="w"> </span><span class="nv">$base64_encode</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$dstPtr</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$srcPtr</span><span class="w"> </span><span class="nv">i32</span><span class="p">)</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">                     </span><span class="p">(</span><span class="nv">param</span><span class="w"> </span><span class="nv">$nBlocks</span><span class="w"> </span><span class="nv">i32</span><span class="p">))</span>
+</code></pre></div>
+<p>12 input bytes → 16 output ASCII chars per iteration, matching
+StdEncoding. The algorithm is Lemire's SSE encoder
+(arXiv:1704.00605) adapted for wasm-SIMD, which lacks PMULHUW.</p>
+<p>Per 12-byte block:</p>
+<ol>
+<li>Load 16 bytes (12 real + 4 tail; tail bytes shuffle into ignored
+   positions).</li>
+<li>Byte-shuffle so each 3-byte triplet maps to two big-endian u16
+   lanes <code>(b0&lt;&lt;8|b1)</code> and <code>(b1&lt;&lt;8|b2)</code> — 24 bits spread across two
+   adjacent i16 words with 4 bits of overlap.</li>
+<li>Extract the four 6-bit indexes per triplet in two rounds:<ul>
+<li><strong>Round 1 (PMULHUW-style)</strong>: mask <code>0x0fc0_fc00</code>, multiply by
+  <code>0x0400_0040</code>. Wasm-SIMD lacks PMULHUW, so this is emulated with
+  <code>i32x4.extmul_low/high_i16x8_u</code> + <code>i32x4.shr_u</code> by 16 +
+  <code>i16x8.narrow_i32x4_u</code>.</li>
+<li><strong>Round 2 (PMULLW-style)</strong>: mask <code>0x003f_03f0</code>, multiply by
+  <code>0x0100_0010</code> via <code>i16x8.mul</code> (which IS PMULLW).</li>
+</ul>
+</li>
+<li>OR the two rounds — the v128 now holds all 16 6-bit indexes
+   sequentially in its byte lanes.</li>
+<li>
+<p>Range-add ASCII conversion (each conditional is a mask
+   AND-ed with the offset, summed via <code>i8x16.add</code>):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>result = idx + 65
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>         + (idx &gt; 25 ? +6   : 0)   ; &#39;a&#39;..&#39;z&#39; offset
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>         + (idx &gt; 51 ? -75  : 0)   ; &#39;0&#39;..&#39;9&#39; offset
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>         + (idx == 62 ? -15 : 0)   ; &#39;+&#39;
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>         + (idx == 63 ? -12 : 0)   ; &#39;/&#39;
+</code></pre></div>
+<p>Negative offsets go modular (-75 → 181, -15 → 241, -12 → 244).
+The wazero verifier caught a real bug on the <code>/</code> correction
+during development: an initial -16 (240) landed idx=63 at '+'
+instead of '/'. The correct value is -12 (244).</p>
+</li>
+</ol>
 <h2 id="the-emit-surface-catalogued">The emit surface, catalogued<a class="headerlink" href="#the-emit-surface-catalogued" title="Permanent link">&para;</a></h2>
-<p>Every op the nine kernels reach into is a one-line method on <code>Function</code>.
+<p>Every op the eleven kernels reach into is a one-line method on <code>Function</code>.
 Extension is by declarative append — see
 <a href="https://github.com/go-asmgen/asmgen/blob/main/wasm/emit.go"><code>emit.go</code></a>.</p>
 <table>
