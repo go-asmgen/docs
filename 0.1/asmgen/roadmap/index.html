@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Ergonomic generation of Go-compatible Plan 9 assembly for non-amd64 architectures, delegating encoding to cmd/asm.">
+        <meta name="description" content="Ergonomic generation of Go-compatible Plan 9 assembly for every 64-bit Go target (amd64, arm64, riscv64, loong64, ppc64le, s390x), delegating encoding to cmd/asm.">
       
       
       
@@ -1008,8 +1008,9 @@
 
 <h1 id="asmgen-roadmap">asmgen — Roadmap<a class="headerlink" href="#asmgen-roadmap" title="Permanent link">&para;</a></h1>
 <p>go-asmgen grew along two axes: <strong>wider type support within an architecture</strong>,
-and <strong>more architectures</strong> over a shared ABI0 layout model. Both are now broadly
-covered; the library is released (latest: <strong>v0.5.0</strong>).</p>
+and <strong>more architectures</strong> over a shared ABI0 layout model. Both were broadly
+covered by <strong>v0.5.0</strong>; the module has since continued through <strong>v0.8.0</strong> with
+the wasm-SIMD kernel catalogue (see the <a href="../../wasm/roadmap/">wasm roadmap</a>).</p>
 <h2 id="v0-proof-of-pipeline-done">v0 — proof of pipeline — done<a class="headerlink" href="#v0-proof-of-pipeline-done" title="Permanent link">&para;</a></h2>
 <ul>
 <li>arm64, ABI0, sequences of 8-byte int/ptr arguments and results.</li>
@@ -1057,7 +1058,7 @@ covered; the library is released (latest: <strong>v0.5.0</strong>).</p>
   fifth and sixth targets, completing all six 64-bit Go SIMD architectures. Both
   use the move table <code>MOVD</code> / <code>FMOVS</code> / <code>FMOVD</code>; s390x is <strong>big-endian</strong>, and its
   runtime job deliberately exercises that path. Validated under qemu-user on
-  <code>debian:trixie</code> (<code>QEMU_CPU=power9</code> for ppc64le; <code>QEMU_CPU=qemu</code> for s390x),
+  <code>ubuntu-latest</code> (default CPU for ppc64le; <code>QEMU_CPU=max</code> for s390x),
   asmdecl + <code>cmd/asm</code> clean, 100% coverage. Released as <strong>v0.5.0</strong>.</li>
 </ul>
 <h2 id="simd-done-via-raw">SIMD — done (via <code>Raw</code>)<a class="headerlink" href="#simd-done-via-raw" title="Permanent link">&para;</a></h2>

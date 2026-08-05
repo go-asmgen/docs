@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Ergonomic generation of Go-compatible Plan 9 assembly for non-amd64 architectures, delegating encoding to cmd/asm.">
+        <meta name="description" content="Ergonomic generation of Go-compatible Plan 9 assembly for every 64-bit Go target (amd64, arm64, riscv64, loong64, ppc64le, s390x), delegating encoding to cmd/asm.">
       
       
       
@@ -976,12 +976,15 @@ accidental little-endian assumption in the emitted assembly.</p>
 big-endian target, so lane order is checked there too.</p>
 <h2 id="validation">Validation<a class="headerlink" href="#validation" title="Permanent link">&para;</a></h2>
 <p>There is no common s390x developer host, so correctness is established in layers —
-asmdecl (cross-arch), <code>cmd/asm</code> cross-build, and runtime under qemu-user, in a
-dedicated <code>asm-s390x</code> CI job on <code>debian:trixie</code> (the only big-endian runtime job):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>go<span class="w"> </span>generate<span class="w"> </span>./examples/s390x/...
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nv">GOOS</span><span class="o">=</span>linux<span class="w"> </span><span class="nv">GOARCH</span><span class="o">=</span>s390x<span class="w"> </span>go<span class="w"> </span>vet<span class="w"> </span>./examples/s390x/...
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nv">GOOS</span><span class="o">=</span>linux<span class="w"> </span><span class="nv">GOARCH</span><span class="o">=</span>s390x<span class="w"> </span>go<span class="w"> </span>build<span class="w"> </span>./examples/s390x/...
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nv">QEMU_CPU</span><span class="o">=</span>qemu<span class="w"> </span><span class="nv">GOARCH</span><span class="o">=</span>s390x<span class="w"> </span>go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-exec<span class="o">=</span>qemu-s390x-static<span class="w"> </span>./examples/s390x/...
+asmdecl (cross-arch), <code>cmd/asm</code> cross-build, and runtime under qemu-user
+(<code>qemu-user-static</code>), in a dedicated <code>asm-s390x</code> CI job on <code>ubuntu-latest</code> (the
+only big-endian runtime job; <code>QEMU_CPU=max</code> enables the vector facility). Only
+the SIMD example is runtime-proven today (no dedicated aggregate/array example
+yet, see the <a href="../roadmap/">Roadmap</a>):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>go<span class="w"> </span>generate<span class="w"> </span>./examples/simd/s390x/...
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nv">GOOS</span><span class="o">=</span>linux<span class="w"> </span><span class="nv">GOARCH</span><span class="o">=</span>s390x<span class="w"> </span>go<span class="w"> </span>vet<span class="w"> </span>./examples/simd/s390x/...
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nv">GOOS</span><span class="o">=</span>linux<span class="w"> </span><span class="nv">GOARCH</span><span class="o">=</span>s390x<span class="w"> </span>go<span class="w"> </span>build<span class="w"> </span>./examples/simd/s390x/...
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nv">QEMU_CPU</span><span class="o">=</span>max<span class="w"> </span><span class="nv">GOARCH</span><span class="o">=</span>s390x<span class="w"> </span>go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-exec<span class="o">=</span>qemu-s390x-static<span class="w"> </span>./examples/simd/s390x/...
 </code></pre></div>
 
 

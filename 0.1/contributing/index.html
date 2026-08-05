@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Ergonomic generation of Go-compatible Plan 9 assembly for non-amd64 architectures, delegating encoding to cmd/asm.">
+        <meta name="description" content="Ergonomic generation of Go-compatible Plan 9 assembly for every 64-bit Go target (amd64, arm64, riscv64, loong64, ppc64le, s390x), delegating encoding to cmd/asm.">
       
       
       
@@ -924,7 +924,7 @@ organizations.</p>
 </code></pre></div>
    For riscv64/loong64, cross-vet + <code>cmd/asm</code> build, then run under qemu-user.</li>
 <li>Confirm the library still measures 100% coverage:
-   <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-coverprofile<span class="o">=</span>cover.out<span class="w"> </span>./abi/...<span class="w"> </span>./emit/...<span class="w"> </span>./amd64/...<span class="w"> </span>./arm64/...<span class="w"> </span>./riscv64/...<span class="w"> </span>./loong64/...<span class="w"> </span>./ppc64le/...<span class="w"> </span>./s390x/...
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-coverprofile<span class="o">=</span>cover.out<span class="w"> </span>./abi/...<span class="w"> </span>./emit/...<span class="w"> </span>./amd64/...<span class="w"> </span>./arm64/...<span class="w"> </span>./riscv64/...<span class="w"> </span>./loong64/...<span class="w"> </span>./ppc64/...<span class="w"> </span>./s390x/...
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>go<span class="w"> </span>tool<span class="w"> </span>cover<span class="w"> </span>-func<span class="o">=</span>cover.out
 </code></pre></div></li>
 </ol>
