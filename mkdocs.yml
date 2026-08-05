@@ -1,5 +1,5 @@
 site_name: go-asmgen docs
-site_description: Ergonomic generation of Go-compatible Plan 9 assembly for non-amd64 architectures, delegating encoding to cmd/asm.
+site_description: Ergonomic generation of Go-compatible Plan 9 assembly for every 64-bit Go target (amd64, arm64, riscv64, loong64, ppc64le, s390x), delegating encoding to cmd/asm.
 site_url: https://go-asmgen.github.io/docs/
 repo_url: https://github.com/go-asmgen
 repo_name: go-asmgen

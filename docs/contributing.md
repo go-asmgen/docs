@@ -32,7 +32,7 @@ organizations.
    For riscv64/loong64, cross-vet + `cmd/asm` build, then run under qemu-user.
 4. Confirm the library still measures 100% coverage:
    ```bash
-   go test -coverprofile=cover.out ./abi/... ./emit/... ./amd64/... ./arm64/... ./riscv64/... ./loong64/... ./ppc64le/... ./s390x/...
+   go test -coverprofile=cover.out ./abi/... ./emit/... ./amd64/... ./arm64/... ./riscv64/... ./loong64/... ./ppc64/... ./s390x/...
    go tool cover -func=cover.out
    ```
 

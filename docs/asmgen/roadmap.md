@@ -1,8 +1,9 @@
 # asmgen — Roadmap
 
 go-asmgen grew along two axes: **wider type support within an architecture**,
-and **more architectures** over a shared ABI0 layout model. Both are now broadly
-covered; the library is released (latest: **v0.5.0**).
+and **more architectures** over a shared ABI0 layout model. Both were broadly
+covered by **v0.5.0**; the module has since continued through **v0.8.0** with
+the wasm-SIMD kernel catalogue (see the [wasm roadmap](../wasm/roadmap.md)).
 
 ## v0 — proof of pipeline — done
 
@@ -51,7 +52,7 @@ covered; the library is released (latest: **v0.5.0**).
   fifth and sixth targets, completing all six 64-bit Go SIMD architectures. Both
   use the move table `MOVD` / `FMOVS` / `FMOVD`; s390x is **big-endian**, and its
   runtime job deliberately exercises that path. Validated under qemu-user on
-  `debian:trixie` (`QEMU_CPU=power9` for ppc64le; `QEMU_CPU=qemu` for s390x),
+  `ubuntu-latest` (default CPU for ppc64le; `QEMU_CPU=max` for s390x),
   asmdecl + `cmd/asm` clean, 100% coverage. Released as **v0.5.0**.
 
 ## SIMD — done (via `Raw`)
