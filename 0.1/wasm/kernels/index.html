@@ -1126,7 +1126,7 @@ with the final horizontal sum via four <code>i32x4.extract_lane</code> + three
 <p>Case-folds ASCII bytes to uppercase 16 lanes at a time. Every byte outside
 <code>[a..z]</code> passes through untouched. The kernel showcases the pattern common to
 text-processing kernels: a <strong>signed-compare pair → mask → arithmetic delta</strong>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>mask   = (bytes ge_s &#39;a&#39;) &amp; (bytes le_s &#39;z&#39;)     ; 0xff where in [a..z]
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>mask   = (bytes ge_s 'a') &amp; (bytes le_s 'z')     ; 0xff where in [a..z]
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>delta  = mask &amp; (0x20 × 16)                       ; 0x20 where lowercase
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>upper  = i8x16.sub(bytes, delta)                  ; branchless subtract
 </code></pre></div>
@@ -1169,9 +1169,9 @@ for a byte value the sign bit and the "is &gt;= 128" bit are the same bit.</p>
 inverse of the encoder's 16-byte → 32-char expansion. The kernel showcases
 the "three-range arithmetic offset" pattern that recurs in every ASCII-to-
 value conversion (base16, base32, base64, url-percent decoding):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>digit    = (chars &gt;= &#39;0&#39;) &amp; (chars &lt;= &#39;9&#39;)                  ; 0xff on 0-9
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>upper    = (chars &gt;= &#39;A&#39;) &amp; (chars &lt;= &#39;F&#39;)                  ; 0xff on A-F
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>lower    = (chars &gt;= &#39;a&#39;) &amp; (chars &lt;= &#39;f&#39;)                  ; 0xff on a-f
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>digit    = (chars &gt;= '0') &amp; (chars &lt;= '9')                  ; 0xff on 0-9
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>upper    = (chars &gt;= 'A') &amp; (chars &lt;= 'F')                  ; 0xff on A-F
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>lower    = (chars &gt;= 'a') &amp; (chars &lt;= 'f')                  ; 0xff on a-f
 <a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>offset   = (digit &amp; 48) | (upper &amp; 55) | (lower &amp; 87)       ; per-lane
 <a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>nibbles  = chars - offset                                    ; each lane 0..15
 </code></pre></div>
@@ -1217,7 +1217,7 @@ that would need <code>\uXXXX</code> escaping. A parser can then take the fast
 byte-by-byte slow path on 0. This is the hottest inner check in almost
 every JSON string-parsing loop.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>bytes    = v128.load(src + 16*i)
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>quotes   = i8x16.eq(bytes, 0x22 × 16)                ; 0xff on `&quot;`
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>quotes   = i8x16.eq(bytes, 0x22 × 16)                ; 0xff on `"`
 <a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>slashes  = i8x16.eq(bytes, 0x5c × 16)                ; 0xff on `\`
 <a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>controls = i8x16.eq(v128.and(bytes, 0xe0 × 16), 0)   ; 0xff on 0x00..0x1f
 <a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>dirty    = quotes | slashes | controls
@@ -1288,10 +1288,10 @@ StdEncoding. The algorithm is Lemire's SSE encoder
 <p>Range-add ASCII conversion (each conditional is a mask
    AND-ed with the offset, summed via <code>i8x16.add</code>):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>result = idx + 65
-<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>         + (idx &gt; 25 ? +6   : 0)   ; &#39;a&#39;..&#39;z&#39; offset
-<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>         + (idx &gt; 51 ? -75  : 0)   ; &#39;0&#39;..&#39;9&#39; offset
-<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>         + (idx == 62 ? -15 : 0)   ; &#39;+&#39;
-<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>         + (idx == 63 ? -12 : 0)   ; &#39;/&#39;
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>         + (idx &gt; 25 ? +6   : 0)   ; 'a'..'z' offset
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>         + (idx &gt; 51 ? -75  : 0)   ; '0'..'9' offset
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>         + (idx == 62 ? -15 : 0)   ; '+'
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>         + (idx == 63 ? -12 : 0)   ; '/'
 </code></pre></div>
 <p>Negative offsets go modular (-75 → 181, -15 → 241, -12 → 244).
 The wazero verifier caught a real bug on the <code>/</code> correction
