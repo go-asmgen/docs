@@ -47,6 +47,7 @@ nav:
       - "Fourth target: amd64": asmgen/amd64.md
       - "Fifth target: ppc64le": asmgen/ppc64le.md
       - "Sixth target: s390x": asmgen/s390x.md
+      - "Instructions cmd/asm lacks": asmgen/gaps.md
       - Roadmap: asmgen/roadmap.md
   - wasm:
       - Overview: wasm/index.md

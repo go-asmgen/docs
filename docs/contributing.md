@@ -46,8 +46,9 @@ unchanged, and provides only:
   types.
 
 Arithmetic and vector ops go through `Raw`; encoding stays delegated to
-`cmd/asm` (only an instruction it lacks is emitted as a pinned `WORD`, as the
-arm64 and ppc64le float64 vector encoders do). riscv64 and loong64 were each exactly this — see their pages under
+`cmd/asm`. An instruction it cannot assemble yet gets an entry in `internal/gap`
+and is emitted as a `WORD` until Go has it; see
+[Instructions cmd/asm lacks](asmgen/gaps.md). riscv64 and loong64 were each exactly this — see their pages under
 the asmgen section.
 
 ## Documentation
