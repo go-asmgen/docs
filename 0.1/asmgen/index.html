@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Ergonomic generation of Go-compatible Plan 9 assembly for every 64-bit Go target (amd64, arm64, riscv64, loong64, ppc64le, s390x), delegating encoding to cmd/asm.">
+        <meta name="description" content="Ergonomic generation of Go-compatible Plan 9 assembly for every 64-bit Go target (amd64, arm64, riscv64, loong64, ppc64le, s390x), delegating encoding to cmd/asm except where it lacks an instruction.">
       
       
       
@@ -1083,7 +1083,11 @@ to a new ISA means re-implementing encoding for that ISA. go-asmgen sidesteps
 this: it produces the same Plan 9 assembly text a human would hand-write, and
 <strong><code>cmd/asm</code> does the encoding</strong> — the very same assembler the Go toolchain
 already uses. Adding an architecture therefore costs only a move table over the
-shared ABI0 model, not an encoder.</p>
+shared ABI0 model, not an encoder. The one exception is the few instructions
+<code>cmd/asm</code> lacks — arm64 vector float64 arithmetic (<code>VFADD2D</code>…, v0.10.0) and
+ppc64le VSX float64 arithmetic (<code>XVADDDP</code>…, v0.13.0) — which go-asmgen emits as
+<code>WORD</code>s pinned against the system assembler (Apple <code>as</code> for arm64, GNU as 2.44
+for ppc64) and has run bit-identical on hardware.</p>
 <h2 id="what-you-write">What you write<a class="headerlink" href="#what-you-write" title="Permanent link">&para;</a></h2>
 <p>You describe a function's signature, then drive a small builder:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nx">sig</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">arm64</span><span class="p">.</span><span class="nx">Layout</span><span class="p">(</span>

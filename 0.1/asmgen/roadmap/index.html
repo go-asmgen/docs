@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Ergonomic generation of Go-compatible Plan 9 assembly for every 64-bit Go target (amd64, arm64, riscv64, loong64, ppc64le, s390x), delegating encoding to cmd/asm.">
+        <meta name="description" content="Ergonomic generation of Go-compatible Plan 9 assembly for every 64-bit Go target (amd64, arm64, riscv64, loong64, ppc64le, s390x), delegating encoding to cmd/asm except where it lacks an instruction.">
       
       
       
@@ -1223,10 +1223,14 @@ and <strong>more architectures</strong> over a shared ABI0 layout model. Both we
 covered by <strong>v0.5.0</strong>; the module has since continued through <strong>v0.13.0</strong> with
 the wasm-SIMD kernel catalogue (see the <a href="../../wasm/roadmap/">wasm roadmap</a>), the
 amd64 CPU feature probes (<code>AVX2</code>, <code>POPCNT</code>, <code>AVX512F</code>, <code>FMA</code>), a CPUID vendor
-probe (<code>VendorProbe</code>, v0.12.0) for tuning choices that differ by vendor, and the
-ppc64le VSX float64 arithmetic the Go assembler lacks (v0.13.0): <code>XVADDDP</code>,
-<code>XVSUBDP</code>, <code>XVMULDP</code>, <code>XVDIVDP</code>, <code>XVMADDADP</code> (fused), <code>XVMAXDP</code>, <code>XVMINDP</code> and
-<code>XVSQRTDP</code>, emitted as <code>WORD</code>s over VSX registers 0–63, pinned against GNU as
+probe (<code>VendorProbe</code>, v0.12.0) for tuning choices that differ by vendor, the
+arm64 vector float64 arithmetic the Go assembler lacks (v0.10.0): <code>VFADD2D</code>,
+<code>VFSUB2D</code>, <code>VFMUL2D</code>, <code>VFNEG2D</code> (and <code>VFMLA2D</code>/<code>VFMLS2D</code>, for one register
+convention), emitted as <code>WORD</code>s for the <code>.2D</code> arrangement, pinned against the
+system assembler (Apple <code>as</code>) and run bit-identical to Go's arithmetic and
+<code>math.FMA</code> on Apple M4 and Neoverse-N1, and the ppc64le VSX float64 arithmetic
+the Go assembler lacks (v0.13.0): <code>XVADDDP</code>, <code>XVSUBDP</code>, <code>XVMULDP</code>, <code>XVDIVDP</code>,
+<code>XVMADDADP</code> (fused), <code>XVMAXDP</code>, <code>XVMINDP</code> and <code>XVSQRTDP</code>, emitted as <code>WORD</code>s over VSX registers 0–63, pinned against GNU as
 2.44 on a POWER9 and run bit-identical to Go's arithmetic, <code>math.Sqrt</code> and
 <code>math.FMA</code> on POWER8 and POWER9.</p>
 <h2 id="v0-proof-of-pipeline-done">v0 — proof of pipeline — done<a class="headerlink" href="#v0-proof-of-pipeline-done" title="Permanent link">&para;</a></h2>

@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Ergonomic generation of Go-compatible Plan 9 assembly for every 64-bit Go target (amd64, arm64, riscv64, loong64, ppc64le, s390x), delegating encoding to cmd/asm.">
+        <meta name="description" content="Ergonomic generation of Go-compatible Plan 9 assembly for every 64-bit Go target (amd64, arm64, riscv64, loong64, ppc64le, s390x), delegating encoding to cmd/asm except where it lacks an instruction.">
       
       
       
@@ -1024,7 +1024,12 @@ exactly what makes extending it to new ISAs expensive. go-asmgen instead <strong
 Plan 9 assembly text and lets the Go toolchain assembler (<code>cmd/asm</code>) encode it</strong>
 — so each architecture is only a thin move/register surface over a <strong>shared</strong>
 ABI0 layout model, not a byte-level encoder. avo remains the richer choice for
-amd64-specific work; go-asmgen offers one uniform builder across every target.</p>
+amd64-specific work; go-asmgen offers one uniform builder across every target.
+The exception is the few instructions <code>cmd/asm</code> lacks — arm64 vector float64
+arithmetic (<code>VFADD2D</code>…, v0.10.0) and ppc64le VSX float64 arithmetic
+(<code>XVADDDP</code>…, v0.13.0) — which go-asmgen emits as <code>WORD</code>s pinned against the
+system assembler (Apple <code>as</code> for arm64, GNU as 2.44 for ppc64) and has run
+bit-identical on hardware.</p>
 <table>
 <thead>
 <tr>
