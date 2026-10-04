@@ -48,6 +48,7 @@ nav:
       - "Fifth target: ppc64le": asmgen/ppc64le.md
       - "Sixth target: s390x": asmgen/s390x.md
       - "Instructions cmd/asm lacks": asmgen/gaps.md
+      - Security: asmgen/security.md
       - Roadmap: asmgen/roadmap.md
   - wasm:
       - Overview: wasm/index.md
