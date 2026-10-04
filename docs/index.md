@@ -10,11 +10,16 @@ Plan 9 assembly text and lets the Go toolchain assembler (`cmd/asm`) encode it**
 — so each architecture is only a thin move/register surface over a **shared**
 ABI0 layout model, not a byte-level encoder. avo remains the richer choice for
 amd64-specific work; go-asmgen offers one uniform builder across every target.
-The exception is the few instructions `cmd/asm` lacks — arm64 vector float64
-arithmetic (`VFADD2D`…, v0.10.0) and ppc64le VSX float64 arithmetic
-(`XVADDDP`…, v0.13.0) — which go-asmgen emits as `WORD`s pinned against the
-system assembler (Apple `as` for arm64, GNU as 2.44 for ppc64) and has run
-bit-identical on hardware.
+The exception is an instruction `cmd/asm` cannot assemble yet. Those are
+the ppc64le VSX float64 arithmetic (`XVADDDP`…) and the loong64 vector
+fused multiply-add (`VFMADDD`…). go-asmgen emits each one as a `WORD`
+whose comment gives the spelling proposed for `cmd/asm`, and keeps its
+encoding, references and proposed spelling in a registry
+(`internal/gap`). From that registry come the Go patches in
+[`goasm-patches/`](https://github.com/go-asmgen/asmgen/tree/main/goasm-patches),
+and a weekly check that notices when Go catches up. Since v0.15.0 the
+arm64 vector float64 arithmetic (`VFADD2D`…) and the loong64 broadcast
+load are encoded by `cmd/asm`.
 
 | Package | What it is |
 | --- | --- |

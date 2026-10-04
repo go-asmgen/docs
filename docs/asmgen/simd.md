@@ -69,11 +69,10 @@ Every target has runtime-tested packed-add examples:
 The amd64 (`addI32x8`, AVX2) and loong64 (`addI32x8`, LASX) examples add eight
 int32 lanes at once; the others add four.
 
-!!! note "RVV / LSX need Go 1.25"
-    The RISC-V Vector and LoongArch SIMD instructions were added to the Go
-    assembler in Go 1.25. The riscv64/loong64 SIMD examples therefore build with
-    a Go 1.25+ toolchain; the library itself (and the scalar/SSE/NEON paths)
-    still build on Go 1.22+.
+!!! note "Go version"
+    The RISC-V Vector and LoongArch SIMD instructions reached the Go assembler
+    in Go 1.25, and the arm64 vector float64 arithmetic in Go 1.27. Since
+    v0.15.0 the module requires Go 1.27.
 
 ## Why pointers, not by-value vectors
 

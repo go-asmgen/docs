@@ -2,19 +2,19 @@
 
 go-asmgen grew along two axes: **wider type support within an architecture**,
 and **more architectures** over a shared ABI0 layout model. Both were broadly
-covered by **v0.5.0**; the module has since continued through **v0.13.0** with
-the wasm-SIMD kernel catalogue (see the [wasm roadmap](../wasm/roadmap.md)), the
-amd64 CPU feature probes (`AVX2`, `POPCNT`, `AVX512F`, `FMA`), a CPUID vendor
-probe (`VendorProbe`, v0.12.0) for tuning choices that differ by vendor, the
-arm64 vector float64 arithmetic the Go assembler lacks (v0.10.0): `VFADD2D`,
-`VFSUB2D`, `VFMUL2D`, `VFNEG2D` (and `VFMLA2D`/`VFMLS2D`, for one register
-convention), emitted as `WORD`s for the `.2D` arrangement, pinned against the
-system assembler (Apple `as`) and run bit-identical to Go's arithmetic and
-`math.FMA` on Apple M4 and Neoverse-N1, and the ppc64le VSX float64 arithmetic
-the Go assembler lacks (v0.13.0): `XVADDDP`, `XVSUBDP`, `XVMULDP`, `XVDIVDP`,
-`XVMADDADP` (fused), `XVMAXDP`, `XVMINDP` and `XVSQRTDP`, emitted as `WORD`s over VSX registers 0–63, pinned against GNU as
-2.44 on a POWER9 and run bit-identical to Go's arithmetic, `math.Sqrt` and
-`math.FMA` on POWER8 and POWER9.
+covered by **v0.5.0**. Later releases brought:
+
+- the wasm-SIMD kernel catalogue (see the [wasm roadmap](../wasm/roadmap.md));
+- the amd64 CPU feature probes (`AVX2`, `POPCNT`, `AVX512F`, `FMA`) and a
+  CPUID vendor probe (`VendorProbe`, v0.12.0) for tuning;
+- vector float64 arithmetic on arm64 (v0.10.0), ppc64le (v0.13.0) and loong64
+  (v0.14.0), each run bit-identical to Go's arithmetic and `math.FMA` on
+  hardware.
+
+**v0.15.0** returns to `cmd/asm` encoding wherever Go allows it. The arm64
+methods emit `VFADD`… (Go 1.27, now the minimum) and the loong64 broadcast load
+emits `VMOVQ off(R), V.V2`. Instructions Go cannot assemble yet are registered,
+patched and watched; see [Instructions cmd/asm lacks](gaps.md).
 
 ## v0 — proof of pipeline — done
 
