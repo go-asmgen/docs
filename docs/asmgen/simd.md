@@ -71,8 +71,8 @@ int32 lanes at once; the others add four.
 
 !!! note "Go version"
     The RISC-V Vector and LoongArch SIMD instructions reached the Go assembler
-    in Go 1.25, and the arm64 vector float64 arithmetic in Go 1.27. Since
-    v0.15.0 the module requires Go 1.27.
+    in Go 1.25, and the arm64 vector float64 arithmetic in Go 1.27. The
+    module has required Go 1.27 since v0.15.0, and 1.27.1 since v0.15.2.
 
 ## Why pointers, not by-value vectors
 

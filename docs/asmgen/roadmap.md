@@ -12,7 +12,7 @@ covered by **v0.5.0**. Later releases brought:
   hardware.
 
 **v0.15.0** returns to `cmd/asm` encoding wherever Go allows it. The arm64
-methods emit `VFADD`… (Go 1.27, now the minimum) and the loong64 broadcast load
+methods emit `VFADD`… (Go 1.27; the minimum is 1.27.1 since v0.15.2) and the loong64 broadcast load
 emits `VMOVQ off(R), V.V2`. Instructions Go cannot assemble yet are registered,
 patched and watched; see [Instructions cmd/asm lacks](gaps.md).
 
