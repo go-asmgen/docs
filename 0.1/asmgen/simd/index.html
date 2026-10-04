@@ -716,6 +716,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../gaps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Instructions cmd/asm lacks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../roadmap/" class="md-nav__link">
         
   
@@ -1182,11 +1210,10 @@ established by the <strong>runtime test</strong>, which checks every lane.</p>
 <p>The amd64 (<code>addI32x8</code>, AVX2) and loong64 (<code>addI32x8</code>, LASX) examples add eight
 int32 lanes at once; the others add four.</p>
 <div class="admonition note">
-<p class="admonition-title">RVV / LSX need Go 1.25</p>
-<p>The RISC-V Vector and LoongArch SIMD instructions were added to the Go
-assembler in Go 1.25. The riscv64/loong64 SIMD examples therefore build with
-a Go 1.25+ toolchain; the library itself (and the scalar/SSE/NEON paths)
-still build on Go 1.22+.</p>
+<p class="admonition-title">Go version</p>
+<p>The RISC-V Vector and LoongArch SIMD instructions reached the Go assembler
+in Go 1.25, and the arm64 vector float64 arithmetic in Go 1.27. Since
+v0.15.0 the module requires Go 1.27.</p>
 </div>
 <h2 id="why-pointers-not-by-value-vectors">Why pointers, not by-value vectors<a class="headerlink" href="#why-pointers-not-by-value-vectors" title="Permanent link">&para;</a></h2>
 <p><code>go vet</code> asmdecl rejects a single vector load of a whole by-value array — e.g.

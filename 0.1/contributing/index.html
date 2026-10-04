@@ -621,6 +621,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../asmgen/gaps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Instructions cmd/asm lacks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../asmgen/roadmap/" class="md-nav__link">
         
   
@@ -1124,8 +1152,9 @@ unchanged, and provides only:</p>
   types.</li>
 </ul>
 <p>Arithmetic and vector ops go through <code>Raw</code>; encoding stays delegated to
-<code>cmd/asm</code> (only an instruction it lacks is emitted as a pinned <code>WORD</code>, as the
-arm64 and ppc64le float64 vector encoders do). riscv64 and loong64 were each exactly this — see their pages under
+<code>cmd/asm</code>. An instruction it cannot assemble yet gets an entry in <code>internal/gap</code>
+and is emitted as a <code>WORD</code> until Go has it; see
+<a href="../asmgen/gaps/">Instructions cmd/asm lacks</a>. riscv64 and loong64 were each exactly this — see their pages under
 the asmgen section.</p>
 <h2 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">&para;</a></h2>
 <p>This site is built with MkDocs Material and versioned with
