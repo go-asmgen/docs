@@ -1286,7 +1286,7 @@ covered by <strong>v0.5.0</strong>. Later releases brought:</p>
   hardware.</li>
 </ul>
 <p><strong>v0.15.0</strong> returns to <code>cmd/asm</code> encoding wherever Go allows it. The arm64
-methods emit <code>VFADD</code>… (Go 1.27, now the minimum) and the loong64 broadcast load
+methods emit <code>VFADD</code>… (Go 1.27; the minimum is 1.27.1 since v0.15.2) and the loong64 broadcast load
 emits <code>VMOVQ off(R), V.V2</code>. Instructions Go cannot assemble yet are registered,
 patched and watched; see <a href="../gaps/">Instructions cmd/asm lacks</a>.</p>
 <h2 id="v0-proof-of-pipeline-done">v0 — proof of pipeline — done<a class="headerlink" href="#v0-proof-of-pipeline-done" title="Permanent link">&para;</a></h2>

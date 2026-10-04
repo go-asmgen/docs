@@ -1240,8 +1240,8 @@ int32 lanes at once; the others add four.</p>
 <div class="admonition note">
 <p class="admonition-title">Go version</p>
 <p>The RISC-V Vector and LoongArch SIMD instructions reached the Go assembler
-in Go 1.25, and the arm64 vector float64 arithmetic in Go 1.27. Since
-v0.15.0 the module requires Go 1.27.</p>
+in Go 1.25, and the arm64 vector float64 arithmetic in Go 1.27. The
+module has required Go 1.27 since v0.15.0, and 1.27.1 since v0.15.2.</p>
 </div>
 <h2 id="why-pointers-not-by-value-vectors">Why pointers, not by-value vectors<a class="headerlink" href="#why-pointers-not-by-value-vectors" title="Permanent link">&para;</a></h2>
 <p><code>go vet</code> asmdecl rejects a single vector load of a whole by-value array — e.g.
