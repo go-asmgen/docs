@@ -20,7 +20,11 @@ to a new ISA means re-implementing encoding for that ISA. go-asmgen sidesteps
 this: it produces the same Plan 9 assembly text a human would hand-write, and
 **`cmd/asm` does the encoding** — the very same assembler the Go toolchain
 already uses. Adding an architecture therefore costs only a move table over the
-shared ABI0 model, not an encoder.
+shared ABI0 model, not an encoder. The one exception is the few instructions
+`cmd/asm` lacks — arm64 vector float64 arithmetic (`VFADD2D`…, v0.10.0) and
+ppc64le VSX float64 arithmetic (`XVADDDP`…, v0.13.0) — which go-asmgen emits as
+`WORD`s pinned against the system assembler (Apple `as` for arm64, GNU as 2.44
+for ppc64) and has run bit-identical on hardware.
 
 ## What you write
 

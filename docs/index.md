@@ -10,6 +10,11 @@ Plan 9 assembly text and lets the Go toolchain assembler (`cmd/asm`) encode it**
 — so each architecture is only a thin move/register surface over a **shared**
 ABI0 layout model, not a byte-level encoder. avo remains the richer choice for
 amd64-specific work; go-asmgen offers one uniform builder across every target.
+The exception is the few instructions `cmd/asm` lacks — arm64 vector float64
+arithmetic (`VFADD2D`…, v0.10.0) and ppc64le VSX float64 arithmetic
+(`XVADDDP`…, v0.13.0) — which go-asmgen emits as `WORD`s pinned against the
+system assembler (Apple `as` for arm64, GNU as 2.44 for ppc64) and has run
+bit-identical on hardware.
 
 | Package | What it is |
 | --- | --- |
