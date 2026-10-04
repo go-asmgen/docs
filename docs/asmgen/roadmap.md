@@ -2,9 +2,10 @@
 
 go-asmgen grew along two axes: **wider type support within an architecture**,
 and **more architectures** over a shared ABI0 layout model. Both were broadly
-covered by **v0.5.0**; the module has since continued through **v0.11.0** with
-the wasm-SIMD kernel catalogue (see the [wasm roadmap](../wasm/roadmap.md)) and
-the amd64 CPU feature probes (`AVX2`, `POPCNT`, `AVX512F`, `FMA`).
+covered by **v0.5.0**; the module has since continued through **v0.12.0** with
+the wasm-SIMD kernel catalogue (see the [wasm roadmap](../wasm/roadmap.md)), the
+amd64 CPU feature probes (`AVX2`, `POPCNT`, `AVX512F`, `FMA`), and a CPUID
+vendor probe (`VendorProbe`, v0.12.0) for tuning choices that differ by vendor.
 
 ## v0 — proof of pipeline — done
 
