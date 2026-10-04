@@ -2,10 +2,15 @@
 
 go-asmgen grew along two axes: **wider type support within an architecture**,
 and **more architectures** over a shared ABI0 layout model. Both were broadly
-covered by **v0.5.0**; the module has since continued through **v0.12.0** with
+covered by **v0.5.0**; the module has since continued through **v0.13.0** with
 the wasm-SIMD kernel catalogue (see the [wasm roadmap](../wasm/roadmap.md)), the
-amd64 CPU feature probes (`AVX2`, `POPCNT`, `AVX512F`, `FMA`), and a CPUID
-vendor probe (`VendorProbe`, v0.12.0) for tuning choices that differ by vendor.
+amd64 CPU feature probes (`AVX2`, `POPCNT`, `AVX512F`, `FMA`), a CPUID vendor
+probe (`VendorProbe`, v0.12.0) for tuning choices that differ by vendor, and the
+ppc64le VSX float64 arithmetic the Go assembler lacks (v0.13.0): `XVADDDP`,
+`XVSUBDP`, `XVMULDP`, `XVDIVDP`, `XVMADDADP` (fused), `XVMAXDP`, `XVMINDP` and
+`XVSQRTDP`, emitted as `WORD`s over VSX registers 0–63, pinned against GNU as
+2.44 on a POWER9 and run bit-identical to Go's arithmetic, `math.Sqrt` and
+`math.FMA` on POWER8 and POWER9.
 
 ## v0 — proof of pipeline — done
 
