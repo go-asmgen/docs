@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://go-asmgen.github.io/docs/0.1/wasm/roadmap/">
+        <link rel="canonical" href="https://go-asmgen.github.io/docs/0.1/asmgen/security/">
       
       
-        <link rel="prev" href="../consumer-ci/">
+        <link rel="prev" href="../gaps/">
       
       
-        <link rel="next" href="../../contributing/">
+        <link rel="next" href="../roadmap/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Roadmap - go-asmgen docs</title>
+        <title>Security - go-asmgen docs</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#wasm-roadmap" class="md-skip">
+        <a href="#security" class="md-skip">
           Skip to content
         </a>
       
@@ -117,7 +117,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Roadmap
+              Security
             
           </span>
         </div>
@@ -288,8 +288,10 @@
       
   
   
+    
   
   
+  
     
     
     
@@ -300,11 +302,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
           <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
@@ -325,437 +327,12 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
   
     asmgen
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../asmgen/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Overview
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../asmgen/quickstart/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Quick start
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../asmgen/design/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    ABI0 & design notes
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../asmgen/aggregates/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Aggregates (structs, slices, strings)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../asmgen/simd/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    SIMD (SSE / NEON / VSX / …)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../asmgen/riscv64/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Second architecture: riscv64
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../asmgen/loong64/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Third architecture: loong64
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../asmgen/amd64/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Fourth target: amd64
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../asmgen/ppc64le/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Fifth target: ppc64le
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../asmgen/s390x/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Sixth target: s390x
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../asmgen/gaps/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Instructions cmd/asm lacks
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../asmgen/security/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Security
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../asmgen/roadmap/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Roadmap
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-    
-  
-  
-  
-    
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
-        
-          
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    wasm
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_3">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    wasm
   
 
           </label>
@@ -824,34 +401,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../kernels/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Kernels
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../design/" class="md-nav__link">
         
   
@@ -859,7 +408,7 @@
   <span class="md-ellipsis">
     
   
-    Design notes
+    ABI0 & design notes
   
 
     
@@ -880,14 +429,210 @@
   
   
     <li class="md-nav__item">
-      <a href="../consumer-ci/" class="md-nav__link">
+      <a href="../aggregates/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Consumer CI
+    Aggregates (structs, slices, strings)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../simd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SIMD (SSE / NEON / VSX / …)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../riscv64/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Second architecture: riscv64
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../loong64/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Third architecture: loong64
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../amd64/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fourth target: amd64
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ppc64le/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fifth target: ppc64le
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s390x/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sixth target: s390x
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gaps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Instructions cmd/asm lacks
   
 
     
@@ -924,7 +669,7 @@
   <span class="md-ellipsis">
     
   
-    Roadmap
+    Security
   
 
     
@@ -942,7 +687,7 @@
   <span class="md-ellipsis">
     
   
-    Roadmap
+    Security
   
 
     
@@ -968,10 +713,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#grow-the-kernel-catalogue" class="md-nav__link">
+  <a href="#what-counts-as-a-vulnerability" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Grow the kernel catalogue
+        What counts as a vulnerability
       
     </span>
   </a>
@@ -979,10 +724,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#fold-into-the-main-asmgen-module-done" class="md-nav__link">
+  <a href="#reporting" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ~~Fold into the main asmgen module~~ — done
+        Reporting
       
     </span>
   </a>
@@ -990,21 +735,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#grow-the-consumer-ecosystem" class="md-nav__link">
+  <a href="#audit-of-2026-10-04-v0150" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Grow the consumer ecosystem
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#non-goals" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Non-goals
+        Audit of 2026-10-04 (v0.15.0)
       
     </span>
   </a>
@@ -1015,6 +749,261 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../roadmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    wasm
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    wasm
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wasm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wasm/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wasm/kernels/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kernels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wasm/design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wasm/consumer-ci/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Consumer CI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wasm/roadmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -1081,10 +1070,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#grow-the-kernel-catalogue" class="md-nav__link">
+  <a href="#what-counts-as-a-vulnerability" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Grow the kernel catalogue
+        What counts as a vulnerability
       
     </span>
   </a>
@@ -1092,10 +1081,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#fold-into-the-main-asmgen-module-done" class="md-nav__link">
+  <a href="#reporting" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ~~Fold into the main asmgen module~~ — done
+        Reporting
       
     </span>
   </a>
@@ -1103,21 +1092,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#grow-the-consumer-ecosystem" class="md-nav__link">
+  <a href="#audit-of-2026-10-04-v0150" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Grow the consumer ecosystem
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#non-goals" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Non-goals
+        Audit of 2026-10-04 (v0.15.0)
       
     </span>
   </a>
@@ -1141,82 +1119,65 @@
 
 
 
-<h1 id="wasm-roadmap">wasm — Roadmap<a class="headerlink" href="#wasm-roadmap" title="Permanent link">&para;</a></h1>
-<p>Where the WAT emitter sits today and what is planned. The order below is
-priority, not commitment.</p>
-<h2 id="grow-the-kernel-catalogue">Grow the kernel catalogue<a class="headerlink" href="#grow-the-kernel-catalogue" title="Permanent link">&para;</a></h2>
-<p>Thirteen kernels ship today (matchlen, hex, hex_decode, popcount, toupper,
-memchr, isascii, utf8len, json_clean, adler32, base64_encode, indexany4,
-base64_decode) covering byte-compare, hex encode/decode, bit-count, ASCII
-case-fold, byte-search, ASCII / UTF-8 preflight, JSON-string preflight,
-checksum, base64 encode/decode, and multi-needle byte-search. Still on
-the wishlist:</p>
+<h1 id="security">Security<a class="headerlink" href="#security" title="Permanent link">&para;</a></h1>
+<p>go-asmgen runs at <code>go generate</code> time, on input written by the generator's
+author. It has no network-facing surface. Its risk lies in what it <strong>emits</strong>:
+the committed assembly runs in every module that uses it, outside Go's memory
+safety.</p>
+<h2 id="what-counts-as-a-vulnerability">What counts as a vulnerability<a class="headerlink" href="#what-counts-as-a-vulnerability" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>~~base64 encode~~</strong> — done. Lemire's SSE algorithm ported to
-  wasm-SIMD; PMULHUW emulated via <code>i32x4.extmul_low/high_i16x8_u +
-  i32x4.shr_u + i16x8.narrow_i32x4_u</code>. See <a href="../kernels/">Kernels</a>.</li>
-<li><strong>~~adler32~~</strong> — done via <code>i16x8.extmul_low/high_i8x16_u</code> for the
-  weighted-byte sum. See <a href="../kernels/">Kernels</a>.</li>
-<li><strong>utf-8 full validation</strong> (Lemire &amp; Keiser) — the classic wasm-SIMD
-  showcase. <code>utf8len</code> already handles rune-counting for known-valid
-  input; the full-validation kernel would use <code>v128.const</code> LUTs and
-  <code>i8x16.swizzle</code> to classify byte-triplets and reject any invalid
-  sequence.</li>
-<li><strong>~~base64 decode~~</strong> — done. Byte-level shift+shuffle+OR approach
-  with a 5-range char→index step; no new emit ops. See the
-  <a href="../kernels/">Kernels</a> page.</li>
-<li><strong>crc32</strong> — checksum families used everywhere in zlib-family formats.
-  Wasm-SIMD lacks PCLMULQDQ, so a table-based approach is more
-  tractable than the carry-less-multiply route.</li>
-<li><strong>~~<code>bytes.IndexAny</code>~~</strong> — done as <code>indexany4</code>, a 4-needle fixed-size
-  variant. See the <a href="../kernels/">Kernels</a> page.</li>
+<li><strong>An encoding that is not the instruction it names.</strong> A <code>WORD</code> (see
+  <a href="../gaps/">Instructions cmd/asm lacks</a>) is the one place <code>cmd/asm</code> checks
+  nothing. Each encoder is pinned to reference encodings from GNU as, and
+  refuses any register or offset that does not encode. An operand it accepts
+  but encodes wrongly is a vulnerability.</li>
+<li><strong>A frame or argument layout that disagrees with the Go declaration</strong> in a
+  way <code>go vet</code> (asmdecl) does not catch.</li>
+<li><strong>A builder that emits other than it documents:</strong> another register, width or
+  offset, or a clobbered callee-saved register.</li>
 </ul>
-<p>Adding a new kernel is a <code>main.go</code> in a new subdirectory plus a
-<code>main_test.go</code> with the golden-file pattern; adding a new op is one line in
-<code>emit.go</code>. Nothing structural changes.</p>
-<h2 id="fold-into-the-main-asmgen-module-done">~~Fold into the main asmgen module~~ — done<a class="headerlink" href="#fold-into-the-main-asmgen-module-done" title="Permanent link">&para;</a></h2>
-<p>The wasm surface used to ship as a stand-alone <code>go-asmgen/wasm</code> module.
-As of <code>go-asmgen/asmgen@v0.6.0</code> it lives inside the main asmgen module
-as a peer of <code>amd64</code> / <code>arm64</code> / …:</p>
-<ul>
-<li><a href="https://github.com/go-asmgen/asmgen/tree/main/wasm"><code>wasm/</code></a> —
-  the emit surface.</li>
-<li><a href="https://github.com/go-asmgen/asmgen/tree/main/examples/wasm"><code>examples/wasm/</code></a>
-  — one subdirectory per shipped kernel, each with the <code>go:generate</code>
-  line and the committed <code>.wat.golden</code>.</li>
-<li>A <code>wasm-e2e</code> job in the top-level <code>ci.yml</code> regenerates every kernel,
-  drift-gates against the committed golden, <code>wat2wasm</code>-compiles, and
-  runs the wazero verifier — one job for all thirteen kernels because
-  wasm-SIMD is arch-agnostic.</li>
-</ul>
-<p>A future extension to the shared <code>abi</code> package would lower Go slice
-headers (<code>base, len, cap</code>) into wasm <code>(i32, i32, i32)</code> param triples
-for <code>//go:wasmimport</code> consumers automatically. Not blocking anything
-today — every shipped kernel hand-writes the ABI at its call sites.</p>
-<h2 id="grow-the-consumer-ecosystem">Grow the consumer ecosystem<a class="headerlink" href="#grow-the-consumer-ecosystem" title="Permanent link">&para;</a></h2>
-<p>Each shipped kernel deserves a <code>go-simd/*-wasm</code> consumer alongside the
-existing <a href="https://github.com/go-simd/matchlen-wasm"><code>go-simd/matchlen-wasm</code></a>:</p>
-<ul>
-<li><code>go-simd/hex-wasm</code></li>
-<li><code>go-simd/popcount-wasm</code></li>
-<li><code>go-simd/toupper-wasm</code></li>
-<li><code>go-simd/memchr-wasm</code></li>
-</ul>
-<p>Every consumer follows the same shape as matchlen-wasm: a <code>//go:generate</code>
-directive pinning the emitter version, <code>wasm-drift.yml</code> for the drift gate,
-<code>wasm-bench.yml</code> for the regression gate, and a small Go wrapper that fronts
-the <code>//go:wasmimport</code>.</p>
-<h2 id="non-goals">Non-goals<a class="headerlink" href="#non-goals" title="Permanent link">&para;</a></h2>
-<ul>
-<li><strong>wasm-binary encoding.</strong> WAT text plus <code>wat2wasm</code> is enough; the module
-  will not grow a binary encoder.</li>
-<li><strong>Non-SIMD wasm.</strong> The point of the module is v128; a scalar-only wasm
-  target is already served by Go's stock wasm output.</li>
-<li><strong>Runtime selection.</strong> The kernel signatures target the SIMD proposal
-  unconditionally. Consumers that need a scalar fallback should ship one in
-  Go alongside the wasmimport call — that's a consumer concern, not an
-  emitter concern.</li>
-</ul>
+<p>Text passed to <code>Raw</code> is emitted as written. Checking it is the caller's job, as
+for hand-written assembly: run <code>go vet</code> and build for the target.</p>
+<h2 id="reporting">Reporting<a class="headerlink" href="#reporting" title="Permanent link">&para;</a></h2>
+<p>Report privately, through the repository's
+<a href="https://github.com/go-asmgen/asmgen/security/advisories/new">Report a vulnerability</a>
+form, not in a public issue. The policy is in
+<a href="https://github.com/go-asmgen/asmgen/blob/main/SECURITY.md">SECURITY.md</a>.</p>
+<h2 id="audit-of-2026-10-04-v0150">Audit of 2026-10-04 (v0.15.0)<a class="headerlink" href="#audit-of-2026-10-04-v0150" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>govulncheck</td>
+<td>no vulnerability; the module has no dependencies. CI runs it on every change.</td>
+</tr>
+<tr>
+<td>gosec</td>
+<td>conversions in the encoders are each preceded by a range check; no change needed</td>
+</tr>
+<tr>
+<td>staticcheck</td>
+<td>one deprecated call (<code>runtime.GOROOT</code>) in a test</td>
+</tr>
+<tr>
+<td>Encoder rejections</td>
+<td>register 32, offset not a multiple of 8, offset out of range: all tested</td>
+</tr>
+<tr>
+<td>CI workflows</td>
+<td>read-only token (<code>issues: write</code> only in the scheduled gap report, never on a pull request); no <code>pull_request_target</code>; no secrets</td>
+</tr>
+<tr>
+<td>Repositories</td>
+<td>private vulnerability reporting, secret scanning and push protection enabled on all five</td>
+</tr>
+</tbody>
+</table>
 
 
 
