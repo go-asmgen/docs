@@ -1212,19 +1212,26 @@ with operands in its order, so the line already shows what it will become.</p>
 </ul>
 <h2 id="patches-and-the-weekly-check">Patches and the weekly check<a class="headerlink" href="#patches-and-the-weekly-check" title="Permanent link">&para;</a></h2>
 <p><a href="https://github.com/go-asmgen/asmgen/tree/main/goasm-patches"><code>goasm-patches/</code></a>
-holds patches for Go, ready to submit. Each one is checked against independent
-assemblers and passes Go's own tests:</p>
+holds the patches for Go. Each one is checked against independent assemblers
+and passes Go's own tests. All three were mailed on 2026-10-05:</p>
 <ul>
-<li>ppc64 VSX float64 arithmetic;</li>
-<li>loong64 vector FMA (with its 14 siblings) and the full offset range of the
-  broadcast loads;</li>
-<li>a range check for loong64 element stores. On Go master these silently
-  encoded an out-of-range offset as a store to the wrong address.</li>
+<li><a href="https://go.dev/cl/845145">CL 845145</a>: ppc64 VSX float64 arithmetic;</li>
+<li><a href="https://go.dev/cl/845165">CL 845165</a>: loong64 vector FMA (with its 14
+  siblings) and the full offset range of the broadcast loads;</li>
+<li><a href="https://go.dev/cl/845166">CL 845166</a>: a range check for loong64 element
+  stores. On Go master these silently encoded an out-of-range offset as a
+  store to the wrong address.</li>
 </ul>
-<p>Every Monday, the <code>goasm-gaps</code> workflow verifies the latest Go release and Go
-master, and opens an issue when either fully assembles an instruction in the
-registry. It also applies every patch to master and requires Go's tests and
-every reference encoding to pass.</p>
+<p>Every Monday, the <code>goasm-gaps</code> workflow:</p>
+<ul>
+<li>verifies the latest Go release and Go master, and opens an issue when either
+  fully assembles an instruction in the registry;</li>
+<li>reads each mailed CL on Gerrit, and opens an issue when one has review
+  comments waiting for a reply or was abandoned. A mailed CL is forgotten the
+  same way as an unmailed patch: a reviewer asks something and nobody answers;</li>
+<li>applies every patch to master, taking a mailed CL as its current patchset,
+  and requires Go's tests and every reference encoding to pass.</li>
+</ul>
 
 
 
