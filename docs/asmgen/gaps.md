@@ -58,16 +58,22 @@ go run ./tools/goasmgap verify -goroot ~/go-master -require
 ## Patches and the weekly check
 
 [`goasm-patches/`](https://github.com/go-asmgen/asmgen/tree/main/goasm-patches)
-holds patches for Go, ready to submit. Each one is checked against independent
-assemblers and passes Go's own tests:
+holds the patches for Go. Each one is checked against independent assemblers
+and passes Go's own tests. All three were mailed on 2026-10-05:
 
-- ppc64 VSX float64 arithmetic;
-- loong64 vector FMA (with its 14 siblings) and the full offset range of the
-  broadcast loads;
-- a range check for loong64 element stores. On Go master these silently
-  encoded an out-of-range offset as a store to the wrong address.
+- [CL 845145](https://go.dev/cl/845145): ppc64 VSX float64 arithmetic;
+- [CL 845165](https://go.dev/cl/845165): loong64 vector FMA (with its 14
+  siblings) and the full offset range of the broadcast loads;
+- [CL 845166](https://go.dev/cl/845166): a range check for loong64 element
+  stores. On Go master these silently encoded an out-of-range offset as a
+  store to the wrong address.
 
-Every Monday, the `goasm-gaps` workflow verifies the latest Go release and Go
-master, and opens an issue when either fully assembles an instruction in the
-registry. It also applies every patch to master and requires Go's tests and
-every reference encoding to pass.
+Every Monday, the `goasm-gaps` workflow:
+
+- verifies the latest Go release and Go master, and opens an issue when either
+  fully assembles an instruction in the registry;
+- reads each mailed CL on Gerrit, and opens an issue when one has review
+  comments waiting for a reply or was abandoned. A mailed CL is forgotten the
+  same way as an unmailed patch: a reviewer asks something and nobody answers;
+- applies every patch to master, taking a mailed CL as its current patchset,
+  and requires Go's tests and every reference encoding to pass.
