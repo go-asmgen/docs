@@ -16,6 +16,9 @@ methods emit `VFADD`… (Go 1.27; the minimum is 1.27.1 since v0.15.2) and the l
 emits `VMOVQ off(R), V.V2`. Instructions Go cannot assemble yet are registered,
 patched and watched; see [Instructions cmd/asm lacks](gaps.md).
 
+**v0.16.0** adds the arm64 float32 vector methods (`VFADD4S` … `VFMLS4S`,
+`VFNEG4S`), as cmd/asm mnemonics.
+
 ## v0 — proof of pipeline — done
 
 - arm64, ABI0, sequences of 8-byte int/ptr arguments and results.

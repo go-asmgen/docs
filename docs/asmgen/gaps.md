@@ -59,7 +59,7 @@ go run ./tools/goasmgap verify -goroot ~/go-master -require
 
 [`goasm-patches/`](https://github.com/go-asmgen/asmgen/tree/main/goasm-patches)
 holds the patches for Go. Each one is checked against independent assemblers
-and passes Go's own tests. All three were mailed on 2026-10-05:
+and passes Go's own tests. The first three were mailed on 2026-10-05:
 
 - [CL 845145](https://go.dev/cl/845145): ppc64 VSX float64 arithmetic;
 - [CL 845165](https://go.dev/cl/845165): loong64 vector FMA (with its 14
@@ -67,6 +67,11 @@ and passes Go's own tests. All three were mailed on 2026-10-05:
 - [CL 845166](https://go.dev/cl/845166): a range check for loong64 element
   stores. On Go master these silently encoded an out-of-range offset as a
   store to the wrong address.
+- [CL 846285](https://go.dev/cl/846285): ppc64 VSX float32 arithmetic, the
+  counterpart of CL 845145 (mailed 2026-10-07);
+- [CL 846286](https://go.dev/cl/846286): s390x vector float32 (`VFASB`…,
+  vector-enhancements facility 1), which go-simd/floats needs to vectorise
+  float32 on s390x (mailed 2026-10-07).
 
 Every Monday, the `goasm-gaps` workflow:
 
