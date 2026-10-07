@@ -1213,7 +1213,7 @@ with operands in its order, so the line already shows what it will become.</p>
 <h2 id="patches-and-the-weekly-check">Patches and the weekly check<a class="headerlink" href="#patches-and-the-weekly-check" title="Permanent link">&para;</a></h2>
 <p><a href="https://github.com/go-asmgen/asmgen/tree/main/goasm-patches"><code>goasm-patches/</code></a>
 holds the patches for Go. Each one is checked against independent assemblers
-and passes Go's own tests. All three were mailed on 2026-10-05:</p>
+and passes Go's own tests. The first three were mailed on 2026-10-05:</p>
 <ul>
 <li><a href="https://go.dev/cl/845145">CL 845145</a>: ppc64 VSX float64 arithmetic;</li>
 <li><a href="https://go.dev/cl/845165">CL 845165</a>: loong64 vector FMA (with its 14
@@ -1221,6 +1221,11 @@ and passes Go's own tests. All three were mailed on 2026-10-05:</p>
 <li><a href="https://go.dev/cl/845166">CL 845166</a>: a range check for loong64 element
   stores. On Go master these silently encoded an out-of-range offset as a
   store to the wrong address.</li>
+<li><a href="https://go.dev/cl/846285">CL 846285</a>: ppc64 VSX float32 arithmetic, the
+  counterpart of CL 845145 (mailed 2026-10-07);</li>
+<li><a href="https://go.dev/cl/846286">CL 846286</a>: s390x vector float32 (<code>VFASB</code>…,
+  vector-enhancements facility 1), which go-simd/floats needs to vectorise
+  float32 on s390x (mailed 2026-10-07).</li>
 </ul>
 <p>Every Monday, the <code>goasm-gaps</code> workflow:</p>
 <ul>
