@@ -1,9 +1,14 @@
-# Contributing
+---
+title: "Contributing"
+weight: 210
+---
+
+# Contributing {#contributing}
 
 go-asmgen follows the same conventions as the rest of the author's Go
 organizations.
 
-## Hard rules
+## Hard rules {#hard-rules}
 
 - **Pure Go, `CGO_ENABLED=0`** for the library — it is ordinary,
   architecture-independent Go that builds everywhere.
@@ -19,7 +24,7 @@ organizations.
 - **English only** for all repository content (issues, PRs, commits, code
   comments).
 
-## Adding a type or instruction
+## Adding a type or instruction {#adding-a-type-or-instruction}
 
 1. Extend the layout (`abi`) and/or the architecture's move table.
 2. Add an example that generates the new assembly, with a runtime test.
@@ -36,7 +41,7 @@ organizations.
    go tool cover -func=cover.out
    ```
 
-## Adding an architecture
+## Adding an architecture {#adding-an-architecture}
 
 A new 64-bit ISA package reuses both `abi` (the shared ABI0 layout) and `emit`
 unchanged, and provides only:
@@ -48,10 +53,10 @@ unchanged, and provides only:
 Arithmetic and vector ops go through `Raw`; encoding stays delegated to
 `cmd/asm`. An instruction it cannot assemble yet gets an entry in `internal/gap`
 and is emitted as a `WORD` until Go has it; see
-[Instructions cmd/asm lacks](asmgen/gaps.md). riscv64 and loong64 were each exactly this — see their pages under
+[Instructions cmd/asm lacks]({{< relref "asmgen/gaps.md" >}}). riscv64 and loong64 were each exactly this — see their pages under
 the asmgen section.
 
-## Documentation
+## Documentation {#documentation}
 
 This site is built with MkDocs Material and versioned with
 [mike](https://github.com/jimporter/mike); see the

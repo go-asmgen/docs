@@ -1,4 +1,9 @@
-# Aggregates — structs, slices, strings
+---
+title: "Aggregates (structs, slices, strings)"
+weight: 50
+---
+
+# Aggregates — structs, slices, strings {#aggregates-structs-slices-strings}
 
 ABI0 passes structs, slices, and strings **by value on the stack**, laid out as
 their constituent fields. go-asmgen models this in the shared layout: an
@@ -6,7 +11,7 @@ aggregate parameter is flattened into one slot per field, named
 `param_field`, which is exactly how hand-written Plan 9 assembly addresses it —
 and exactly what `go vet` asmdecl checks.
 
-## Field naming
+## Field naming {#field-naming}
 
 | Go type | fields (slots) |
 | --- | --- |
@@ -21,7 +26,7 @@ trailing padding. So `struct{Flag int8; N int64}` places `N` at offset **8**, no
 1 — the generated assembly must address the padded offset, and asmdecl fails the
 build if it doesn't.
 
-## Describing aggregates
+## Describing aggregates {#describing-aggregates}
 
 Layout takes aggregate arguments via `abi.LayoutArgs` and the `Struct` / `Slice`
 / `String` constructors:
@@ -37,7 +42,7 @@ The arch builders need no aggregate-specific API: a field is just a named slot,
 so `LoadArg("s_base", reg)` loads the base pointer with the right move, and
 dereferencing it (`s[0]`) is ordinary arithmetic through the `Raw` hatch.
 
-## Worked example (arm64)
+## Worked example (arm64) {#worked-example-arm64}
 
 `func sliceFirst(s []int64) int64 { return s[0] }`:
 
@@ -65,7 +70,7 @@ The result sits at offset 24 — after the 24-byte slice header, word-aligned. T
 package also covers a by-value struct, a padded struct, a slice length, and a
 string length, each runtime-tested on native arm64.
 
-## Why asmdecl is the safety net
+## Why asmdecl is the safety net {#why-asmdecl-is-the-safety-net}
 
 asmdecl independently computes the Go layout of every parameter — including the
 internal structure of slices, strings, and structs — and rejects any
@@ -73,7 +78,7 @@ internal structure of slices, strings, and structs — and rejects any
 padded-field and slice-header offsets self-checking: if go-asmgen computed them
 wrong, `go vet` would fail before any code ran.
 
-## Fixed-size arrays
+## Fixed-size arrays {#fixed-size-arrays}
 
 A `[n]T` array passed **by value** is laid out the same way — `abi.Array` flattens
 it into element slots `name_0 … name_(n-1)`, exactly the names asmdecl gives array
@@ -91,13 +96,16 @@ See [`examples/array`](https://github.com/go-asmgen/asmgen/tree/main/examples/ar
 `abi.Signature.Slot(name)` looks up any slot's offset, handy when you need an
 aggregate's base offset for a `Raw` access.
 
-!!! note "By-value arrays are accessed element-wise"
-    `go vet` asmdecl does **not** accept a single wide/vector load of a whole
-    by-value array — e.g. `MOVOU a+0(FP), X0` for a `[4]int32` is rejected
-    ("invalid MOVOU … is 16-byte value"). Idiomatic Go SIMD therefore passes
-    vector data **by pointer**; see [SIMD](simd.md).
+{{< callout type="info" >}}
+**By-value arrays are accessed element-wise**
 
-## Not yet covered
+`go vet` asmdecl does **not** accept a single wide/vector load of a whole
+by-value array — e.g. `MOVOU a+0(FP), X0` for a `[4]int32` is rejected
+("invalid MOVOU … is 16-byte value"). Idiomatic Go SIMD therefore passes
+vector data **by pointer**; see [SIMD]({{< relref "simd.md" >}}).
+{{< /callout >}}
+
+## Not yet covered {#not-yet-covered}
 
 First-class vector *types* in the typed surface (SIMD is via `Raw`). See the
-[Roadmap](roadmap.md).
+[Roadmap]({{< relref "roadmap.md" >}}).

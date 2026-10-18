@@ -1,4 +1,9 @@
-# SIMD (SSE / NEON / …)
+---
+title: "SIMD (SSE / NEON / VSX / …)"
+weight: 60
+---
+
+# SIMD (SSE / NEON / …) {#simd-sse-neon}
 
 go-asmgen does not model vector instructions in its typed surface, and it does
 not need to: vector code is emitted through the **`Raw` escape hatch**, exactly
@@ -46,14 +51,14 @@ each runtime-tested: amd64 (SSE2) and arm64 (NEON) natively, and riscv64 (RVV),
 loong64 (LSX), ppc64le (VSX) and s390x (vector facility) under qemu with the
 vector unit enabled (s390x exercising the big-endian path).
 
-## What asmdecl checks here
+## What asmdecl checks here {#what-asmdecl-checks-here}
 
 Only the **pointer loads** are FP-relative, so asmdecl validates those (three
 8-byte pointer reads at offsets 0/8/16). The vector loads/stores go through
 registers (`(AX)`, `(R0)`), which asmdecl does not track — their correctness is
 established by the **runtime test**, which checks every lane.
 
-## SIMD across the targets
+## SIMD across the targets {#simd-across-the-targets}
 
 Every target has runtime-tested packed-add examples:
 
@@ -69,22 +74,25 @@ Every target has runtime-tested packed-add examples:
 The amd64 (`addI32x8`, AVX2) and loong64 (`addI32x8`, LASX) examples add eight
 int32 lanes at once; the others add four.
 
-!!! note "Go version"
-    The RISC-V Vector and LoongArch SIMD instructions reached the Go assembler
-    in Go 1.25, and the arm64 vector float64 arithmetic in Go 1.27. The
-    module has required Go 1.27 since v0.15.0, and 1.27.1 since v0.15.2.
+{{< callout type="info" >}}
+**Go version**
 
-## Why pointers, not by-value vectors
+The RISC-V Vector and LoongArch SIMD instructions reached the Go assembler
+in Go 1.25, and the arm64 vector float64 arithmetic in Go 1.27. The
+module has required Go 1.27 since v0.15.0, and 1.27.1 since v0.15.2.
+{{< /callout >}}
+
+## Why pointers, not by-value vectors {#why-pointers-not-by-value-vectors}
 
 `go vet` asmdecl rejects a single vector load of a whole by-value array — e.g.
 `MOVOU a+0(FP), X0` for a `[4]int32` argument fails with *"invalid MOVOU …;
 [4]int32 is 16-byte value"*. So passing a vector **by value** and loading it in
 one instruction is not asmdecl-clean. The pointer-based shape above is the
 idiomatic Go approach and is what go-asmgen supports. (Fixed-size arrays passed
-by value are still usable **element-wise** — see [Aggregates](aggregates.md#fixed-size-arrays).)
+by value are still usable **element-wise** — see [Aggregates]({{< relref "aggregates.md#fixed-size-arrays" >}}).)
 
-## Future work
+## Future work {#future-work}
 
 A typed vector-load helper could emit the pointer load/op/store sequence for you,
-removing the `Raw` boilerplate. See the [Roadmap](roadmap.md); the `Raw` path
+removing the `Raw` boilerplate. See the [Roadmap]({{< relref "roadmap.md" >}}); the `Raw` path
 works today.

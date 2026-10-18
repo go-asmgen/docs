@@ -1,4 +1,9 @@
-# wasm — Overview
+---
+title: "wasm"
+weight: 150
+---
+
+# wasm — Overview {#wasm-overview}
 
 [`go-asmgen/asmgen/wasm`](https://github.com/go-asmgen/asmgen/tree/main/wasm)
 is a WebAssembly text (`.wat`) emitter modeled on
@@ -7,14 +12,17 @@ the six existing arch packages (amd64 / arm64 / ppc64le / riscv64 / loong64 /
 s390x). It covers **the seventh target: wasm-SIMD (v128)** — the module text
 a Go host consumes via `//go:wasmimport`.
 
-!!! note "Was previously a sibling module"
-    The wasm surface used to ship as a standalone `go-asmgen/wasm`
-    module. It was folded into the main `go-asmgen/asmgen` repo as a
-    peer package; the standalone repo has since been retired. Pin
-    `github.com/go-asmgen/asmgen/wasm/...` and
-    `github.com/go-asmgen/asmgen/examples/wasm/<kernel>`.
+{{< callout type="info" >}}
+**Was previously a sibling module**
 
-## Why wasm needs a separate emitter
+The wasm surface used to ship as a standalone `go-asmgen/wasm`
+module. It was folded into the main `go-asmgen/asmgen` repo as a
+peer package; the standalone repo has since been retired. Pin
+`github.com/go-asmgen/asmgen/wasm/...` and
+`github.com/go-asmgen/asmgen/examples/wasm/<kernel>`.
+{{< /callout >}}
+
+## Why wasm needs a separate emitter {#why-wasm-needs-a-separate-emitter}
 
 The other six architectures share Plan 9 assembly and the ABI0 model. wasm has
 neither:
@@ -31,7 +39,7 @@ module uses — a per-target emit surface over a shared abstract model —
 produces well-formed WAT programmatically, byte-equivalent to a hand-authored
 kernel and dropped straight into a `//go:wasmimport` consumer.
 
-## What the module ships
+## What the module ships {#what-the-module-ships}
 
 A single package, `github.com/go-asmgen/asmgen/wasm`, that exposes:
 
@@ -63,7 +71,7 @@ and a wazero end-to-end cross-check against a Go reference:
 | `indexany4` | `bytes.IndexAny` (fixed 4-needle set) | 4× `i8x16.eq` + `v128.or` + `i8x16.bitmask` + `i32.ctz` |
 | `base64_decode` | `encoding/base64.StdEncoding` (decode) | 5-range mask+sub + 3× `i8x16.shl` + 2× `i8x16.shr_u` + 4 shuffle merges |
 
-## What the module does not do
+## What the module does not do {#what-the-module-does-not-do}
 
 - **Only WAT (text) output.** `.wasm` binary encoding is `wat2wasm`'s job
   (part of [WABT](https://github.com/WebAssembly/wabt)).
@@ -72,14 +80,14 @@ and a wazero end-to-end cross-check against a Go reference:
   [`go-simd/matchlen-wasm`](https://github.com/go-simd/matchlen-wasm) for the
   `//go:wasmimport` wrapper pattern.
 
-## Where to next
+## Where to next {#where-to-next}
 
-- **[Quick start](quickstart.md)** — generate a kernel, compile it, verify it
+- **[Quick start]({{< relref "quickstart.md" >}})** — generate a kernel, compile it, verify it
   under wazero.
-- **[Kernels](kernels.md)** — the thirteen shipped kernels with signatures
+- **[Kernels]({{< relref "kernels.md" >}})** — the thirteen shipped kernels with signatures
   and emit-surface excerpts.
-- **[Design notes](design.md)** — how the wasm module maps to the asmgen
+- **[Design notes]({{< relref "design.md" >}})** — how the wasm module maps to the asmgen
   layering, what changed, what stayed the same.
-- **[Consumer CI](consumer-ci.md)** — drift + bench + arch-native CI pattern
+- **[Consumer CI]({{< relref "consumer-ci.md" >}})** — drift + bench + arch-native CI pattern
   used by `matchlen-wasm`, end-to-end validated.
-- **[Roadmap](roadmap.md)** — utf-8 full validation (Lemire-Keiser), crc32.
+- **[Roadmap]({{< relref "roadmap.md" >}})** — utf-8 full validation (Lemire-Keiser), crc32.

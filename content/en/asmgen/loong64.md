@@ -1,11 +1,16 @@
-# Third architecture: loong64
+---
+title: "Third architecture: loong64"
+weight: 80
+---
+
+# Third architecture: loong64 {#third-architecture-loong64}
 
 loong64 (LoongArch 64-bit) was the cheapest architecture yet — it confirms that
-the [riscv64](riscv64.md) drop-in was not a coincidence between two similar
+the [riscv64]({{< relref "riscv64.md" >}}) drop-in was not a coincidence between two similar
 ISAs. It reuses the shared ABI0 model (`abi`) unchanged and adds only a
 move table.
 
-## The move table
+## The move table {#the-move-table}
 
 | Type | arm64 | riscv64 | loong64 |
 | --- | --- | --- | --- |
@@ -19,7 +24,7 @@ loong64's 8-byte integer move is `MOVV` (the "V" = 8-byte/doubleword, inherited
 from the MIPS lineage of Go's assembler). Floats match riscv64 (`MOVF`/`MOVD`).
 The ABI0 offsets are, again, byte-for-byte identical to the other targets.
 
-## Example
+## Example {#example}
 
 ```go
 sig := loong64.Layout(
@@ -45,7 +50,7 @@ TEXT ·add(SB), NOSPLIT, $0-24
 	RET
 ```
 
-## A note on arithmetic and `cmd/asm`
+## A note on arithmetic and `cmd/asm` {#a-note-on-arithmetic-and-cmdasm}
 
 Arithmetic is supplied through the `Raw` escape hatch, and `cmd/asm` is the
 backstop that keeps it honest. loong64's assembler has no three-register `ADDW`
@@ -54,7 +59,7 @@ bits of the sum are the correct `int32` result). The build step caught the wrong
 mnemonic immediately — the move-selection surface that go-asmgen *does* model
 (`MOVW` load/store) is unaffected.
 
-## Validation
+## Validation {#validation}
 
 Identical to riscv64 — asmdecl (cross-arch), `cmd/asm` cross-build, and runtime
 under qemu-user, in a dedicated `asm-loong64` CI job:

@@ -1,4 +1,9 @@
-# go-asmgen documentation
+---
+title: "Home"
+weight: 10
+---
+
+# go-asmgen documentation {#go-asmgen-documentation}
 
 **Ergonomic generation of Go-compatible Plan 9 assembly for every 64-bit Go
 target** — **amd64**, **arm64**, **riscv64**, **loong64**, **ppc64le** (VSX),
@@ -23,23 +28,23 @@ load are encoded by `cmd/asm`.
 
 | Package | What it is |
 | --- | --- |
-| [`amd64`](asmgen/amd64.md) | builder emitting Plan 9 amd64 instructions (`MOVQ`, `MOVSS`/`MOVSD`) |
-| [`arm64`](asmgen/index.md) | builder emitting Plan 9 arm64 instructions (`MOVD`, `FMOVS`/`FMOVD`) |
-| [`riscv64`](asmgen/riscv64.md) | builder emitting Plan 9 riscv64 instructions (`MOV`, `MOVF`/`MOVD`) |
-| [`loong64`](asmgen/loong64.md) | builder emitting Plan 9 loong64 instructions (`MOVV`, `MOVF`/`MOVD`) |
-| [`ppc64le`](asmgen/ppc64le.md) | builder emitting Plan 9 ppc64le instructions (`MOVD`, `FMOVS`/`FMOVD`) |
-| [`s390x`](asmgen/s390x.md) | builder emitting Plan 9 s390x instructions (`MOVD`, `FMOVS`/`FMOVD`; big-endian) |
+| [`amd64`]({{< relref "asmgen/amd64.md" >}}) | builder emitting Plan 9 amd64 instructions (`MOVQ`, `MOVSS`/`MOVSD`) |
+| [`arm64`]({{< relref "asmgen/_index.md" >}}) | builder emitting Plan 9 arm64 instructions (`MOVD`, `FMOVS`/`FMOVD`) |
+| [`riscv64`]({{< relref "asmgen/riscv64.md" >}}) | builder emitting Plan 9 riscv64 instructions (`MOV`, `MOVF`/`MOVD`) |
+| [`loong64`]({{< relref "asmgen/loong64.md" >}}) | builder emitting Plan 9 loong64 instructions (`MOVV`, `MOVF`/`MOVD`) |
+| [`ppc64le`]({{< relref "asmgen/ppc64le.md" >}}) | builder emitting Plan 9 ppc64le instructions (`MOVD`, `FMOVS`/`FMOVD`) |
+| [`s390x`]({{< relref "asmgen/s390x.md" >}}) | builder emitting Plan 9 s390x instructions (`MOVD`, `FMOVS`/`FMOVD`; big-endian) |
 | `abi` | the architecture-independent ABI0 layout model all builders share |
 | `emit` | a deliberately dumb, ISA-agnostic writer of well-formed Plan 9 `.s` text |
 
-Start with the [Quick start](asmgen/quickstart.md), read the
-[ABI0 & design notes](asmgen/design.md) for why it is built this way, see
-[Aggregates](asmgen/aggregates.md) for struct/slice/string parameters, then
-[riscv64](asmgen/riscv64.md), [loong64](asmgen/loong64.md),
-[ppc64le](asmgen/ppc64le.md) and [s390x](asmgen/s390x.md) for how cheaply a
+Start with the [Quick start]({{< relref "asmgen/quickstart.md" >}}), read the
+[ABI0 & design notes]({{< relref "asmgen/design.md" >}}) for why it is built this way, see
+[Aggregates]({{< relref "asmgen/aggregates.md" >}}) for struct/slice/string parameters, then
+[riscv64]({{< relref "asmgen/riscv64.md" >}}), [loong64]({{< relref "asmgen/loong64.md" >}}),
+[ppc64le]({{< relref "asmgen/ppc64le.md" >}}) and [s390x]({{< relref "asmgen/s390x.md" >}}) for how cheaply a
 new ISA drops in.
 
-## The seventh target: wasm-SIMD
+## The seventh target: wasm-SIMD {#the-seventh-target-wasm-simd}
 
 The same layering pattern runs one more target — wasm-SIMD (v128) — as
 the [`wasm/`](https://github.com/go-asmgen/asmgen/tree/main/wasm) peer
@@ -53,7 +58,7 @@ Thirteen kernels ship today — matchlen, hex, hex_decode, popcount,
 toupper, memchr, isascii, utf8len, json_clean, adler32, base64_encode,
 indexany4, base64_decode — each byte-equivalent to a hand-written
 reference and wazero-verified against a Go stdlib function. Start with
-the [wasm overview](wasm/index.md) or the [quick start](wasm/quickstart.md).
+the [wasm overview]({{< relref "wasm/_index.md" >}}) or the [quick start]({{< relref "wasm/quickstart.md" >}}).
 
 Source lives at [github.com/go-asmgen/asmgen](https://github.com/go-asmgen/asmgen).
 
