@@ -1,11 +1,16 @@
-# Second architecture: riscv64
+---
+title: "Second architecture: riscv64"
+weight: 70
+---
+
+# Second architecture: riscv64 {#second-architecture-riscv64}
 
 riscv64 is where go-asmgen's design pays off. Adding it required **no new layout
 code** — it reuses the shared ABI0 model (`abi`) unchanged, because
 ABI0's stack layout is identical on every 64-bit target. All that differs is the
 register file and the move table.
 
-## What the `riscv64` package adds
+## What the `riscv64` package adds {#what-the-riscv64-package-adds}
 
 Compared to `arm64`, the entire architecture-specific surface is the move
 selection:
@@ -27,7 +32,7 @@ The ABI0 offsets are byte-for-byte the same as arm64. For `func add(a, b int64)
 int64` both emit `TEXT ·add(SB), NOSPLIT, $0-24` with `a+0(FP)`, `b+8(FP)`,
 `ret+16(FP)` — only the mnemonic changes (`MOVD` → `MOV`).
 
-## Example
+## Example {#example}
 
 ```go
 sig := riscv64.Layout(
@@ -53,7 +58,7 @@ TEXT ·add(SB), NOSPLIT, $0-24
 	RET
 ```
 
-## Validating riscv64
+## Validating riscv64 {#validating-riscv64}
 
 There is no common riscv64 developer host, so correctness is established in
 layers:
@@ -75,9 +80,9 @@ layers:
 
 The asmgen CI runs all three in a dedicated `asm-riscv64` job.
 
-## Adding the next architecture
+## Adding the next architecture {#adding-the-next-architecture}
 
 Any other 64-bit target follows the same recipe: re-export the shared `abi`
 types, write a `loadMnemonic`/`storeMnemonic` pair, and reuse the `Builder`
-shape. The layout model does not change — [loong64](loong64.md) was exactly
+shape. The layout model does not change — [loong64]({{< relref "loong64.md" >}}) was exactly
 this.

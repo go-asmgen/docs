@@ -1,11 +1,16 @@
-# wasm — Kernels
+---
+title: "Kernels"
+weight: 170
+---
+
+# wasm — Kernels {#wasm-kernels}
 
 The thirteen kernels that ship in the current main. Every one is a `go run`
 command that prints WAT to stdout; every one has a golden-file test that
 pins the exact output byte-for-byte; every one has a wazero cross-check
 against a Go reference.
 
-## matchlen — `bytes.Equal`-shaped scan
+## matchlen — `bytes.Equal`-shaped scan {#matchlen-bytesequal-shaped-scan}
 
 Signature:
 
@@ -22,7 +27,7 @@ offset within the byte after the fast loop bails.
 Emit-surface ops it exercises: `v128.load`, `i8x16.eq`, `i8x16.all_true`,
 `i32.load8_u`, and the control-flow primitives `block` / `loop` / `br_if`.
 
-## hex — `encoding/hex`-shaped encoder
+## hex — `encoding/hex`-shaped encoder {#hex-encodinghex-shaped-encoder}
 
 Signature:
 
@@ -39,7 +44,7 @@ Converts each 16-byte input chunk to 32 hex chars, matching Go's
   analogue of PSHUFB.
 - Interleave the two chars per byte via a fixed `i8x16.shuffle` pattern.
 
-## popcount — `math/bits.OnesCount`-shaped reduction
+## popcount — `math/bits.OnesCount`-shaped reduction {#popcount-mathbitsonescount-shaped-reduction}
 
 Signature:
 
@@ -56,7 +61,7 @@ plus the pairwise-widening reduction chain
 with the final horizontal sum via four `i32x4.extract_lane` + three
 `i32.add`.
 
-## toupper — `strings.ToUpper` for ASCII
+## toupper — `strings.ToUpper` for ASCII {#toupper-stringstoupper-for-ascii}
 
 Signature:
 
@@ -74,7 +79,7 @@ delta  = mask & (0x20 × 16)                       ; 0x20 where lowercase
 upper  = i8x16.sub(bytes, delta)                  ; branchless subtract
 ```
 
-## memchr — `bytes.IndexByte`-shaped search
+## memchr — `bytes.IndexByte`-shaped search {#memchr-bytesindexbyte-shaped-search}
 
 Signature:
 
@@ -96,7 +101,7 @@ if mask != 0:
   return i*16 + i32.ctz(mask)
 ```
 
-## isascii — `all(b < 128 for b in buf)` preflight
+## isascii — `all(b < 128 for b in buf)` preflight {#isascii-allb-128-for-b-in-buf-preflight}
 
 Signature:
 
@@ -120,7 +125,7 @@ if i8x16.bitmask(bytes) != 0:
 
 No extra compare, no key vector, no shift — just load, bitmask, i32.eqz.
 
-## hex_decode — `encoding/hex.DecodeString`-shape (companion to `hex`)
+## hex_decode — `encoding/hex.DecodeString`-shape (companion to `hex`) {#hex_decode-encodinghexdecodestring-shape-companion-to-hex}
 
 Signature:
 
@@ -152,7 +157,7 @@ store just the low 8 bytes via `v128.store64_lane offset=0 0`. New emit-
 surface ops: `i8x16.shl` (per-lane left shift, symmetric to `i8x16.shr_u`)
 and `v128.store64_lane` (partial store of one i64 lane of a v128).
 
-## utf8len — `utf8.RuneCount` for valid UTF-8
+## utf8len — `utf8.RuneCount` for valid UTF-8 {#utf8len-utf8runecount-for-valid-utf-8}
 
 Signature:
 
@@ -181,7 +186,7 @@ leader byte, so the count of leaders equals the count of runes. Malformed
 inputs give an approximation (the count of bytes whose top two bits aren't
 `10`).
 
-## json_clean — JSON-string bulk-copy preflight
+## json_clean — JSON-string bulk-copy preflight {#json_clean-json-string-bulk-copy-preflight}
 
 Signature:
 
@@ -214,7 +219,7 @@ misclassify high-bit bytes (0x80..0xff, negative under i8) as controls
 `bytes & 0xe0 == 0` is true iff the top three bits are all clear, which
 happens exactly for byte values 0x00..0x1f regardless of signedness.
 
-## adler32 — `hash/adler32.Checksum` (Adler-32 rolling sum)
+## adler32 — `hash/adler32.Checksum` (Adler-32 rolling sum) {#adler32-hashadler32checksum-adler-32-rolling-sum}
 
 Signature:
 
@@ -251,7 +256,7 @@ The `i16x8.extmul_low/high_i8x16_u` ops widen and multiply pairwise in
 one instruction — no PMULLW+PMULHW dance. Max product 255×16=4080 fits
 in u16 so the intermediate representation stays exact.
 
-## base64_encode — `encoding/base64.StdEncoding` (Lemire's algorithm)
+## base64_encode — `encoding/base64.StdEncoding` (Lemire's algorithm) {#base64_encode-encodingbase64stdencoding-lemires-algorithm}
 
 Signature:
 
@@ -296,7 +301,7 @@ Per 12-byte block:
     during development: an initial -16 (240) landed idx=63 at '+'
     instead of '/'. The correct value is -12 (244).
 
-## indexany4 — `bytes.IndexAny` with a 4-needle fixed set
+## indexany4 — `bytes.IndexAny` with a 4-needle fixed set {#indexany4-bytesindexany-with-a-4-needle-fixed-set}
 
 Signature:
 
@@ -333,7 +338,7 @@ No new emit-surface ops: `indexany4` reuses `i8x16.splat`, `i8x16.eq`,
 that `memchr` already introduced. It's the cleanest demonstration of
 how the emit surface composes into new kernels without churn.
 
-## base64_decode — `encoding/base64.StdEncoding` (decode)
+## base64_decode — `encoding/base64.StdEncoding` (decode) {#base64_decode-encodingbase64stdencoding-decode}
 
 Signature:
 
@@ -376,7 +381,7 @@ No new emit-surface ops: uses the same `i8x16.shl` / `.shr_u` /
 `.shuffle` / `.eq` / `.ge_s` / `.le_s` / `.sub` / `v128.and` / `.or` /
 `.store` set the other kernels have introduced.
 
-## The emit surface, catalogued
+## The emit surface, catalogued {#the-emit-surface-catalogued}
 
 Every op the thirteen kernels reach into is a one-line method on `Function`.
 Extension is by declarative append — see

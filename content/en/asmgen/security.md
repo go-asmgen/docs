@@ -1,14 +1,19 @@
-# Security
+---
+title: "Security"
+weight: 130
+---
+
+# Security {#security}
 
 go-asmgen runs at `go generate` time, on input written by the generator's
 author. It has no network-facing surface. Its risk lies in what it **emits**:
 the committed assembly runs in every module that uses it, outside Go's memory
 safety.
 
-## What counts as a vulnerability
+## What counts as a vulnerability {#what-counts-as-a-vulnerability}
 
 - **An encoding that is not the instruction it names.** A `WORD` (see
-  [Instructions cmd/asm lacks](gaps.md)) is the one place `cmd/asm` checks
+  [Instructions cmd/asm lacks]({{< relref "gaps.md" >}})) is the one place `cmd/asm` checks
   nothing. Each encoder is pinned to reference encodings from GNU as, and
   refuses any register or offset that does not encode. An operand it accepts
   but encodes wrongly is a vulnerability.
@@ -20,14 +25,14 @@ safety.
 Text passed to `Raw` is emitted as written. Checking it is the caller's job, as
 for hand-written assembly: run `go vet` and build for the target.
 
-## Reporting
+## Reporting {#reporting}
 
 Report privately, through the repository's
 [Report a vulnerability](https://github.com/go-asmgen/asmgen/security/advisories/new)
 form, not in a public issue. The policy is in
 [SECURITY.md](https://github.com/go-asmgen/asmgen/blob/main/SECURITY.md).
 
-## Audit of 2026-10-04 (v0.15.0)
+## Audit of 2026-10-04 (v0.15.0) {#audit-of-2026-10-04-v0150}
 
 | Check | Result |
 |---|---|

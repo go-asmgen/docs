@@ -1,9 +1,14 @@
-# wasm — Roadmap
+---
+title: "Roadmap"
+weight: 200
+---
+
+# wasm — Roadmap {#wasm-roadmap}
 
 Where the WAT emitter sits today and what is planned. The order below is
 priority, not commitment.
 
-## Grow the kernel catalogue
+## Grow the kernel catalogue {#grow-the-kernel-catalogue}
 
 Thirteen kernels ship today (matchlen, hex, hex_decode, popcount, toupper,
 memchr, isascii, utf8len, json_clean, adler32, base64_encode, indexany4,
@@ -14,9 +19,9 @@ the wishlist:
 
 - **~~base64 encode~~** — done. Lemire's SSE algorithm ported to
   wasm-SIMD; PMULHUW emulated via `i32x4.extmul_low/high_i16x8_u +
-  i32x4.shr_u + i16x8.narrow_i32x4_u`. See [Kernels](kernels.md).
+  i32x4.shr_u + i16x8.narrow_i32x4_u`. See [Kernels]({{< relref "kernels.md" >}}).
 - **~~adler32~~** — done via `i16x8.extmul_low/high_i8x16_u` for the
-  weighted-byte sum. See [Kernels](kernels.md).
+  weighted-byte sum. See [Kernels]({{< relref "kernels.md" >}}).
 - **utf-8 full validation** (Lemire & Keiser) — the classic wasm-SIMD
   showcase. `utf8len` already handles rune-counting for known-valid
   input; the full-validation kernel would use `v128.const` LUTs and
@@ -24,18 +29,18 @@ the wishlist:
   sequence.
 - **~~base64 decode~~** — done. Byte-level shift+shuffle+OR approach
   with a 5-range char→index step; no new emit ops. See the
-  [Kernels](kernels.md) page.
+  [Kernels]({{< relref "kernels.md" >}}) page.
 - **crc32** — checksum families used everywhere in zlib-family formats.
   Wasm-SIMD lacks PCLMULQDQ, so a table-based approach is more
   tractable than the carry-less-multiply route.
 - **~~`bytes.IndexAny`~~** — done as `indexany4`, a 4-needle fixed-size
-  variant. See the [Kernels](kernels.md) page.
+  variant. See the [Kernels]({{< relref "kernels.md" >}}) page.
 
 Adding a new kernel is a `main.go` in a new subdirectory plus a
 `main_test.go` with the golden-file pattern; adding a new op is one line in
 `emit.go`. Nothing structural changes.
 
-## ~~Fold into the main asmgen module~~ — done
+## ~~Fold into the main asmgen module~~ — done {#fold-into-the-main-asmgen-module-done}
 
 The wasm surface used to ship as a stand-alone `go-asmgen/wasm` module.
 As of `go-asmgen/asmgen@v0.6.0` it lives inside the main asmgen module
@@ -56,7 +61,7 @@ headers (`base, len, cap`) into wasm `(i32, i32, i32)` param triples
 for `//go:wasmimport` consumers automatically. Not blocking anything
 today — every shipped kernel hand-writes the ABI at its call sites.
 
-## Grow the consumer ecosystem
+## Grow the consumer ecosystem {#grow-the-consumer-ecosystem}
 
 Each shipped kernel deserves a `go-simd/*-wasm` consumer alongside the
 existing [`go-simd/matchlen-wasm`](https://github.com/go-simd/matchlen-wasm):
@@ -71,7 +76,7 @@ directive pinning the emitter version, `wasm-drift.yml` for the drift gate,
 `wasm-bench.yml` for the regression gate, and a small Go wrapper that fronts
 the `//go:wasmimport`.
 
-## Non-goals
+## Non-goals {#non-goals}
 
 - **wasm-binary encoding.** WAT text plus `wat2wasm` is enough; the module
   will not grow a binary encoder.

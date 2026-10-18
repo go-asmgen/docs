@@ -1,9 +1,14 @@
-# Fifth target: ppc64le
+---
+title: "Fifth target: ppc64le"
+weight: 100
+---
+
+# Fifth target: ppc64le {#fifth-target-ppc64le}
 
 ppc64le (POWER, little-endian) is the fifth architecture. Like the others, it
 reuses the shared ABI0 model (`abi`) unchanged and adds only a move table.
 
-## The move table
+## The move table {#the-move-table}
 
 | Type | arm64 | ppc64le |
 | --- | --- | --- |
@@ -18,7 +23,7 @@ same shape as arm64. The unsigned sub-word loads use the `Z` (zero-extend)
 suffix (`MOVBZ`/`MOVHZ`/`MOVWZ`). The ABI0 offsets are byte-for-byte identical to
 the other targets.
 
-## Example
+## Example {#example}
 
 ```go
 // package ppc64 targets ppc64le
@@ -45,12 +50,12 @@ TEXT ·add(SB), NOSPLIT, $0-24
 	RET
 ```
 
-## SIMD
+## SIMD {#simd}
 
 The packed-add example uses VSX (`LXVD2X` / `VADDUWM` / `STXVD2X`) through `Raw`
-over pointer arguments — see [SIMD](simd.md).
+over pointer arguments — see [SIMD]({{< relref "simd.md" >}}).
 
-## Validation
+## Validation {#validation}
 
 There is no common ppc64le developer host, so correctness is established in
 layers — asmdecl (cross-arch), `cmd/asm` cross-build, and runtime under
@@ -58,8 +63,8 @@ qemu-user (`qemu-user-static`), in a dedicated `asm-ppc64le` CI job on
 `ubuntu-latest`. The default qemu CPU already models VSX (baseline on POWER8+),
 so no `QEMU_CPU` override is needed. The package is `ppc64` (import path
 `github.com/go-asmgen/asmgen/ppc64`); only its own SIMD example is
-runtime-proven today (see [SIMD](simd.md) — no dedicated aggregate/array
-example yet, see the [Roadmap](roadmap.md)):
+runtime-proven today (see [SIMD]({{< relref "simd.md" >}}) — no dedicated aggregate/array
+example yet, see the [Roadmap]({{< relref "roadmap.md" >}})):
 
 ```bash
 go generate ./examples/simd/ppc64/...

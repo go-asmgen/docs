@@ -1,11 +1,16 @@
-# Instructions cmd/asm lacks
+---
+title: "Instructions cmd/asm lacks"
+weight: 120
+---
+
+# Instructions cmd/asm lacks {#instructions-cmdasm-lacks}
 
 go-asmgen emits Plan 9 assembly and lets the Go assembler, `cmd/asm`, encode it.
 Sometimes a kernel needs an instruction `cmd/asm` cannot assemble yet. go-asmgen
 then emits it as a `WORD` for the time being, and keeps everything needed to
 remove that `WORD` later.
 
-## What gets emitted
+## What gets emitted {#what-gets-emitted}
 
 ```
 WORD $0xf001130f // XVMADDADP VS33, VS34, VS32
@@ -23,7 +28,7 @@ As of v0.15.0:
 | loong64 | `VFMADDD` `XVFMADDD` | `WORD` |
 | ppc64le | `XVADDDP` `XVSUBDP` `XVMULDP` `XVDIVDP` `XVMADDADP` `XVMAXDP` `XVMINDP` `XVSQRTDP` | `WORD` |
 
-## The registry
+## The registry {#the-registry}
 
 Each `WORD` comes from an entry in `internal/gap`, which holds:
 
@@ -36,7 +41,7 @@ Each `WORD` comes from an entry in `internal/gap`, which holds:
 
 The architecture packages only call into it, so there is one source.
 
-## goasmgap
+## goasmgap {#goasmgap}
 
 `tools/goasmgap` works from the registry:
 
@@ -55,7 +60,7 @@ go run ./tools/goasmgap verify -goroot ~/go-master -require
   an out-of-date installed binary cannot pass for a patch. Before it trusts a
   refusal, it checks that the toolchain can assemble at all.
 
-## Patches and the weekly check
+## Patches and the weekly check {#patches-and-the-weekly-check}
 
 [`goasm-patches/`](https://github.com/go-asmgen/asmgen/tree/main/goasm-patches)
 holds the patches for Go. Each one is checked against independent assemblers

@@ -1,23 +1,31 @@
-# asmgen — Quick start
+---
+title: "Quick start"
+weight: 30
+---
+
+# asmgen — Quick start {#asmgen-quick-start}
 
 This walks through the `examples/add` program shipped in the
 [asmgen repo](https://github.com/go-asmgen/asmgen/tree/main/examples/add): a
 `func add(a, b int64) int64` whose body is generated arm64 assembly.
 
-!!! note "arm64 required to run"
-    The generated assembly is built under `//go:build arm64` and exercised by a
-    runtime test. Generation runs anywhere, but **building and testing the
-    example requires an arm64 host** (Apple Silicon, an arm64 Linux box, or a
-    GitHub `ubuntu-24.04-arm` runner). The library packages themselves are
-    architecture-independent.
+{{< callout type="info" >}}
+**arm64 required to run**
 
-## Install
+The generated assembly is built under `//go:build arm64` and exercised by a
+runtime test. Generation runs anywhere, but **building and testing the
+example requires an arm64 host** (Apple Silicon, an arm64 Linux box, or a
+GitHub `ubuntu-24.04-arm` runner). The library packages themselves are
+architecture-independent.
+{{< /callout >}}
+
+## Install {#install}
 
 ```bash
 go get github.com/go-asmgen/asmgen@latest
 ```
 
-## 1. Declare the function with no body
+## 1. Declare the function with no body {#1-declare-the-function-with-no-body}
 
 ```go
 // add.go
@@ -29,7 +37,7 @@ package add
 func add(a, b int64) int64
 ```
 
-## 2. Write the generator
+## 2. Write the generator {#2-write-the-generator}
 
 ```go
 //go:build ignore
@@ -70,7 +78,7 @@ func main() {
 }
 ```
 
-## 3. Generate, vet, build, test
+## 3. Generate, vet, build, test {#3-generate-vet-build-test}
 
 ```bash
 go generate ./...          # runs gen.go -> writes add_arm64.s
@@ -96,7 +104,7 @@ TEXT ·add(SB), NOSPLIT, $0-24
 	RET
 ```
 
-## How correctness is checked
+## How correctness is checked {#how-correctness-is-checked}
 
 In priority order — the same checks the asmgen CI runs:
 

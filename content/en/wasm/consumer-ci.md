@@ -1,4 +1,9 @@
-# wasm — Consumer CI pattern
+---
+title: "Consumer CI"
+weight: 190
+---
+
+# wasm — Consumer CI pattern {#wasm-consumer-ci-pattern}
 
 A wasm consumer that pins one of the shipped kernels ends up owning three
 CI concerns the emitter can't answer for them: **is the committed
@@ -10,7 +15,7 @@ consumer, [`go-simd/matchlen-wasm`](https://github.com/go-simd/matchlen-wasm),
 uses to answer all three, with the workflow shapes and the numbers
 from a full end-to-end validation.
 
-## The three-workflow layer
+## The three-workflow layer {#the-three-workflow-layer}
 
 ```text
                 ┌──────────────────────────────────────────┐
@@ -38,7 +43,7 @@ performance-sensitive consumer adds `wasm-bench`; a consumer that cares
 about a specific arch's dispatch quality adds a per-arch bench with a
 label gate that keeps the shared runner from being flooded.
 
-## wasm-drift — enforce generator = committed source
+## wasm-drift — enforce generator = committed source {#wasm-drift-enforce-generator-committed-source}
 
 The kernel source of truth is the pinned generator. The drift workflow
 regenerates it and diffs vs the committed `.wat` / `.wasm`. Any hand-
@@ -99,7 +104,7 @@ jobs:
 Trip-up: someone hand-edits `matchlen.wat` to add a comment. Regen wipes
 the comment, diff fails, PR is blocked with an actionable error message.
 
-## wasm-bench — portable regression detection under wazero
+## wasm-bench — portable regression detection under wazero {#wasm-bench-portable-regression-detection-under-wazero}
 
 `wasm-bench` runs the wazero-hosted benchmark on stock ubuntu-24.04 —
 cheap enough (~30s per size × 22 benchmarks × 6 count = ~3 min) to fire
@@ -115,7 +120,7 @@ The workflow splits into two roles by trigger:
   re-runs replace the previous comment), and fails on any benchmark
   regressed beyond `REGRESSION_THRESHOLD_PCT` (default 5%).
 
-### The awk regression scanner
+### The awk regression scanner {#the-awk-regression-scanner}
 
 The tricky part is parsing modern `benchstat -format text` output — it
 uses Unicode box-drawing characters, strips the `Benchmark` prefix, and
@@ -160,7 +165,7 @@ Gotchas the scanner encodes:
 - Everything after `allocs/op` / `B/op` is memory data, not perf —
   section resets to `alloc` and no rows there are flagged.
 
-## z15-bench — arch-native regression detection on real hardware
+## z15-bench — arch-native regression detection on real hardware {#z15-bench-arch-native-regression-detection-on-real-hardware}
 
 `z15-bench` SSHes into a real IBM z15 LPAR (`linux1@148.100.85.193`)
 via `webfactory/ssh-agent`, runs the s390x bench there, and applies the
@@ -203,7 +208,7 @@ jobs:
 A PR without the label sees `gate` pass in 5 seconds and `bench` skip —
 the LPAR is untouched.
 
-## Proof: end-to-end validation
+## Proof: end-to-end validation {#proof-end-to-end-validation}
 
 The reference consumer's pipeline was validated with two self-check PRs:
 
@@ -254,7 +259,7 @@ threshold exactly. The runs are on record at
 and
 [/pull/2](https://github.com/go-simd/matchlen-wasm/pull/2).
 
-## Adopting the pattern
+## Adopting the pattern {#adopting-the-pattern}
 
 1. Copy `generate.go` from `matchlen-wasm` and update the kernel name.
 2. Copy `.github/workflows/wasm-drift.yml` — adjust the `paths` list to

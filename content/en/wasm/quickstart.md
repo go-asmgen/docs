@@ -1,16 +1,24 @@
-# wasm — Quick start
+---
+title: "Quick start"
+weight: 160
+---
+
+# wasm — Quick start {#wasm-quick-start}
 
 This walks through the `matchlen` kernel end-to-end: from generator source to
 a consumed `.wasm` binary. The same shape works for the other four kernels
 (`hex`, `popcount`, `toupper`, `memchr`) — swap the package name.
 
-!!! note "Toolchain"
-    You need Go (any modern release), and
-    [WABT](https://github.com/WebAssembly/wabt) for `wat2wasm`.
-    On Debian/Ubuntu: `sudo apt install wabt`.
-    On macOS: `brew install wabt`.
+{{< callout type="info" >}}
+**Toolchain**
 
-## 1. Generate the `.wat`
+You need Go (any modern release), and
+[WABT](https://github.com/WebAssembly/wabt) for `wat2wasm`.
+On Debian/Ubuntu: `sudo apt install wabt`.
+On macOS: `brew install wabt`.
+{{< /callout >}}
+
+## 1. Generate the `.wat` {#1-generate-the-wat}
 
 Every kernel in `github.com/go-asmgen/asmgen/examples/wasm/` is a
 `go run` command that prints WAT to stdout:
@@ -43,7 +51,7 @@ the emit-surface stack ops laid out in evaluation order:
     ...
 ```
 
-## 2. Compile to `.wasm`
+## 2. Compile to `.wasm` {#2-compile-to-wasm}
 
 ```bash
 wat2wasm matchlen.wat -o matchlen.wasm
@@ -53,7 +61,7 @@ Every kernel in v0.1.0 fits in a small binary: `matchlen.wasm` is 177 bytes,
 `memchr.wasm` is 135, `toupper.wasm` is 155. The SIMD proposal is enabled by
 default in WABT 1.0.41+.
 
-## 3. Verify it functions
+## 3. Verify it functions {#3-verify-it-functions}
 
 Every kernel has a wazero cross-check that runs the generated `.wasm` against
 a Go reference. From the module root:
@@ -76,7 +84,7 @@ The other kernels take the same form (`go run . hex ../hex.wasm`, etc.). The
 verifier ships in a separate submodule so wazero's dependency does not leak
 into the main emit surface.
 
-## 4. Consume it from Go
+## 4. Consume it from Go {#4-consume-it-from-go}
 
 The consumer wires the compiled `.wasm` into a host runtime and calls the
 exported function via `//go:wasmimport`. See
@@ -97,7 +105,7 @@ func matchlen16(ptrA, ptrB uint32, limit uint32) uint32
 func MatchLen(a, b []byte) int { ... }
 ```
 
-## 5. Keep it in sync
+## 5. Keep it in sync {#5-keep-it-in-sync}
 
 A committed `.wat` will drift from the pinned generator over time. Two moves
 keep them honest:

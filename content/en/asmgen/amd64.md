@@ -1,4 +1,9 @@
-# Fourth target: amd64
+---
+title: "Fourth target: amd64"
+weight: 90
+---
+
+# Fourth target: amd64 {#fourth-target-amd64}
 
 amd64 is already well served by [avo][avo], which encodes instructions at the
 byte level and models the instruction set in depth. go-asmgen supports amd64 not
@@ -28,13 +33,13 @@ amd64 arithmetic is two-operand (`ADDQ b, a` computes `a += b`), so the example
 generator accumulates into the first register. The ABI0 offsets are identical to
 the other targets.
 
-## Validation
+## Validation {#validation}
 
 amd64 is the easiest target to runtime-test: the GitHub-hosted ubuntu runner is
 amd64, so the generated assembly runs natively — no emulation. Locally on Apple
 Silicon it runs under Rosetta (`GOARCH=amd64 go test`). The asmgen CI has a
 dedicated native `asm-amd64` job covering the scalar and SSE-SIMD examples.
 
-See also [SIMD](simd.md) for the SSE packed-add example.
+See also [SIMD]({{< relref "simd.md" >}}) for the SSE packed-add example.
 
 [avo]: https://github.com/mmcloughlin/avo

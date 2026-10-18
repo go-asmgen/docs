@@ -1,8 +1,13 @@
-# wasm — Design notes
+---
+title: "Design notes"
+weight: 180
+---
 
-## Same layering, different bottom
+# wasm — Design notes {#wasm-design-notes}
 
-The [main asmgen module](../asmgen/design.md) splits Plan 9 assembly
+## Same layering, different bottom {#same-layering-different-bottom}
+
+The [main asmgen module]({{< relref "../asmgen/design.md" >}}) splits Plan 9 assembly
 generation into three layers:
 
 - `abi` — architecture-independent ABI0 frame layout.
@@ -28,7 +33,7 @@ plumbing. The emitter builds a `Module` (the `(module ...)` s-expression),
 each `Function` is a `(func $name (export "name") ...)` body, and the ops
 push/pop against wasm's implicit value stack in evaluation order.
 
-## Why a text emitter, not a wasm-binary encoder
+## Why a text emitter, not a wasm-binary encoder {#why-a-text-emitter-not-a-wasm-binary-encoder}
 
 Same argument as the main module. Encoding wasm bytes directly would require
 tracking type IDs, section offsets, function indices, LEB128 varints — a full
@@ -43,7 +48,7 @@ and delegating to `wat2wasm` is:
 - **Composable with tooling.** `wasm2wat`, `wasm-validate`, wasm-opt all
   interoperate with the emitter output as-is.
 
-## Stack semantics as an emit model
+## Stack semantics as an emit model {#stack-semantics-as-an-emit-model}
 
 Every op the emitter exposes is a wasm stack op — its operands must already
 be on the value stack, and its result gets pushed. The kernel author writes
@@ -68,7 +73,7 @@ s-expression. The `Function.String()` renderer indents everything one level
 inside the `(func ...)` block; blocks and loops open/close via `Block` /
 `Loop` / `End`.
 
-## What the emitter does NOT model
+## What the emitter does NOT model {#what-the-emitter-does-not-model}
 
 - **Block signatures.** A `(block (result i32) ...)` variant would let a
   block carry a stack result across its boundary. All five shipped kernels
@@ -86,7 +91,7 @@ inside the `(func ...)` block; blocks and loops open/close via `Block` /
 
 Every one of these is a "when needed" addition, not a design tension.
 
-## Verifying an emitted kernel
+## Verifying an emitted kernel {#verifying-an-emitted-kernel}
 
 Each kernel package ships three verification layers:
 
@@ -105,7 +110,7 @@ suite on native and under qemu across all 6 Go 64-bit arches; the
 `wasm-e2e` job installs WABT, regenerates each kernel, drift-gates against
 the golden, compiles, and runs the wazero verifier.
 
-## The consumer side
+## The consumer side {#the-consumer-side}
 
 Consumers (see [`go-simd/matchlen-wasm`](https://github.com/go-simd/matchlen-wasm))
 pin the generator version in a package-scoped `//go:generate` directive, run
