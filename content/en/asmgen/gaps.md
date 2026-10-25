@@ -41,6 +41,17 @@ Each `WORD` comes from an entry in `internal/gap`, which holds:
 
 The architecture packages only call into it, so there is one source.
 
+The registry also holds instructions that hand-written Go assembly needs and
+no `Builder` method emits. The loong64 privileged CSR access instructions
+`csrrd`, `csrwr` and `csrxchg` (LoongArch Vol. 1 §4.2.1) are an example:
+tamago's bare-metal loong64 port writes them as `WORD`s, such as
+`WORD $0x04000833 // CSRWR $2, R19` to enable the FPU. The registry has 19
+reference cases from GNU as 2.44, and llvm-mc 23 agrees on all of them. The
+three instructions share one opcode, and the rj field tells them apart: 0 is
+`csrrd`, 1 is `csrwr`, anything else is `csrxchg`. So an entry can also exclude
+encodings from its mask (`NotMask`/`NotBits`), and `scan` does not mistake
+one for another.
+
 ## goasmgap {#goasmgap}
 
 `tools/goasmgap` works from the registry:
@@ -79,7 +90,11 @@ and passes Go's own tests. The first three were mailed on 2026-10-05:
   counterpart of CL 845145 (mailed 2026-10-07);
 - [CL 846286](https://go.dev/cl/846286): s390x vector float32 (`VFASB`…,
   vector-enhancements facility 1), which go-simd/floats needs to vectorise
-  float32 on s390x (mailed 2026-10-07).
+  float32 on s390x (mailed 2026-10-07);
+- [CL 853786](https://go.dev/cl/853786): loong64 CSR access, `CSRRD $csr, Rd`,
+  `CSRWR $csr, Rd` and `CSRXCHG $csr, Rj, Rd`. It refuses a CSR number above
+  16383, and a `CSRXCHG` mask register of R0 or R1, which would encode the
+  other two (mailed 2026-10-25).
 
 Every Monday, the `goasm-gaps` workflow:
 
