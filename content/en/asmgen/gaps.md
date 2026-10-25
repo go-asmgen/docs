@@ -24,6 +24,7 @@ As of v0.15.0:
 | Architecture | Instructions | Emitted as |
 |---|---|---|
 | arm64 | `VFADD2D` `VFSUB2D` `VFMUL2D` `VFNEG2D` `VFMLA2D` `VFMLS2D` | mnemonics (Go 1.27) |
+| arm64 | `VFMLAElem2D` `VFMLSElem2D` `VFMULElem2D` `VFMLAElem4S` `VFMLSElem4S` `VFMULElem4S` (by element, from v0.22.0) | `WORD` |
 | loong64 | `VLDREPLD` `XVLDREPLD` | `VMOVQ off(R), V.V2` / `XVMOVQ off(R), X.V4`, except offset −2048 |
 | loong64 | `VFMADDD` `XVFMADDD` | `WORD` |
 | loong64 | `CSRRD` `CSRWR` `CSRXCHG` (from v0.21.0) | `WORD` |
@@ -52,6 +53,35 @@ three instructions share one opcode, and the rj field tells them apart: 0 is
 `csrrd`, 1 is `csrwr`, anything else is `csrxchg`. So an entry can also exclude
 encodings from its mask (`NotMask`/`NotBits`), and `scan` does not mistake
 one for another.
+
+### arm64 multiply by element {#arm64-multiply-by-element}
+
+`cmd/asm` has the vector-by-vector `VFMLA`/`VFMLS`/`VFMUL` but not their
+indexed forms, `fmla vd.2d, vn.2d, vm.d[i]`. In those, every lane is multiplied
+by one lane of Vm, the broadcast a GEMM micro-kernel needs. go-ndarray's GEMM
+kernel therefore writes sixteen of them as `WORD`s by hand. The registry holds
+fmla, fmls and fmul in `.4S` and `.2D`, spelt the way
+[CL 764224](https://go.dev/cl/764224) (Jonathan Swinney) spells them:
+
+```
+WORD $0x4fd41200 // VFMLA V20.D[0], V16.D2, V0.D2
+```
+
+The 76 reference cases come from llvm-mc 23, and GNU as 2.44 agrees on every
+one. They include go-ndarray's sixteen words. Vm is any of V0–V31 for `.S` and
+`.D`; only the half-precision forms are limited to V0–V15. The index is 0–3
+for `.S` and 0–1 for `.D`.
+
+| Toolchain | `goasmgap verify -arch arm64` |
+|---|---|
+| Go 1.27.1 | 6/6 `ABSENT` |
+| master + CL 764224 patchset 6 | 6/6 `SUPPORTED`, 76/76 identical |
+
+Patchset 6 is stacked on two other CLs by the same author and does not apply to
+master by itself, but the three apply cleanly together. It is not one of our
+CLs, so it is not in `goasm-patches/cls.txt`: the weekly job would apply it
+without its parents and would report its author's review threads as ours. The
+weekly release and master checks still report the day these forms assemble.
 
 ## goasmgap {#goasmgap}
 
