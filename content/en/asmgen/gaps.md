@@ -26,6 +26,7 @@ As of v0.15.0:
 | arm64 | `VFADD2D` `VFSUB2D` `VFMUL2D` `VFNEG2D` `VFMLA2D` `VFMLS2D` | mnemonics (Go 1.27) |
 | loong64 | `VLDREPLD` `XVLDREPLD` | `VMOVQ off(R), V.V2` / `XVMOVQ off(R), X.V4`, except offset −2048 |
 | loong64 | `VFMADDD` `XVFMADDD` | `WORD` |
+| loong64 | `CSRRD` `CSRWR` `CSRXCHG` (from v0.21.0) | `WORD` |
 | ppc64le | `XVADDDP` `XVSUBDP` `XVMULDP` `XVDIVDP` `XVMADDADP` `XVMAXDP` `XVMINDP` `XVSQRTDP` | `WORD` |
 
 ## The registry {#the-registry}
@@ -41,10 +42,10 @@ Each `WORD` comes from an entry in `internal/gap`, which holds:
 
 The architecture packages only call into it, so there is one source.
 
-The registry also holds instructions that hand-written Go assembly needs and
-no `Builder` method emits. The loong64 privileged CSR access instructions
-`csrrd`, `csrwr` and `csrxchg` (LoongArch Vol. 1 §4.2.1) are an example:
-tamago's bare-metal loong64 port writes them as `WORD`s, such as
+The loong64 privileged CSR access instructions `csrrd`, `csrwr` and `csrxchg`
+(LoongArch Vol. 1 §4.2.1) are in the registry for bare-metal code.
+`Builder.CSRRD`, `CSRWR` and `CSRXCHG` emit them, and tamago's bare-metal
+loong64 port writes the same `WORD`s by hand, for example
 `WORD $0x04000833 // CSRWR $2, R19` to enable the FPU. The registry has 19
 reference cases from GNU as 2.44, and llvm-mc 23 agrees on all of them. The
 three instructions share one opcode, and the rj field tells them apart: 0 is
