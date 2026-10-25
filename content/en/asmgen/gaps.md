@@ -66,7 +66,10 @@ go run ./tools/goasmgap verify -goroot ~/go-master -require
 holds the patches for Go. Each one is checked against independent assemblers
 and passes Go's own tests. The first three were mailed on 2026-10-05:
 
-- [CL 845145](https://go.dev/cl/845145): ppc64 VSX float64 arithmetic;
+- [CL 845145](https://go.dev/cl/845145): ppc64 VSX float64 arithmetic.
+  **Merged on 2026-10-20**; it ships in Go 1.28. go-asmgen keeps emitting
+  `WORD`s for these instructions until its consumers build with Go 1.28, since
+  its floor is Go 1.27;
 - [CL 845165](https://go.dev/cl/845165): loong64 vector FMA (with its 14
   siblings) and the full offset range of the broadcast loads;
 - [CL 845166](https://go.dev/cl/845166): a range check for loong64 element
@@ -86,4 +89,5 @@ Every Monday, the `goasm-gaps` workflow:
   comments waiting for a reply or was abandoned. A mailed CL is forgotten the
   same way as an unmailed patch: a reviewer asks something and nobody answers;
 - applies every patch to master, taking a mailed CL as its current patchset,
-  and requires Go's tests and every reference encoding to pass.
+  and requires Go's tests and every reference encoding to pass. A merged or
+  abandoned CL is not applied: master already holds a merged one.
