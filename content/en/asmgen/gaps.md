@@ -118,7 +118,9 @@ and passes Go's own tests. The first three were mailed on 2026-10-05:
   stores. On Go master these silently encoded an out-of-range offset as a
   store to the wrong address.
 - [CL 846285](https://go.dev/cl/846285): ppc64 VSX float32 arithmetic, the
-  counterpart of CL 845145 (mailed 2026-10-07);
+  counterpart of CL 845145 (mailed 2026-10-07). **Merged on 2026-10-29**; it
+  ships in Go 1.28, and the same applies: `WORD`s until consumers build with
+  Go 1.28;
 - [CL 846286](https://go.dev/cl/846286): s390x vector float32 (`VFASB`…,
   vector-enhancements facility 1), which go-simd/floats needs to vectorise
   float32 on s390x (mailed 2026-10-07);
