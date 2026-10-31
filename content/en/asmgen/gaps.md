@@ -27,6 +27,7 @@ As of v0.15.0:
 | arm64 | `VFMLAElem2D` `VFMLSElem2D` `VFMULElem2D` `VFMLAElem4S` `VFMLSElem4S` `VFMULElem4S` (by element, from v0.22.0) | `WORD` |
 | loong64 | `VLDREPLD` `XVLDREPLD` | `VMOVQ off(R), V.V2` / `XVMOVQ off(R), X.V4`, except offset −2048 |
 | loong64 | `VFMADDD` `XVFMADDD` | `WORD` |
+| loong64 | `VFMADDF` `XVFMADDF` (float32 fused multiply-add, from v0.23.0) | `WORD` |
 | loong64 | `CSRRD` `CSRWR` `CSRXCHG` (from v0.21.0) | `WORD` |
 | ppc64le | `XVADDDP` `XVSUBDP` `XVMULDP` `XVDIVDP` `XVMADDADP` `XVMAXDP` `XVMINDP` `XVSQRTDP` | `WORD` |
 
@@ -53,6 +54,13 @@ three instructions share one opcode, and the rj field tells them apart: 0 is
 `csrrd`, 1 is `csrwr`, anything else is `csrxchg`. So an entry can also exclude
 encodings from its mask (`NotMask`/`NotBits`), and `scan` does not mistake
 one for another.
+
+The loong64 float32 fused multiply-add, `vfmadd.s` and `xvfmadd.s`, is in the
+registry since v0.23.0. `Builder.VFMADDF` and `Builder.XVFMADDF` emit it as a
+`WORD`, with the spelling CL 845165 gives it. The encodings come from
+llvm-mc 23.1.2, which also reproduces the held GNU as words for `vfmadd.d` and
+`xvfmadd.d`, and equal the cases the mailed patch holds. go-ndarray's float32
+GEMM on loong64 uses them.
 
 ### arm64 multiply by element {#arm64-multiply-by-element}
 
